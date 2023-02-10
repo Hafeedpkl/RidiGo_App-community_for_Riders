@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "832094384410",
+    "project_id": "ridigo-388b4",
+    "storage_bucket": "ridigo-388b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:832094384410:android:829b3d37a101f684a5fca3",
+        "android_client_info": {
+          "package_name": "com.example.ridigo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "832094384410-erhat7m2kmcbbb01rh6dbe9ufl0sdms5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAZbVKYi5HSqBrI56ihNkptD1GaPIQhfE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "832094384410-erhat7m2kmcbbb01rh6dbe9ufl0sdms5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
