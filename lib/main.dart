@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/controller/user_data.dart';
-import 'package:ridigo/views/home%20screen/home_page.dart';
-import 'package:ridigo/views/intro%20screen/intro_screen.dart';
-import 'package:ridigo/views/authentication/authentication_page.dart';
+import 'package:ridigo/views/authentication/views/signup.dart';
+import 'package:ridigo/views/home/home_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +42,7 @@ class MyApp extends StatelessWidget {
                 } else if (snapshot.hasData) {
                   return const HomeScreen();
                 } else {
-                  return const AuthScreen();
+                  return SignupScreen();
                 }
               })),
     );
