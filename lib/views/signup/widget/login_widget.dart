@@ -20,7 +20,7 @@ class LogInWidget extends StatelessWidget {
         children: [
           SizedBox(height: size.width * 0.03),
           Text(
-            'Login',
+            'Sign In',
             style:
                 GoogleFonts.poppins(fontSize: 28, fontWeight: FontWeight.bold),
           ),
@@ -39,9 +39,10 @@ class LogInWidget extends StatelessWidget {
                   ),
                   TextFormField(
                     controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 5),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
@@ -59,12 +60,13 @@ class LogInWidget extends StatelessWidget {
                     style: GoogleFonts.poppins(
                         fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                  TextField(
+                  TextFormField(
                     controller: passwordController,
                     obscureText: true,
-                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 5),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(
@@ -98,9 +100,9 @@ class LogInWidget extends StatelessWidget {
             width: size.width * 0.8,
             height: 55,
             child: MaterialButton(
-              onPressed: () {},
+              onPressed: signIn,
               child: Text(
-                'Sign up',
+                'Sign in',
                 style: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -136,7 +138,7 @@ class LogInWidget extends StatelessWidget {
     );
   }
 
-  Future LogIn() async {
+  Future signIn() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim());
