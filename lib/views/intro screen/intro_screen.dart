@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intro_screen_onboarding_flutter/introduction.dart';
 import 'package:intro_screen_onboarding_flutter/introscreenonboarding.dart';
-import 'package:ridigo/views/signup/authentication_page.dart';
+import 'package:ridigo/views/authentication/authentication_page.dart';
 
 class IntroScreen extends StatelessWidget {
   IntroScreen({super.key});

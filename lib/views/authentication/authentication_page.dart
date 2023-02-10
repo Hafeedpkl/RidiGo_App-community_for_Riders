@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ridigo/controller/constants.dart';
-import 'package:ridigo/views/signup/widget/login_widget.dart';
-import 'package:ridigo/views/signup/widget/signup_widget.dart';
+import 'package:ridigo/views/authentication/widget/login_widget.dart';
+import 'package:ridigo/views/authentication/widget/signup_widget.dart';
 
 class AuthScreen extends StatelessWidget {
-  const AuthScreen({super.key});
-
+  const AuthScreen({super.key, this.isLogin = false});
+  final bool isLogin;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -26,8 +26,7 @@ class AuthScreen extends StatelessWidget {
               SizedBox(
                 height: size.width * 0.1,
               ),
-              // SignupWidget(size: size)
-              LogInWidget(size: size)
+              isLogin ? LogInWidget(size: size) : SignupWidget(size: size)
             ],
           ),
         ),
