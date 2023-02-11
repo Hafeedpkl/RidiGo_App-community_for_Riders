@@ -4,8 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/core/controller/user_data.dart';
 import 'package:ridigo/ui/authentication/views/signup.dart';
+import 'package:ridigo/ui/bottom%20navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/home/home_page.dart';
-
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
                     child: Text('Something went wrong'),
                   );
                 } else if (snapshot.hasData) {
-                  return const HomeScreen();
+                  return const BottomNavScreen();
                 } else {
                   return SignupScreen();
                 }

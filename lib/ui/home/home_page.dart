@@ -25,7 +25,6 @@ class HomeScreen extends StatelessWidget {
                     FirebaseAuth.instance.signOut();
                   },
                   child: Text('Logout')),
-              ElevatedButton(onPressed: () {}, child: Text('bottom nav'))
             ],
           ),
         ),

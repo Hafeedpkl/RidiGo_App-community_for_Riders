@@ -195,7 +195,7 @@ class LogInScreen extends StatelessWidget {
   Future signIn({context, navigationkey}) async {
     FocusManager.instance.primaryFocus?.unfocus();
     String text;
-    var snackBar;
+
     final isvalid = formkey.currentState!.validate();
     if (!isvalid) return;
     showDialog(
@@ -214,8 +214,10 @@ class LogInScreen extends StatelessWidget {
       if (e.message ==
           'There is no user record corresponding to this identifier. The user may have been deleted.') {
         text = 'Eneterd email does\'nt Exist';
-        snackBar = SnackBar(content: Text(text));
+        final snackBar = SnackBar(content: Text(text));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
+      final snackBar = SnackBar(content: Text(e.message.toString()));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
