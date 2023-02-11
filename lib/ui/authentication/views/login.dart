@@ -2,21 +2,16 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:ridigo/controller/user_data.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ridigo/main.dart';
-import 'package:ridigo/views/authentication/views/login.dart';
+import 'package:ridigo/ui/authentication/views/signup.dart';
 
-import '../../../controller/constants.dart';
+import '../../../core/controller/constants.dart';
 
-class SignupScreen extends StatelessWidget {
-  SignupScreen({
-    super.key,
-  });
+class LogInScreen extends StatelessWidget {
+  LogInScreen({super.key});
 
   final formkey = GlobalKey<FormState>();
-
-  final namecontroller = TextEditingController();
 
   final emailController = TextEditingController();
 
@@ -45,14 +40,14 @@ class SignupScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white),
-                height: size.height * 0.65,
+                height: size.height * 0.6,
                 width: size.width * 0.9,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: size.width * 0.03),
                     Text(
-                      'Sign Up',
+                      'Log In',
                       style: GoogleFonts.poppins(
                           fontSize: 28, fontWeight: FontWeight.bold),
                     ),
@@ -60,7 +55,7 @@ class SignupScreen extends StatelessWidget {
                     SizedBox(
                         // color: Colors.amber,
                         width: size.width * 0.8,
-                        height: size.width * 0.6,
+                        height: size.width * 0.37,
                         child: Form(
                           key: formkey,
                           child: Column(
@@ -68,36 +63,12 @@ class SignupScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               TextFormField(
-                                controller: namecontroller,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                validator: (value) =>
-                                    value == null ? 'Enter Name' : null,
-                                decoration: InputDecoration(
-                                    labelText: 'Username',
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: Colors.black),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 4, horizontal: 5),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                      borderSide: const BorderSide(
-                                        width: 2,
-                                      ),
-                                    ),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                        borderSide: const BorderSide(
-                                            width: 5,
-                                            style: BorderStyle.none))),
-                              ),
-                              TextFormField(
                                 controller: emailController,
                                 validator: (email) => email != null &&
                                         !EmailValidator.validate(email)
                                     ? 'Enter a valid email'
                                     : null,
-                                keyboardType: TextInputType.emailAddress,
+                                textInputAction: TextInputAction.next,
                                 decoration: InputDecoration(
                                     labelText: 'Email',
                                     labelStyle: GoogleFonts.poppins(
@@ -118,14 +89,12 @@ class SignupScreen extends StatelessWidget {
                               ),
                               TextFormField(
                                 controller: passwordController,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
                                 validator: (value) =>
                                     value != null && value.length < 6
                                         ? 'Enter min 6 character'
                                         : null,
                                 obscureText: true,
-                                keyboardType: TextInputType.visiblePassword,
+                                textInputAction: TextInputAction.done,
                                 decoration: InputDecoration(
                                     labelText: 'Password',
                                     labelStyle: GoogleFonts.poppins(
@@ -147,8 +116,18 @@ class SignupScreen extends StatelessWidget {
                             ],
                           ),
                         )),
-                    SizedBox(
-                      height: size.width * 0.02,
+                    Row(
+                      children: [
+                        MaterialButton(
+                            onPressed: () {
+                              resetPassword(context);
+                            },
+                            child: Text(
+                              'Forgot password?',
+                              style: GoogleFonts.poppins(
+                                  fontSize: 12, fontWeight: FontWeight.bold),
+                            )),
+                      ],
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -158,9 +137,10 @@ class SignupScreen extends StatelessWidget {
                       width: size.width * 0.8,
                       height: 55,
                       child: MaterialButton(
-                        onPressed: () => signUp(context: context),
+                        onPressed: () => signIn(
+                            context: context, navigationkey: navigatorKey),
                         child: Text(
-                          'Sign up',
+                          'Log in',
                           style: GoogleFonts.poppins(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -171,22 +151,32 @@ class SignupScreen extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
+                    // MaterialButton(
+                    //   onPressed: () {
+                    //     // signinGoogle(context);
+                    //   },
+                    //   child:
+                    //       Image.asset('assets/images/Google_login_button.png'),
+                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Already have an Account?',
-                          style: GoogleFonts.poppins(fontSize: 15),
+                          'Don\'t have an Account?',
+                          style: GoogleFonts.sarala(
+                            fontSize: 15,
+                          ),
                         ),
                         TextButton(
                             onPressed: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LogInScreen()));
+                                    builder: (context) => SignupScreen(),
+                                  ));
                             },
                             child: Text(
-                              'Login',
+                              'Sign up',
                               style: GoogleFonts.poppins(
                                   fontSize: 15, fontWeight: FontWeight.bold),
                             ))
@@ -202,7 +192,10 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
-  Future signUp({context}) async {
+  Future signIn({context, navigationkey}) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    String text;
+    var snackBar;
     final isvalid = formkey.currentState!.validate();
     if (!isvalid) return;
     showDialog(
@@ -212,18 +205,125 @@ class SignupScreen extends StatelessWidget {
         child: CircularProgressIndicator(),
       ),
     );
-
-    Provider.of<UserDataProvider>(context, listen: false).userName =
-        namecontroller.text.trim();
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
     } on FirebaseAuthException catch (e) {
       print(e);
-      var snackBar = SnackBar(content: Text(e.message.toString()));
+      if (e.message ==
+          'There is no user record corresponding to this identifier. The user may have been deleted.') {
+        text = 'Eneterd email does\'nt Exist';
+        snackBar = SnackBar(content: Text(text));
+      }
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
+
+  void resetPassword(context) {
+    final size = MediaQuery.of(context).size;
+    final formkey1 = GlobalKey<FormState>();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Reset Password'),
+            content: Form(
+              key: formkey1,
+              child: TextFormField(
+                controller: emailController,
+                validator: (email) =>
+                    email != null && !EmailValidator.validate(email)
+                        ? 'Enter a valid email'
+                        : null,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                    labelText: 'Email',
+                    labelStyle: GoogleFonts.poppins(color: Colors.black),
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        width: 2,
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          width: 2,
+                        ))),
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    'cancel',
+                    style: GoogleFonts.poppins(color: Colors.black),
+                  )),
+              TextButton(
+                child: Text('Reset Password', style: GoogleFonts.poppins()),
+                onPressed: () {
+                  final isvalid = formkey1.currentState!.validate();
+                  if (!isvalid) return;
+                  verifyEmail(context: context, controller: emailController);
+                  Navigator.of(context).pop();
+                  const snackBar = SnackBar(
+                      content:
+                          Text('password Reset Link is send to your Email'));
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future verifyEmail({context, controller}) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: controller.text.trim());
+
+      Navigator.popUntil(context, (route) => route.isFirst);
+    } on FirebaseAuthException catch (e) {
+      print(e);
+
+      Navigator.pop(context);
+    }
+  }
+
+  // final FirebaseAuth auth = FirebaseAuth.instance;
+  // User? user;
+
+  // Future signinGoogle(BuildContext context) async {
+  //   final GoogleSignIn googleSignIn = GoogleSignIn();
+  //   final GoogleSignInAccount? googleSignInAccount =
+  //       googleSignIn.signIn() as GoogleSignInAccount?;
+  //   if (googleSignInAccount != null) {
+  //     final GoogleSignInAuthentication googleSignInAuthentication =
+  //         await googleSignInAccount.authentication;
+  //     final AuthCredential credential = GoogleAuthProvider.credential(
+  //         accessToken: googleSignInAuthentication.accessToken,
+  //         idToken: googleSignInAuthentication.idToken);
+  //     try {
+  //       final UserCredential userCredential =
+  //           await auth.signInWithCredential(credential);
+  //       user = userCredential.user;
+  //     } on FirebaseAuthException catch (e) {
+  //       // if(e.code =='account- exists-with-different')
+  //       print(e);
+  //     } catch (e) {
+  //       print('catch-$e');
+  //     }
+  //   }
+  // }
 }

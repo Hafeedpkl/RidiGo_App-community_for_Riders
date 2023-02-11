@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ridigo/controller/user_data.dart';
+import 'package:ridigo/core/controller/user_data.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -24,7 +24,8 @@ class HomeScreen extends StatelessWidget {
                   onPressed: () {
                     FirebaseAuth.instance.signOut();
                   },
-                  child: Text('Logout'))
+                  child: Text('Logout')),
+              ElevatedButton(onPressed: () {}, child: Text('bottom nav'))
             ],
           ),
         ),

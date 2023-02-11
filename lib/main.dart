@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:ridigo/controller/user_data.dart';
-import 'package:ridigo/views/authentication/views/signup.dart';
-import 'package:ridigo/views/home/home_page.dart';
+import 'package:ridigo/core/controller/user_data.dart';
+import 'package:ridigo/ui/authentication/views/signup.dart';
+import 'package:ridigo/ui/home/home_page.dart';
+
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
