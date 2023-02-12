@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
-import 'package:ridigo/ui/home/provider/event_provider.dart';
+import 'package:ridigo/ui/home/provider/rides_provider.dart';
 
-class EventsScreen extends StatelessWidget {
-  const EventsScreen({super.key});
+class RidesScreen extends StatelessWidget {
+  const RidesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class EventsScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Image.asset(
-                    'assets/images/event-picture.png',
+                    'assets/images/rider-photo.png',
                     fit: BoxFit.contain,
                   ),
                   Padding(
@@ -58,7 +58,6 @@ class EventsScreen extends StatelessWidget {
                           lessStyle: const TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold),
                           style: const TextStyle(fontSize: 12),
-                          // callback: (val) => value.changeExpansion(),
                         ),
                       ],
                     ),
@@ -137,7 +136,7 @@ class EventsScreen extends StatelessWidget {
                             child: ElevatedButton(
                                 onPressed: () {},
                                 child: const Text(
-                                  'Register',
+                                  'Join',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )))
                       ],

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:ridigo/core/constants.dart';
 import 'package:ridigo/core/provider/user_data.dart';
 import 'package:ridigo/ui/home/views/events.dart';
+import 'package:ridigo/ui/home/views/rides.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -58,16 +59,14 @@ class HomeScreen extends StatelessWidget {
           ),
           backgroundColor: kBackgroundColor,
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             //events
             EventsScreen(),
 
             //Rides
 
-            const Center(
-              child: Text('hai'),
-            )
+            RidesScreen()
           ],
         ),
       ),

@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/core/provider/user_data.dart';
 import 'package:ridigo/ui/authentication/views/signup.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/home/provider/event_provider.dart';
+import 'package:ridigo/ui/home/provider/rides_provider.dart';
 import 'package:ridigo/ui/home/views/home_page.dart';
 
 Future main() async {
@@ -28,6 +30,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => EventProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => RidesProvider(),
         )
       ],
       child: MaterialApp(
@@ -35,6 +40,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
+            fontFamily: GoogleFonts.poppins().fontFamily,
             primarySwatch: Colors.blue,
           ),
           home: StreamBuilder<User?>(
