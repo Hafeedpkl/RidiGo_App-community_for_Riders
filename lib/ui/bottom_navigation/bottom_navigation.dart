@@ -2,8 +2,8 @@ import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ridigo/ui/community%20chat/community_chat.dart';
-import 'package:ridigo/ui/home/home_page.dart';
+import 'package:ridigo/ui/community_chat/community_chat.dart';
+import 'package:ridigo/ui/home/views/home_page.dart';
 import 'package:ridigo/ui/map/map_screen.dart';
 import 'package:ridigo/ui/profile/profile_screen.dart';
 
@@ -20,7 +20,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     const HomeScreen(),
     const MapScreen(),
     const ChatScreen(),
-    const ProfileScreen(),
+    ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -34,31 +34,47 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         }),
         items: [
           FlashyTabBarItem(
-            icon: const Icon(Icons.home_outlined),
+            icon: const Icon(
+              Icons.home_outlined,
+              color: Colors.black,
+              size: 30,
+            ),
             title: Text(
               'Home',
-              style: GoogleFonts.poppins(),
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
           ),
           FlashyTabBarItem(
-            icon: const Icon(Icons.search),
+            icon: const Icon(
+              Icons.location_on_outlined,
+              color: Colors.black,
+              size: 30,
+            ),
             title: Text(
-              'Search',
-              style: GoogleFonts.poppins(),
+              'Map',
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
           ),
           FlashyTabBarItem(
-            icon: const Icon(CupertinoIcons.chat_bubble_2),
+            icon: const Icon(
+              CupertinoIcons.chat_bubble_2,
+              color: Colors.black,
+              size: 30,
+            ),
             title: Text(
               'Chat',
-              style: GoogleFonts.poppins(),
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
           ),
           FlashyTabBarItem(
-            icon: const Icon(CupertinoIcons.profile_circled),
+            icon: const Icon(
+              CupertinoIcons.profile_circled,
+              color: Colors.black,
+              size: 30,
+            ),
             title: Text(
               'Profile',
-              style: GoogleFonts.poppins(),
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
             ),
           ),
         ],

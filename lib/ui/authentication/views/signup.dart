@@ -1,13 +1,14 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:ridigo/core/controller/user_data.dart';
+import 'package:ridigo/core/provider/user_data.dart';
 import 'package:ridigo/main.dart';
 import 'package:ridigo/ui/authentication/views/login.dart';
 
-import '../../../core/controller/constants.dart';
+import '../../../core/constants.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({
@@ -74,6 +75,10 @@ class SignupScreen extends StatelessWidget {
                                 validator: (value) =>
                                     value == null ? 'Enter Name' : null,
                                 decoration: InputDecoration(
+                                    prefixIcon: const Icon(
+                                      CupertinoIcons.profile_circled,
+                                      color: Colors.black,
+                                    ),
                                     labelText: 'Username',
                                     labelStyle: GoogleFonts.poppins(
                                         color: Colors.black),
@@ -99,6 +104,10 @@ class SignupScreen extends StatelessWidget {
                                     : null,
                                 keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
+                                    prefixIcon: const Icon(
+                                      CupertinoIcons.at,
+                                      color: Colors.black,
+                                    ),
                                     labelText: 'Email',
                                     labelStyle: GoogleFonts.poppins(
                                         color: Colors.black),
@@ -127,6 +136,10 @@ class SignupScreen extends StatelessWidget {
                                 obscureText: true,
                                 keyboardType: TextInputType.visiblePassword,
                                 decoration: InputDecoration(
+                                    prefixIcon: const Icon(
+                                      CupertinoIcons.padlock,
+                                      color: Colors.black,
+                                    ),
                                     labelText: 'Password',
                                     labelStyle: GoogleFonts.poppins(
                                         color: Colors.black),

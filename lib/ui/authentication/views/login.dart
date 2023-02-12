@@ -1,12 +1,13 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ridigo/main.dart';
 import 'package:ridigo/ui/authentication/views/signup.dart';
 
-import '../../../core/controller/constants.dart';
+import '../../../core/constants.dart';
 
 class LogInScreen extends StatelessWidget {
   LogInScreen({super.key});
@@ -70,6 +71,10 @@ class LogInScreen extends StatelessWidget {
                                     : null,
                                 textInputAction: TextInputAction.next,
                                 decoration: InputDecoration(
+                                    prefixIcon: Icon(
+                                      CupertinoIcons.at,
+                                      color: Colors.black,
+                                    ),
                                     labelText: 'Email',
                                     labelStyle: GoogleFonts.poppins(
                                         color: Colors.black),
@@ -96,6 +101,10 @@ class LogInScreen extends StatelessWidget {
                                 obscureText: true,
                                 textInputAction: TextInputAction.done,
                                 decoration: InputDecoration(
+                                    prefixIcon: Icon(
+                                      CupertinoIcons.padlock,
+                                      color: Colors.black,
+                                    ),
                                     labelText: 'Password',
                                     labelStyle: GoogleFonts.poppins(
                                         color: Colors.black),
@@ -321,7 +330,7 @@ class LogInScreen extends StatelessWidget {
   //           await auth.signInWithCredential(credential);
   //       user = userCredential.user;
   //     } on FirebaseAuthException catch (e) {
-  //       // if(e.code =='account- exists-with-different')
+  //       // if(e.code =='account- dexists-with-different')
   //       print(e);
   //     } catch (e) {
   //       print('catch-$e');

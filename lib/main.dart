@@ -2,10 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'package:ridigo/core/controller/user_data.dart';
+import 'package:ridigo/core/provider/user_data.dart';
 import 'package:ridigo/ui/authentication/views/signup.dart';
-import 'package:ridigo/ui/bottom%20navigation/bottom_navigation.dart';
-import 'package:ridigo/ui/home/home_page.dart';
+import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
+import 'package:ridigo/ui/home/provider/event_provider.dart';
+import 'package:ridigo/ui/home/views/home_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +21,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => UserDataProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserDataProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => EventProvider(),
+        )
+      ],
       child: MaterialApp(
           navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,

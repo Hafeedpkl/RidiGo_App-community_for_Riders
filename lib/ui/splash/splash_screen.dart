@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:ridigo/core/controller/constants.dart';
-import 'package:ridigo/ui/home/home_page.dart';
+import 'package:ridigo/core/constants.dart';
+import 'package:ridigo/ui/home/views/home_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
