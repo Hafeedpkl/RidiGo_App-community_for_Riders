@@ -86,7 +86,9 @@ class RidesScreen extends StatelessWidget {
                                 ),
                                 Text(
                                   'royal_enfield_india',
-                                  style: GoogleFonts.poppins(fontSize: 13),
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             )),

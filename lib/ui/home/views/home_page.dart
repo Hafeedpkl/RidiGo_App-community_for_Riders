@@ -1,9 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+
 import 'package:ridigo/core/constants.dart';
-import 'package:ridigo/core/provider/user_data.dart';
+
 import 'package:ridigo/ui/home/views/events.dart';
 import 'package:ridigo/ui/home/views/rides.dart';
 
@@ -12,52 +11,59 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final user = FirebaseAuth.instance.currentUser!;
-    final username = Provider.of<UserDataProvider>(context).userName;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom:
-              TabBar(indicatorColor: Colors.white, indicatorWeight: 3, tabs: [
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.event),
-                  const SizedBox(
-                    width: 10,
+          bottom: TabBar(
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.white54,
+              indicatorColor: Colors.white,
+              indicatorWeight: 3,
+              tabs: [
+                Tab(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.event),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Events',
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    'Events',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                ),
+                Tab(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.two_wheeler_rounded),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        'Rides',
+                        style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.two_wheeler_rounded),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Rides',
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            )
-          ]),
+                )
+              ]),
           centerTitle: true,
           title: Image.asset(
             'assets/images/Logo.png',
             scale: 1.4,
           ),
           backgroundColor: kBackgroundColor,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(Icons.add),
         ),
         body: const TabBarView(
           children: [

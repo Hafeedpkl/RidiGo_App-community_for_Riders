@@ -2,36 +2,32 @@ import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ridigo/ui/community_chat/community_chat.dart';
+import 'package:provider/provider.dart';
+import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
+import 'package:ridigo/ui/community_chat/views/chat_groups.dart';
 import 'package:ridigo/ui/home/views/home_page.dart';
 import 'package:ridigo/ui/map/map_screen.dart';
 import 'package:ridigo/ui/profile/profile_screen.dart';
 
-class BottomNavScreen extends StatefulWidget {
-  const BottomNavScreen({super.key});
+class BottomNavScreen extends StatelessWidget {
+  BottomNavScreen({super.key});
 
-  @override
-  State<BottomNavScreen> createState() => _BottomNavScreenState();
-}
-
-class _BottomNavScreenState extends State<BottomNavScreen> {
-  int _selectedIndex = 0;
   final pages = [
     const HomeScreen(),
     const MapScreen(),
-    const ChatScreen(),
+    const ChatGroups(),
     ProfileScreen(),
   ];
+
   @override
   Widget build(BuildContext context) {
+    final bottomNavProvider = Provider.of<BottomNavProvider>(context);
     return Scaffold(
-      body: pages[_selectedIndex],
+      body: pages[bottomNavProvider.selectedIndex],
       bottomNavigationBar: FlashyTabBar(
-        selectedIndex: _selectedIndex,
+        selectedIndex: bottomNavProvider.selectedIndex,
         showElevation: true,
-        onItemSelected: (index) => setState(() {
-          _selectedIndex = index;
-        }),
+        onItemSelected: (index) => bottomNavProvider.bottomChanger(index),
         items: [
           FlashyTabBarItem(
             icon: const Icon(

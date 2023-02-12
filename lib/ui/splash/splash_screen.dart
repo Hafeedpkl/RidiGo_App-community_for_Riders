@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:ridigo/core/constants.dart';
-import 'package:ridigo/ui/home/views/home_page.dart';
+import 'package:ridigo/ui/authentication/authentication.dart';
+import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,14 +14,15 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
   void initState() {
     super.initState();
     Timer(
       const Duration(seconds: 2),
-      () => Navigator.push(
+      () => Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) => AuthScreen(),
           )),
     );
   }

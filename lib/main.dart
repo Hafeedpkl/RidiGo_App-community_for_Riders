@@ -6,9 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:ridigo/core/provider/user_data.dart';
 import 'package:ridigo/ui/authentication/views/signup.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
+import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
 import 'package:ridigo/ui/home/provider/event_provider.dart';
 import 'package:ridigo/ui/home/provider/rides_provider.dart';
 import 'package:ridigo/ui/home/views/home_page.dart';
+import 'package:ridigo/ui/splash/splash_screen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
           create: (context) => UserDataProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => EventProvider(),
+          create: (context) => BottomNavProvider(),
         ),
         ChangeNotifierProvider(
           create: (context) => RidesProvider(),
@@ -40,26 +42,28 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
-            fontFamily: GoogleFonts.poppins().fontFamily,
-            primarySwatch: Colors.blue,
+              fontFamily: GoogleFonts.poppins().fontFamily,
+              primarySwatch: Colors.blue,
+              useMaterial3: true),
+          home: const SplashScreen()
+          // StreamBuilder<User?>(
+          //     stream: FirebaseAuth.instance.authStateChanges(),
+          //     builder: (context, snapshot) {
+          //       if (snapshot.connectionState == ConnectionState.waiting) {
+          //         return const Center(
+          //           child: CircularProgressIndicator(),
+          //         );
+          //       } else if (snapshot.hasError) {
+          //         return const Center(
+          //           child: Text('Something went wrong'),
+          //         );
+          //       } else if (snapshot.hasData) {
+          //         return BottomNavScreen();
+          //       } else {
+          //         return SignupScreen();
+          //       }
+          //     })
           ),
-          home: StreamBuilder<User?>(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  return const Center(
-                    child: Text('Something went wrong'),
-                  );
-                } else if (snapshot.hasData) {
-                  return const BottomNavScreen();
-                } else {
-                  return SignupScreen();
-                }
-              })),
     );
   }
 }
