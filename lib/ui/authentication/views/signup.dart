@@ -230,7 +230,7 @@ class SignupScreen extends StatelessWidget {
     Provider.of<UserDataProvider>(context, listen: false).userName =
         namecontroller.text.trim();
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
     } on FirebaseAuthException catch (e) {

@@ -61,10 +61,6 @@ class HomeScreen extends StatelessWidget {
           ),
           backgroundColor: kBackgroundColor,
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.add),
-        ),
         body: const TabBarView(
           children: [
             //events
@@ -74,6 +70,13 @@ class HomeScreen extends StatelessWidget {
 
             RidesScreen()
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          shape: const CircleBorder(),
+          onPressed: () {},
+          child: const Icon(
+            Icons.add,
+          ),
         ),
       ),
     );

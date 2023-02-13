@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
-import 'package:ridigo/ui/home/provider/event_provider.dart';
 
 class EventsScreen extends StatelessWidget {
   const EventsScreen({super.key});
@@ -46,19 +44,18 @@ class EventsScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        ReadMoreText(
+                        const ReadMoreText(
                           'Flutter is Google’s mobile UI open source framework to build high-quality native (super fast) interfaces for iOS and Android apps with the unified codebase. in my opinion flutter is very nice language and its very beginner friendly language.this is my project for rider\' community ',
                           trimLines: 2,
                           colorClickableText: Colors.pink,
                           trimMode: TrimMode.Line,
                           trimCollapsedText: 'Show more',
                           trimExpandedText: 'Show less',
-                          moreStyle: const TextStyle(
+                          moreStyle: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold),
-                          lessStyle: const TextStyle(
+                          lessStyle: TextStyle(
                               fontSize: 12, fontWeight: FontWeight.bold),
-                          style: const TextStyle(fontSize: 12),
-                          // callback: (val) => value.changeExpansion(),
+                          style: TextStyle(fontSize: 12),
                         ),
                       ],
                     ),
@@ -140,7 +137,9 @@ class EventsScreen extends StatelessWidget {
                                 onPressed: () {},
                                 child: const Text(
                                   'Register',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
                                 )))
                       ],
                     ),
