@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
 import 'package:ridigo/ui/community_chat/views/chat_groups.dart';
 import 'package:ridigo/ui/home/views/home_page.dart';

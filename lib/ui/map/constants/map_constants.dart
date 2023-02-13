@@ -1,6 +1,6 @@
 import 'package:latlong2/latlong.dart';
 
-class AppConstants {
+class MapConstants {
   static const String mapBoxAccessToken =
       'pk.eyJ1IjoiaGFmZWVkcGtsIiwiYSI6ImNsZTAyNm51YzAzeGszcnJ6M3R5am8zdzQifQ.z9fFZYH4GzLEoRlZ4RI26A';
   static const String mapBoxStyleId =
