@@ -7,7 +7,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ridigo/main.dart';
 import 'package:ridigo/ui/authentication/views/signup.dart';
 
-import '../../../core/constants.dart';
+import '../../../core/constants/constants.dart';
 
 class LogInScreen extends StatelessWidget {
   LogInScreen({super.key});

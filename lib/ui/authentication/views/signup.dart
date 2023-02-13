@@ -8,7 +8,7 @@ import 'package:ridigo/core/provider/user_data.dart';
 import 'package:ridigo/main.dart';
 import 'package:ridigo/ui/authentication/views/login.dart';
 
-import '../../../core/constants.dart';
+import '../../../core/constants/constants.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({

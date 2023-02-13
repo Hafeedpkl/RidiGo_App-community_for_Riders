@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:ridigo/core/constants.dart';
+import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/ui/authentication/authentication.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 
