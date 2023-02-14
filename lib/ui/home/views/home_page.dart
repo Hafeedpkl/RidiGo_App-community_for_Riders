@@ -56,8 +56,8 @@ class HomeScreen extends StatelessWidget {
               ]),
           centerTitle: true,
           title: Image.asset(
-            'assets/images/Logo.png',
-            scale: 1.4,
+            'assets/images/new-logo.png',
+            scale: 10,
           ),
           backgroundColor: kBackgroundColor,
         ),

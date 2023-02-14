@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/ui/map/constants/map_constants.dart';
@@ -32,7 +31,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           centerTitle: true,
           backgroundColor: kBackgroundColor,
           title: const Text(
-            'RSA Map',
+            'Roadside Assistance',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
