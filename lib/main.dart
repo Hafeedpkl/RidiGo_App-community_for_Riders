@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:ridigo/core/provider/user_data.dart';
+import 'package:ridigo/ui/profile/provider/user_data_provider.dart';
 import 'package:ridigo/ui/authentication/views/signup.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
@@ -46,23 +46,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: Colors.blue,
               useMaterial3: true),
           home: const SplashScreen()
-          // StreamBuilder<User?>(
-          //     stream: FirebaseAuth.instance.authStateChanges(),
-          //     builder: (context, snapshot) {
-          //       if (snapshot.connectionState == ConnectionState.waiting) {
-          //         return const Center(
-          //           child: CircularProgressIndicator(),
-          //         );
-          //       } else if (snapshot.hasError) {
-          //         return const Center(
-          //           child: Text('Something went wrong'),
-          //         );
-          //       } else if (snapshot.hasData) {
-          //         return BottomNavScreen();
-          //       } else {
-          //         return SignupScreen();
-          //       }
-          //     })
+         
           ),
     );
   }

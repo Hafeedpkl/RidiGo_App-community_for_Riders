@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:ridigo/core/provider/user_data.dart';
+import 'package:ridigo/ui/profile/provider/user_data_provider.dart';
 import 'package:ridigo/main.dart';
 import 'package:ridigo/ui/authentication/views/login.dart';
 
