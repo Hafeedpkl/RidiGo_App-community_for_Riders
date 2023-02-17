@@ -1,15 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/ui/profile/provider/user_data_provider.dart';
-import 'package:ridigo/ui/authentication/views/signup.dart';
-import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
-import 'package:ridigo/ui/home/provider/event_provider.dart';
 import 'package:ridigo/ui/home/provider/rides_provider.dart';
-import 'package:ridigo/ui/home/views/home_page.dart';
 import 'package:ridigo/ui/splash/splash_screen.dart';
 
 Future main() async {

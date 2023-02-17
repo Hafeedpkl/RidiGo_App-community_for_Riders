@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/ui/profile/provider/user_data_provider.dart';
+import 'package:ridigo/ui/settings/settings_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser!;
@@ -18,13 +19,13 @@ class ProfileScreen extends StatelessWidget {
             PopupMenuButton(
               color: Colors.white,
               itemBuilder: (context) => [
-                PopupMenuItem(
-                  child: Text('Sign Out'),
+                const PopupMenuItem(
                   value: 1,
+                  child: Text('Sign Out'),
                 ),
-                PopupMenuItem(
-                  child: Text('Settings'),
+                const PopupMenuItem(
                   value: 2,
+                  child: Text('Settings'),
                 ),
               ],
               onSelected: (value) {
@@ -51,6 +52,12 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
                   );
+                } else if (value == 2) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingsScreen(),
+                      ));
                 }
               },
             )
@@ -66,12 +73,99 @@ class ProfileScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        color: Colors.white,
+                    Card(
+                      elevation: 4,
+                      child: InkWell(
+                        onTap: () {},
+                        child: SizedBox(
+                          height: size.height * 0.06,
+                          width: double.infinity,
+                          child: Center(
+                              child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Icons.bookmark_border_outlined,
+                                size: 25,
+                              ),
+                              Text(
+                                'Saved Events & Rides',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          )),
+                        ),
                       ),
-                      height: size.height * 0.1,
+                    ),
+                    SizedBox(
+                      height: size.width * 0.02,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Card(
+                            color: Colors.lightBlueAccent,
+                            elevation: 4,
+                            child: InkWell(
+                              onTap: () {},
+                              child: SizedBox(
+                                height: size.height * 0.06,
+                                child: Center(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.event_available,
+                                      size: 25,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: size.width * 0.02),
+                                    const Text(
+                                      'Events',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                )),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Card(
+                            color: Colors.deepPurpleAccent,
+                            elevation: 4,
+                            child: InkWell(
+                              onTap: () {},
+                              child: SizedBox(
+                                height: size.height * 0.06,
+                                child: Center(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.two_wheeler_rounded,
+                                      size: 25,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: size.width * 0.02),
+                                    const Text(
+                                      'Rides',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                )),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     )
                   ],
                 ),
@@ -96,7 +190,7 @@ class ProfileScreen extends StatelessWidget {
             Expanded(
               child: CircleAvatar(
                 backgroundColor: kBackgroundColor,
-                radius: size.width * 0.15,
+                radius: size.width * 0.16,
                 child: CircleAvatar(
                   radius: size.width * 0.14,
                   backgroundImage:
@@ -142,7 +236,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  '${user.email}',
+                                  '${user.displayName}',
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 15),
                                 ),
