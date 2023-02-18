@@ -16,7 +16,7 @@ class MapMarker {
 final mapMarkers = [
   MapMarker(
       username: 'mr user',
-      title: 'Iam Stcuked Pls help!',
+      title: 'Iam Stucked Pls help!',
       location: LatLng(51.5382123, -0.1882464),
       description:
           'My bike is breakdown. anyone help or send a mechanic to this location'),

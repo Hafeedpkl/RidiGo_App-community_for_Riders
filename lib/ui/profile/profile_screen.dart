@@ -214,15 +214,16 @@ class ProfileScreen extends StatelessWidget {
                               Expanded(
                                 child: Row(
                                   children: [
-                                    Text(
-                                      Provider.of<UserDataProvider>(context)
-                                              .userName ??
-                                          'User Name',
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                    Consumer<UserDataProvider>(
+                                        builder: (context, value, _) {
+                                      return Text(
+                                        user.displayName ?? value.userName,
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      );
+                                    }),
                                     IconButton(
                                       onPressed: () {},
                                       icon: const Icon(
@@ -236,7 +237,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  '${user.displayName}',
+                                  '${user.email}',
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 15),
                                 ),

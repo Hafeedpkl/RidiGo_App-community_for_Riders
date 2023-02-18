@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:ridigo/ui/profile/provider/user_data_provider.dart';
 import 'package:ridigo/main.dart';
 import 'package:ridigo/ui/authentication/views/login.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../common/api_base_url.dart';
+import '../../../common/api_end_points.dart';
 import '../../../core/constants/constants.dart';
 
 class SignupScreen extends StatelessWidget {
@@ -73,7 +78,9 @@ class SignupScreen extends StatelessWidget {
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 validator: (value) =>
-                                    value == null ? 'Enter Name' : null,
+                                    value != null && value.length < 3
+                                        ? 'Enter Name'
+                                        : null,
                                 decoration: InputDecoration(
                                     prefixIcon: const Icon(
                                       CupertinoIcons.profile_circled,
@@ -171,7 +178,10 @@ class SignupScreen extends StatelessWidget {
                       width: size.width * 0.8,
                       height: 55,
                       child: MaterialButton(
-                        onPressed: () => signUp(context: context),
+                        onPressed: () {
+                          signUp(context: context);
+                          // dbSignup();
+                        },
                         child: Text(
                           'Sign up',
                           style: GoogleFonts.poppins(
@@ -217,6 +227,8 @@ class SignupScreen extends StatelessWidget {
 
   Future signUp({context}) async {
     FocusManager.instance.primaryFocus?.unfocus();
+    final db = FirebaseFirestore.instance;
+
     final isvalid = formkey.currentState!.validate();
     if (!isvalid) return;
     showDialog(
@@ -226,18 +238,36 @@ class SignupScreen extends StatelessWidget {
         child: CircularProgressIndicator(),
       ),
     );
-
     Provider.of<UserDataProvider>(context, listen: false).userName =
         namecontroller.text.trim();
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
+      final user = FirebaseAuth.instance.currentUser;
+      await user!.updateDisplayName(namecontroller.text.trim());
+      dbSignup(user);
     } on FirebaseAuthException catch (e) {
       print(e);
       var snackBar = SnackBar(content: Text(e.message.toString()));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  }
+
+  Future<void> dbSignup(user) async {
+    var dio = Dio();
+    try {
+      final url = Uri.parse('${kBaseUrl}${ApiEndPoints.signUp}');
+      var data = {'email': user.email.toString(), 'uid': user.uid.toString()};
+      final response = await dio.post(url.toString(), data: data);
+      if (response.statusCode == 200) {
+        log(response.data.toString());
+      } else {
+        log('request failed');
+      }
+    } on DioError catch (e) {
+      log(e.toString());
+    }
   }
 }

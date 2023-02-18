@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ridigo/common/api_base_url.dart';
@@ -19,9 +21,17 @@ class SettingsScreen extends StatelessWidget {
 
 void checkGet() async {
   var dio = Dio();
-  var response = await dio.post("${kBaseUrl}profile/showProfile",
-      data: {'email': 'hafeed123@gmail.com'});
-
-  print(response.statusCode);
-  print(response.data.toString());
+  log("${kBaseUrl}profile/showProfile");
+  try {
+    var response = await dio.post('${kBaseUrl}profile/showProfile',
+        data: {'email': 'hafeed123@gmail.com'});
+    if (response.statusCode == 200) {
+      log('done');
+      print(response.data.toString());
+    } else {
+      log('error');
+    }
+  } on DioError catch (e) {
+    print(e);
+  }
 }
