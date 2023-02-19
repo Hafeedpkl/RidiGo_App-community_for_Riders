@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ridigo/core/constants/constants.dart';
-import 'package:ridigo/ui/introdiction/intro_screen.dart';
+import 'package:ridigo/ui/introduction/intro_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../splash/splash_screen.dart';
@@ -25,7 +25,7 @@ class _IntroCheckingState extends State<IntroChecking> {
     } else {
       await prefs.setBool('seen', true);
 
-      Navigator.push(
+      Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => IntroScreen(),

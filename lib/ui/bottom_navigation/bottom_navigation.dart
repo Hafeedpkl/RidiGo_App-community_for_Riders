@@ -98,7 +98,6 @@ class BottomNavScreen extends StatelessWidget {
             ),
           ],
         ),
-       
       ),
     );
   }

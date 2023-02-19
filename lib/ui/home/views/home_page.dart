@@ -14,7 +14,9 @@ class HomeScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           bottom: TabBar(
               labelColor: Colors.white,
               unselectedLabelColor: Colors.white54,

@@ -53,7 +53,7 @@ class IntroScreen extends StatelessWidget {
       skipTextStyle: GoogleFonts.poppins(
           color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
       introductionList: list,
-      onTapSkipButton: () => Navigator.push(
+      onTapSkipButton: () => Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => SplashScreen(),

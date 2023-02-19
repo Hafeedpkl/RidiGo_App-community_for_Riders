@@ -14,6 +14,7 @@ class ProfileScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: kBackgroundColor,
           actions: [
             PopupMenuButton(
