@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intro_screen_onboarding_flutter/introduction.dart';
 import 'package:intro_screen_onboarding_flutter/introscreenonboarding.dart';
-import 'package:ridigo/ui/authentication/views/signup.dart';
+import 'package:ridigo/ui/splash/splash_screen.dart';
 
 class IntroScreen extends StatelessWidget {
   IntroScreen({super.key});
+
   final List<Introduction> list = [
     Introduction(
       imageUrl: 'assets/images/a-guy-ride-scooter.png',
@@ -55,7 +56,7 @@ class IntroScreen extends StatelessWidget {
       onTapSkipButton: () => Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => SignupScreen(),
+            builder: (context) => SplashScreen(),
           )),
     );
   }
