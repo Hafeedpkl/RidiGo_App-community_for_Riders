@@ -1,9 +1,13 @@
+import 'dart:developer';
+
+import 'package:dio/dio.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:ridigo/common/api_base_url.dart';
 import 'package:ridigo/main.dart';
 import 'package:ridigo/ui/authentication/views/signup.dart';
 
@@ -163,6 +167,7 @@ class LogInScreen extends StatelessWidget {
                     // MaterialButton(
                     //   onPressed: () {
                     //     // signinGoogle(context);
+                    //     dbLogin();
                     //   },
                     //   child:
                     //       Image.asset('assets/images/Google_login_button.png'),
@@ -291,6 +296,7 @@ class LogInScreen extends StatelessWidget {
           );
         });
   }
+  
 
   Future verifyEmail({context, controller}) async {
     showDialog(

@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
 import 'package:ridigo/ui/introduction/intro_checking.dart';
 import 'package:ridigo/ui/introduction/intro_screen.dart';
 import 'package:ridigo/ui/profile/provider/user_data_provider.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => RidesProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GroupProvider(),
         )
       ],
       child: MaterialApp(
