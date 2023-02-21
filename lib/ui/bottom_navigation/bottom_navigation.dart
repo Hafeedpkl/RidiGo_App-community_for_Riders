@@ -117,7 +117,6 @@ class BottomNavScreen extends StatelessWidget {
       final response = await dio.post(url.toString(),
           data: {"email": "${user.email}", "uid": user.uid.toString()});
       log(response.data.toString());
-      log('new Added');
       log(response.statusCode.toString());
     } on DioError catch (e) {
       log(e.toString());

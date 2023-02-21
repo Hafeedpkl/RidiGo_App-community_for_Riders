@@ -1,8 +1,11 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ridigo/ui/community_chat/model/group_model.dart';
 import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
+import 'package:ridigo/ui/community_chat/views/join_group.dart';
 import 'package:ridigo/ui/community_chat/views/single_group.dart';
 
 class ChatGroups extends StatelessWidget {
@@ -10,20 +13,48 @@ class ChatGroups extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser!;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        centerTitle: true,
         title: const Text('Community Chat'),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return const [
+                PopupMenuItem(
+                  child: Text('Add Group'),
+                  value: 1,
+                ),
+                PopupMenuItem(
+                  child: Text('Join Group'),
+                  value: 2,
+                )
+              ];
+            },
+            onSelected: (value) {
+              if (value == 1) {
+                log('add Group button Pressed');
+              } else if (value == 2) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => JoinGroup(),
+                    ));
+              }
+            },
+          )
+        ],
       ),
       body: Consumer<GroupProvider>(builder: (context, value, _) {
         log('get', name: 'view');
         return value.isLoading == true
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : ListView.builder(
-                itemCount: value.groupList.length,
+                itemCount: value.indvidualGroupList.length,
                 itemBuilder: (context, index) {
                   return ListTile(
                     leading: const CircleAvatar(
@@ -31,20 +62,22 @@ class ChatGroups extends StatelessWidget {
                           AssetImage('assets/images/profile-image.png'),
                       radius: 25,
                     ),
-                    title: Text(value.groupList[index].groupName),
-                    // subtitle: const Text(
-                    //   'admin : hello',
-                    //   style: TextStyle(fontSize: 12, color: Colors.black54),
-                    // ),
+                    title: Text(
+                      value.indvidualGroupList[index].groupName,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: const Text(
+                      ' ',
+                      style: TextStyle(fontSize: 12, color: Colors.black54),
+                    ),
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              ChatScreen(title: 'Group ${index + 1}'),
+                          builder: (context) => ChatScreen(
+                              title: value.indvidualGroupList[index].groupName),
                         )),
                   );
                 },
-                // separatorBuilder: (context, index) => Divider(),
               );
       }),
     );
