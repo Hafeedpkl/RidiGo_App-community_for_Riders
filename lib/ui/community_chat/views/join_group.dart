@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
+import 'package:ridigo/ui/community_chat/services/group_services.dart';
 
 class JoinGroup extends StatelessWidget {
   const JoinGroup({super.key});
@@ -59,7 +61,16 @@ class JoinGroup extends StatelessWidget {
                                   fontSize: 12, color: Colors.black54),
                             ),
                             trailing: ElevatedButton(
-                                onPressed: () {}, child: Text('join')),
+                                onPressed: () {
+                                  GroupService().joinGroup(
+                                      groupId: value.foundedJoinList[index].id);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BottomNavScreen(),
+                                      ));
+                                },
+                                child: const Text('join')),
                           );
                         },
                       ),

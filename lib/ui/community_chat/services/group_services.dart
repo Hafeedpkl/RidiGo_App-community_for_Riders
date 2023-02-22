@@ -61,13 +61,23 @@ class GroupService {
           data: '{"adminName":"${user.email}","roomName":"$roomName"}');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        log(response.data.toString(),name: 'createGp');
+        log(response.data.toString(), name: 'createGp');
       }
     } on DioError catch (e) {
       log(e.message);
     }
   }
-  Future<void>joinGroup()async{
 
+  Future<void> joinGroup({groupId}) async {
+    try {
+      log('joined the group');
+      Response response = await dio.post(kBaseUrl + ApiEndPoints.joinGroup,
+          data: '{"selection":"${groupId}","username":"${user.email}"}');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log(response.data.toString());
+      }
+    } on DioError catch (e) {
+      log(e.message);
+    }
   }
 }
