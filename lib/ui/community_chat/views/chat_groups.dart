@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ridigo/ui/community_chat/model/group_model.dart';
 import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
 import 'package:ridigo/ui/community_chat/views/join_group.dart';
 import 'package:ridigo/ui/community_chat/views/single_group.dart';
@@ -13,6 +12,9 @@ class ChatGroups extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<GroupProvider>(context, listen: false).getJoinedGroup();
+    });
     final user = FirebaseAuth.instance.currentUser!;
 
     return Scaffold(

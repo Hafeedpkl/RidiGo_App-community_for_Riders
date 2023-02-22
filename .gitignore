@@ -45,3 +45,4 @@ app.*.map.json
 
 # map constants
 lib/ui/map/constants/
+lib/common/api_base_url.dart
