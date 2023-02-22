@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
-import 'package:ridigo/ui/community_chat/views/single_group.dart';
 
 class JoinGroup extends StatelessWidget {
   const JoinGroup({super.key});
@@ -12,6 +11,9 @@ class JoinGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<GroupProvider>().getJoinList();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<GroupProvider>(context, listen: false).getJoinList();
+    });
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(

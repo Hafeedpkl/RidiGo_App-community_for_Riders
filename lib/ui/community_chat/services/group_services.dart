@@ -45,7 +45,6 @@ class GroupService {
           }
         }
         return filteredData;
-      
       } else {
         return null;
       }
@@ -53,5 +52,22 @@ class GroupService {
       log(e.message);
     }
     return null;
+  }
+
+  Future<void> createGroup({roomName}) async {
+    try {
+      log('create Group');
+      Response response = await dio.post(kBaseUrl + ApiEndPoints.createGroup,
+          data: '{"adminName":"${user.email}","roomName":"$roomName"}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log(response.data.toString(),name: 'createGp');
+      }
+    } on DioError catch (e) {
+      log(e.message);
+    }
+  }
+  Future<void>joinGroup()async{
+
   }
 }

@@ -7,6 +7,7 @@ import 'package:ridigo/ui/community_chat/services/group_services.dart';
 
 class GroupProvider extends ChangeNotifier {
   final user = FirebaseAuth.instance.currentUser!;
+  TextEditingController groupNameController = TextEditingController();
 
   List<Group> groupList = [];
 
@@ -27,7 +28,7 @@ class GroupProvider extends ChangeNotifier {
       if (value != null) {
         groupList = value;
         notifyListeners();
-   
+
         isLoading = false;
         notifyListeners();
       } else {

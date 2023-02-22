@@ -2,8 +2,12 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
+import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
 import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
+import 'package:ridigo/ui/community_chat/services/group_services.dart';
 import 'package:ridigo/ui/community_chat/views/join_group.dart';
 import 'package:ridigo/ui/community_chat/views/single_group.dart';
 
@@ -26,7 +30,7 @@ class ChatGroups extends StatelessWidget {
             itemBuilder: (context) {
               return const [
                 PopupMenuItem(
-                  child: Text('Add Group'),
+                  child: Text('Create Group'),
                   value: 1,
                 ),
                 PopupMenuItem(
@@ -37,7 +41,7 @@ class ChatGroups extends StatelessWidget {
             },
             onSelected: (value) {
               if (value == 1) {
-                log('add Group button Pressed');
+                addGroup(context: context);
               } else if (value == 2) {
                 Navigator.push(
                     context,
@@ -83,5 +87,72 @@ class ChatGroups extends StatelessWidget {
               );
       }),
     );
+  }
+
+  void addGroup({context}) {
+    var controller =
+        Provider.of<GroupProvider>(context, listen: false).groupNameController;
+
+    final formkey1 = GlobalKey<FormState>();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Create Group'),
+            content: Form(
+              key: formkey1,
+              child: TextFormField(
+                controller: controller,
+                validator: (value) =>
+                    value != null && value.length < 3 ? 'Enter Name' : null,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  
+                    labelText: 'Group name',
+                    labelStyle: GoogleFonts.poppins(color: Colors.black),
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        width: 2,
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          width: 2,
+                        ))),
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    'cancel',
+                    style: GoogleFonts.poppins(color: Colors.black),
+                  )),
+              TextButton(
+                child: Text('create', style: GoogleFonts.poppins()),
+                onPressed: () async {
+                  final isvalid = formkey1.currentState!.validate();
+                  if (!isvalid) return;
+                  await GroupService()
+                      .createGroup(roomName: controller.text.trim());
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BottomNavScreen(),
+                      ));
+                  var snackBar = SnackBar(
+                      content:
+                          Text('Group ${controller.text.trim()} is created'));
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  controller.clear();
+                },
+              )
+            ],
+          );
+        });
   }
 }
