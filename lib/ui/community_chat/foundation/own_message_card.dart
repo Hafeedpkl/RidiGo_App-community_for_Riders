@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class OwnMessageCard extends StatelessWidget {
-  const OwnMessageCard({super.key});
-
+   OwnMessageCard({super.key,required this.text});
+  String text;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -19,19 +19,19 @@ class OwnMessageCard extends StatelessWidget {
             color: Color.fromARGB(255, 198, 238, 248),
             child: Stack(
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(
+                 Padding(
+                  padding: const EdgeInsets.only(
                     left: 10,
                     right: 30,
                     top: 5,
                     bottom: 20,
                   ),
                   child: Text(
-                    "Hey there you are very innovative .and flutter is awesome framework . This is  a sample chat ",
-                    style: TextStyle(fontSize: 15),
+                    text,
+                    style: const TextStyle(fontSize: 15),
                   ),
                 ),
-                Positioned(
+                const Positioned(
                   bottom: 4,
                   right: 5,
                   child: Text(

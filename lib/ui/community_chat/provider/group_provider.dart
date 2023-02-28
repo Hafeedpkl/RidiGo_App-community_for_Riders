@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ridigo/ui/community_chat/model/group_model.dart';
@@ -68,7 +66,7 @@ class GroupProvider extends ChangeNotifier {
       results = groupList
           .where((element) => element.groupName
               .toLowerCase()
-              .contains(enteredKeyword.toLowerCase()))
+              .contains(enteredKeyword.toLowerCase().trim()))
           .toList();
     }
     foundedJoinList = results;
