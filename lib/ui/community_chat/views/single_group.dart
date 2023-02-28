@@ -1,7 +1,10 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ridigo/common/api_base_url.dart';
 import 'package:ridigo/core/constants/constants.dart';
+import 'package:ridigo/ui/community_chat/foundation/own_message_card.dart';
+import 'package:ridigo/ui/community_chat/foundation/reply_card.dart';
+import 'package:ridigo/ui/community_chat/model/chat_model.dart';
 import 'package:ridigo/ui/community_chat/model/group_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -16,21 +19,37 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController textController = TextEditingController();
   bool? sendButton;
+  List<ChatModel> listMsg = [];
   IO.Socket? socket;
   @override
   void initState() {
+    connnect();
     super.initState();
   }
 
   void connnect() {
-    socket = IO.io(kBaseUrl, <String, dynamic>{
+    socket = IO.io(kBaseUrl2, <String, dynamic>{
       "transports": ["websocket"],
       "autoConnect": false,
     });
     socket!.connect();
     socket!.onConnect((data) {
-    
+      print('connnected to frontend');
     });
+  }
+
+  void sendMsg(String message) {
+    final user = FirebaseAuth.instance.currentUser!;
+    ChatModel chat = ChatModel(
+        name: user.displayName!,
+        text: message,
+        groupId: widget.data.id,
+        email: user.email!);
+    setState(() {
+      listMsg.add(chat);
+    });
+    socket!.emit("message",
+        {"name": user.displayName, "text": message, "groupId": widget.data.id});
   }
 
   @override
@@ -54,14 +73,19 @@ class _ChatScreenState extends State<ChatScreen> {
                     Icons.arrow_back,
                     color: Colors.white,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ],
             ),
-            title: Text(
-              widget.data.groupName,
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
+            title: InkWell(
+              onTap: () {},
+              child: Text(
+                widget.data.groupName,
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
             ),
             backgroundColor: kBackgroundColor,
           ),
@@ -70,14 +94,43 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               Expanded(
                   child: Container(
-                      // color: Colors.amber,
-                      )),
+                child: ListView(
+                  children: [
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                    OwnMessageCard(),
+                    ReplyCard(),
+                  ],
+                ),
+              )),
               SizedBox(
-                height: size.height * 0.08,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                        width: size.width - 60,
+                        width: size.width - 70,
                         child: Card(
                             elevation: 2,
                             margin: const EdgeInsets.only(
@@ -115,12 +168,11 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: IconButton(
                           onPressed: () {
                             if (sendButton == true) {
-                              // sendMessage(controller.text, widget.sourceChat.id!,
-                              //     widget.chatModel.id!);
+                              sendMsg(textController.text);
                               textController.clear();
                             }
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.send,
                             color: Colors.white,
                           ),

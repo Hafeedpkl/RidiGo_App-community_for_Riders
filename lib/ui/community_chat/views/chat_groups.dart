@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -34,12 +32,12 @@ class ChatGroups extends StatelessWidget {
             itemBuilder: (context) {
               return const [
                 PopupMenuItem(
-                  child: Text('Create Group'),
                   value: 1,
+                  child: Text('Create Group'),
                 ),
                 PopupMenuItem(
-                  child: Text('Join Group'),
                   value: 2,
+                  child: Text('Join Group'),
                 )
               ];
             },

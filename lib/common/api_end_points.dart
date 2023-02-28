@@ -4,4 +4,5 @@ class ApiEndPoints {
   static String createGroup = 'createGroup/create';
   static String joinGroup = 'createGroup/join';
   static String getImage = 'profile/image?q=';
+  static String message = 'createGroup/message';
 }

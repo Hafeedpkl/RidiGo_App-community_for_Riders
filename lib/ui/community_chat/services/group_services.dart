@@ -31,7 +31,6 @@ class GroupService {
 
   Future<List<Group>?> joinedGroups() async {
     try {
-      log('joined Group');
       Response response = await dio.get(kBaseUrl + ApiEndPoints.getgroup);
       if (response.statusCode == 200 || response.statusCode == 201) {
         final List<Group> jsonData =
@@ -69,7 +68,6 @@ class GroupService {
 
   Future<void> joinGroup({groupId}) async {
     try {
-      log('joined the group');
       Response response = await dio.post(kBaseUrl + ApiEndPoints.joinGroup,
           data: '{"selection":"${groupId}","username":"${user.email}"}');
       if (response.statusCode == 200 || response.statusCode == 201) {

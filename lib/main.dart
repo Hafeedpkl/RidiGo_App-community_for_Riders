@@ -4,8 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
-import 'package:ridigo/ui/introduction/intro_checking.dart';
-import 'package:ridigo/ui/introduction/intro_screen.dart';
 import 'package:ridigo/ui/profile/provider/user_data_provider.dart';
 import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
 import 'package:ridigo/ui/home/provider/rides_provider.dart';
@@ -50,7 +48,7 @@ class MyApp extends StatelessWidget {
               fontFamily: GoogleFonts.poppins().fontFamily,
               primarySwatch: Colors.blue,
               useMaterial3: true),
-          home: SplashScreen()),
+          home: const SplashScreen()),
     );
   }
 }
