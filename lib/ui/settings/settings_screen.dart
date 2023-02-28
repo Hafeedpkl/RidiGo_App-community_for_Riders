@@ -4,16 +4,34 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ridigo/common/api_base_url.dart';
 
+import '../../common/api_end_points.dart';
+
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    String image = 'public\\Profile\\2023-02-23T04-46-56.232Zimages.png';
+    return Scaffold(
+      appBar: AppBar(),
       body: Center(
-          child: ElevatedButton(
-        onPressed: checkGet,
-        child: Text('Get'),
+          child: SizedBox(
+        height: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.amber,
+              backgroundImage:
+                  NetworkImage(kBaseUrl + ApiEndPoints.getImage + image),
+            ),
+            const ElevatedButton(
+              onPressed: checkGet,
+              child: Text('Get'),
+            ),
+          ],
+        ),
       )),
     );
   }

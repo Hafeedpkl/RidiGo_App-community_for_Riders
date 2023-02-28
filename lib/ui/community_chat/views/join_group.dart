@@ -12,7 +12,6 @@ class JoinGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<GroupProvider>().getJoinList();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<GroupProvider>(context, listen: false).getJoinList();
     });

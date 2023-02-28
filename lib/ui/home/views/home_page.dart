@@ -14,7 +14,6 @@ class HomeScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-
         appBar: AppBar(
           automaticallyImplyLeading: false,
           bottom: TabBar(
@@ -73,13 +72,13 @@ class HomeScreen extends StatelessWidget {
             RidesScreen()
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          shape: const CircleBorder(),
-          onPressed: () {},
-          child: const Icon(
-            Icons.add,
-          ),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   shape: const CircleBorder(),
+        //   onPressed: () {},
+        //   child: const Icon(
+        //     Icons.add,
+        //   ),
+        // ),
       ),
     );
   }

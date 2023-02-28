@@ -16,7 +16,7 @@ class GroupService {
       Response response = await dio.get(
         kBaseUrl + ApiEndPoints.getgroup,
       );
-      log(response.statusCode.toString());
+      log(response.statusCode.toString(), name: 'getGroup');
       if (response.statusCode == 200 || response.statusCode == 201) {
         List<Group> groupList =
             (response.data as List).map((e) => Group.fromJson(e)).toList();

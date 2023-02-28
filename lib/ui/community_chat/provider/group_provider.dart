@@ -11,7 +11,7 @@ class GroupProvider extends ChangeNotifier {
 
   List<Group> groupList = [];
 
-  List<dynamic> indvidualGroupList = [];
+  List<Group> indvidualGroupList = [];
 
   GroupProvider() {
     getGroup();
@@ -58,6 +58,7 @@ class GroupProvider extends ChangeNotifier {
   List<Group> foundedJoinList = [];
   void getJoinList() {
     foundedJoinList = groupList;
+    notifyListeners();
   }
 
   void joinGroupRunFilter(String enteredKeyword) {

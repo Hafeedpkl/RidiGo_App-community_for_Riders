@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
-import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
 import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
 import 'package:ridigo/ui/community_chat/services/group_services.dart';
 import 'package:ridigo/ui/community_chat/views/join_group.dart';
@@ -19,14 +19,18 @@ class ChatGroups extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<GroupProvider>(context, listen: false).getJoinedGroup();
     });
-    final user = FirebaseAuth.instance.currentUser!;
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: kBackgroundColor,
         automaticallyImplyLeading: false,
-        title: const Text('Community Chat'),
+        title: const Text(
+          'Community',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         actions: [
           PopupMenuButton(
+            color: Colors.white,
             itemBuilder: (context) {
               return const [
                 PopupMenuItem(
@@ -46,7 +50,7 @@ class ChatGroups extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => JoinGroup(),
+                      builder: (context) => const JoinGroup(),
                     ));
               }
             },
@@ -79,8 +83,8 @@ class ChatGroups extends StatelessWidget {
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ChatScreen(
-                              title: value.indvidualGroupList[index].groupName),
+                          builder: (context) =>
+                              ChatScreen(data: value.indvidualGroupList[index]),
                         )),
                   );
                 },
@@ -107,7 +111,6 @@ class ChatGroups extends StatelessWidget {
                     value != null && value.length < 3 ? 'Enter Name' : null,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                  
                     labelText: 'Group name',
                     labelStyle: GoogleFonts.poppins(color: Colors.black),
                     contentPadding:
@@ -139,6 +142,7 @@ class ChatGroups extends StatelessWidget {
                   if (!isvalid) return;
                   await GroupService()
                       .createGroup(roomName: controller.text.trim());
+                  // ignore: use_build_context_synchronously
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -147,6 +151,7 @@ class ChatGroups extends StatelessWidget {
                   var snackBar = SnackBar(
                       content:
                           Text('Group ${controller.text.trim()} is created'));
+                  // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   controller.clear();
                 },
