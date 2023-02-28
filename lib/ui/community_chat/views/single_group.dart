@@ -1,6 +1,9 @@
+
 import 'package:flutter/material.dart';
+import 'package:ridigo/common/api_base_url.dart';
 import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/ui/community_chat/model/group_model.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key, required this.data});
@@ -13,10 +16,23 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController textController = TextEditingController();
   bool? sendButton;
+  IO.Socket? socket;
   @override
   void initState() {
     super.initState();
   }
+
+  void connnect() {
+    socket = IO.io(kBaseUrl, <String, dynamic>{
+      "transports": ["websocket"],
+      "autoConnect": false,
+    });
+    socket!.connect();
+    socket!.onConnect((data) {
+    
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

@@ -22,7 +22,6 @@ class GroupProvider extends ChangeNotifier {
 
   void getGroup() async {
     isLoading = true;
-    log('get ', name: 'provider');
     notifyListeners();
     await GroupService().getGroup().then((value) {
       if (value != null) {
@@ -40,7 +39,6 @@ class GroupProvider extends ChangeNotifier {
 
   void getJoinedGroup() async {
     isLoading = true;
-    log('get ', name: 'joined');
     notifyListeners();
     await GroupService().joinedGroups().then((value) {
       if (value != null) {

@@ -21,7 +21,6 @@ class JoinGroup extends StatelessWidget {
         title: const Text('Join Group'),
       ),
       body: Consumer<GroupProvider>(builder: (context, value, _) {
-        log('get', name: 'view');
         return value.isLoading == true
             ? const Center(
                 child: CircularProgressIndicator(),

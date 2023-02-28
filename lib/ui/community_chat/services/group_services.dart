@@ -12,7 +12,6 @@ class GroupService {
   Dio dio = Dio();
   Future<List<Group>?> getGroup() async {
     try {
-      log('get group');
       Response response = await dio.get(
         kBaseUrl + ApiEndPoints.getgroup,
       );

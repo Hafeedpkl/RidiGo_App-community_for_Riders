@@ -58,7 +58,6 @@ class ChatGroups extends StatelessWidget {
         ],
       ),
       body: Consumer<GroupProvider>(builder: (context, value, _) {
-        log('get', name: 'view');
         return value.isLoading == true
             ? const Center(
                 child: CircularProgressIndicator(),
