@@ -32,7 +32,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   dio: ^4.0.6
   email_validator: ^2.1.17
-  firebase_auth: ^4.2.6
+  firebase_auth: ^4.2.9
   firebase_core: ^2.5.0
   flashy_tab_bar2: ^0.0.6
   flutter:
@@ -41,7 +41,7 @@ dependencies:
   flutter_svg: ^2.0.0+1
   google_fonts: ^4.0.3
   google_sign_in: ^5.4.4
-  intl: ^0.18.0
+  intl: ^0.17.0
   intro_screen_onboarding_flutter: ^1.0.0
   latlong2: ^0.8.1
   lottie: ^2.2.0

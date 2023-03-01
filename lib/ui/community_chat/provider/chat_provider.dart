@@ -9,7 +9,7 @@ import '../model/chat_model.dart';
 class ChatProvider extends ChangeNotifier {
   final user = FirebaseAuth.instance.currentUser!;
   TextEditingController textController = TextEditingController();
-
+  late String groupId;
   IO.Socket? socket;
   List<ChatModel> listMsg = [];
   ChatProvider() {
@@ -30,10 +30,15 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setGroupId({required groupId1}) {
+    groupId = groupId1;
+    notifyListeners();
+  }
+
   void getMessages() async {
     isLoading = true;
     notifyListeners();
-    await ChatServices().getMessages().then((value) {
+    await ChatServices().getMessages(groupId: groupId).then((value) {
       if (value != null) {
         listMsg = value;
         notifyListeners();

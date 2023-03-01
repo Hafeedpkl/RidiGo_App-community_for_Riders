@@ -22,6 +22,8 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<ChatProvider>(context, listen: false).connect();
+      Provider.of<ChatProvider>(context, listen: false)
+          .setGroupId(groupId1: data.id);
       Provider.of<ChatProvider>(context, listen: false).getMessages();
     });
     final size = MediaQuery.of(context).size;
@@ -61,11 +63,11 @@ class ChatScreen extends StatelessWidget {
             actions: [
               PopupMenuButton(
                 itemBuilder: (context) => [
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     child: Text('Add Event'),
                   ),
-                  PopupMenuItem(
-                    child: Text('Add Event'),
+                  const PopupMenuItem(
+                    child: Text('Add Rides'),
                   )
                 ],
               )
@@ -81,7 +83,7 @@ class ChatScreen extends StatelessWidget {
                     itemCount: value.listMsg.length,
                     itemBuilder: (context, index) {
                       // value.listMsg[index].name;
-                      if (value.listMsg[index].email == value.user.email) {
+                      if (value.listMsg[index].name == value.user.email) {
                         return OwnMessageCard(
                           text: value.listMsg[index].text,
                         );
