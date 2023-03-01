@@ -38,7 +38,7 @@ class EventsScreen extends StatelessWidget {
                           child: const Padding(
                             padding: EdgeInsets.only(top: 2.0),
                             child: Text(
-                              'Offroad Traning Program',
+                              'Offroad Training Program',
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),

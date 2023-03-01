@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ridigo/ui/community_chat/services/chat_services.dart';
@@ -11,11 +14,17 @@ class ChatProvider extends ChangeNotifier {
   TextEditingController textController = TextEditingController();
   late String groupId;
   IO.Socket? socket;
-  List<ChatModel> listMsg = [];
+  final StreamController<List<ChatModel>> listMsg =
+      StreamController<List<ChatModel>>.broadcast();
   ChatProvider() {
     connect();
   }
   bool isLoading = false;
+  void setGroupId({required groupId1}) {
+    groupId = groupId1;
+    notifyListeners();
+  }
+
   void connect() {
     socket = IO.io(kBaseUrl2, <String, dynamic>{
       "transports": ["websocket"],
@@ -30,17 +39,12 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setGroupId({required groupId1}) {
-    groupId = groupId1;
-    notifyListeners();
-  }
-
-  void getMessages() async {
+  Future<void> getMessages() async {
     isLoading = true;
     notifyListeners();
     await ChatServices().getMessages(groupId: groupId).then((value) {
       if (value != null) {
-        listMsg = value;
+        listMsg.add(value);
         notifyListeners();
         isLoading = false;
         notifyListeners();
@@ -56,10 +60,14 @@ class ChatProvider extends ChangeNotifier {
     ChatModel chat = ChatModel(
         name: user.email!, text: message, groupId: groupId, email: user.email!);
     notifyListeners();
-    listMsg.add(chat);
+    // listMsg.add(chat);
     notifyListeners();
     socket!.emit(
         "message", {"name": user.email, "text": message, "groupId": groupId});
     textController.clear();
   }
+
+  // void disposed() {
+  //   listMsg.close();
+  // }
 }
