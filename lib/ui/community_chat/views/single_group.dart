@@ -29,14 +29,23 @@ class _ChatScreenState extends State<ChatScreen> {
   StreamController<List<ChatModel>> controller =
       StreamController<List<ChatModel>>.broadcast();
   @override
+  void didChangeDependencies() {
+    _timer = Timer.periodic(const Duration(seconds: 2), (_) {
+      Provider.of<ChatProvider>(context, listen: false).getMessages();
+    });
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<ChatProvider>(context, listen: false)
-          .setGroupId(groupId1: widget.data.id);
+      Provider.of<ChatProvider>(context, listen: false).groupId =
+          widget.data.id;
+      // .setGroupId(groupId1: widget.data.id);
+
       Provider.of<ChatProvider>(context, listen: false).connect();
-      _timer = Timer.periodic(const Duration(seconds: 2), (_) {
-        Provider.of<ChatProvider>(context, listen: false).getMessages();
-      });
+
+      Provider.of<ChatProvider>(context, listen: false).getMessages();
     });
 
     final size = MediaQuery.of(context).size;
@@ -51,40 +60,55 @@ class _ChatScreenState extends State<ChatScreen> {
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            leading: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(
+            leadingWidth: 70,
+            leading: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  Icon(
                     Icons.arrow_back,
                     color: Colors.white,
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
+                  SizedBox(
+                    width: 5,
+                  ),
+                  CircleAvatar(
+                    radius: 19,
+                    backgroundImage:
+                        AssetImage('assets/images/profile-image.png'),
+                  )
+                ],
+              ),
             ),
             title: InkWell(
               onTap: () {},
-              child: Text(
-                widget.data.groupName,
-                style: const TextStyle(
-                    color: Colors.white, fontWeight: FontWeight.bold),
+              child: Column(
+                children: [
+                  Text(
+                    widget.data.groupName,
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  // Text(' '),
+                ],
               ),
             ),
             backgroundColor: kBackgroundColor,
-            actions: [
-              PopupMenuButton(
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    child: Text('Add Event'),
-                  ),
-                  const PopupMenuItem(
-                    child: Text('Add Rides'),
-                  )
-                ],
-              )
-            ],
+            // actions: [
+            //   PopupMenuButton(
+            //     itemBuilder: (context) => [
+            //       const PopupMenuItem(
+            //         child: Text('Add Event'),
+            //       ),
+            //       const PopupMenuItem(
+            //         child: Text('Add Rides'),
+            //       )
+            //     ],
+            //   )
+            // ],
           ),
           body: Consumer<ChatProvider>(builder: (context, value, _) {
             controller = value.listMsg;
@@ -92,41 +116,41 @@ class _ChatScreenState extends State<ChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
-                    child: Container(
-                  child: StreamBuilder<List<ChatModel>>(
-                      stream: controller.stream,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final data1 = snapshot.data!;
-                          final data = data1.reversed.toList();
-                          return ListView.builder(
-                            reverse: true,
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              // value.listMsg[index].name;
-                              if (data[index].name == value.user.email) {
-                                return OwnMessageCard(
-                                  text: data[index].text,
-                                );
-                              } else {
-                                log('${data[index].email} ${value.user.email}');
-                                return ReplyCard(
-                                  name: data[index].name,
-                                  text: data[index].text,
-                                  time: data[index].time,
-                                );
-                              }
-                            },
-                          );
-                        } else if (snapshot.hasError) {
-                          return Center(
-                              child: Lottie.asset(
-                                  'assets/lottie/76699-error.json'));
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      }),
-                )),
+                    child: StreamBuilder<List<ChatModel>>(
+                        stream: controller.stream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final data1 = snapshot.data!;
+                            final data = data1.reversed.toList();
+                            return ListView.builder(
+                              reverse: true,
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                // value.listMsg[index].name;
+                                if (data[index].name == value.user.email) {
+                                  return OwnMessageCard(
+                                    text: data[index].text,
+                                    name: data[index].name,
+                                    time: data[index].time,
+                                  );
+                                } else {
+                                  log('${data[index].email} ${value.user.email}');
+                                  return ReplyCard(
+                                    name: data[index].name,
+                                    text: data[index].text,
+                                    time: data[index].time,
+                                  );
+                                }
+                              },
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Lottie.asset(
+                                    'assets/lottie/76699-error.json'));
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        })),
                 SizedBox(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -182,7 +206,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     _timer.cancel();
-    controller.close();
+    // controller.close();
     log('Disposed');
     super.dispose();
   }

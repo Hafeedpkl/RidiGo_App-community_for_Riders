@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,7 @@ class ChatProvider extends ChangeNotifier {
   bool isLoading = false;
   void setGroupId({required groupId1}) {
     groupId = groupId1;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void connect() {
