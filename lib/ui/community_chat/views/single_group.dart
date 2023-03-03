@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/core/constants/constants.dart';
+import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/community_chat/foundation/own_message_card.dart';
 import 'package:ridigo/ui/community_chat/foundation/reply_card.dart';
 import 'package:ridigo/ui/community_chat/model/chat_model.dart';
@@ -23,7 +24,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   List<ChatModel> listMsg = [];
-
+  final _focusNode = FocusNode();
   IO.Socket? socket;
   late Timer _timer;
   StreamController<List<ChatModel>> controller =
@@ -31,7 +32,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void didChangeDependencies() {
     _timer = Timer.periodic(const Duration(seconds: 2), (_) {
-      Provider.of<ChatProvider>(context, listen: false).getMessages();
+      if (context.mounted) {
+        Provider.of<ChatProvider>(context, listen: false).getMessages();
+      }
     });
     super.didChangeDependencies();
   }
@@ -49,165 +52,183 @@ class _ChatScreenState extends State<ChatScreen> {
     });
 
     final size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        Image.asset(
-          'assets/images/chat_background.png',
-          height: size.height,
-          width: size.width,
-          fit: BoxFit.cover,
-        ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            leadingWidth: 70,
-            leading: InkWell(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
-                  Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  CircleAvatar(
-                    radius: 19,
-                    backgroundImage:
-                        AssetImage('assets/images/profile-image.png'),
-                  )
-                ],
-              ),
-            ),
-            title: InkWell(
-              onTap: () {},
-              child: Column(
-                children: [
-                  Text(
-                    widget.data.groupName,
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  // Text(' '),
-                ],
-              ),
-            ),
-            backgroundColor: kBackgroundColor,
-            // actions: [
-            //   PopupMenuButton(
-            //     itemBuilder: (context) => [
-            //       const PopupMenuItem(
-            //         child: Text('Add Event'),
-            //       ),
-            //       const PopupMenuItem(
-            //         child: Text('Add Rides'),
-            //       )
-            //     ],
-            //   )
-            // ],
+    return WillPopScope(
+      onWillPop: () async {
+        _focusNode.unfocus();
+        return true;
+      },
+      child: Stack(
+        children: [
+          Image.asset(
+            'assets/images/chat_background.png',
+            height: size.height,
+            width: size.width,
+            fit: BoxFit.cover,
           ),
-          body: Consumer<ChatProvider>(builder: (context, value, _) {
-            controller = value.listMsg;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                    child: StreamBuilder<List<ChatModel>>(
-                        stream: controller.stream,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            final data1 = snapshot.data!;
-                            final data = data1.reversed.toList();
-                            return ListView.builder(
-                              reverse: true,
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                // value.listMsg[index].name;
-                                if (data[index].name == value.user.email) {
-                                  return OwnMessageCard(
-                                    text: data[index].text,
-                                    name: data[index].name,
-                                    time: data[index].time,
-                                  );
-                                } else {
-                                  log('${data[index].email} ${value.user.email}');
-                                  return ReplyCard(
-                                    name: data[index].name,
-                                    text: data[index].text,
-                                    time: data[index].time,
-                                  );
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              leadingWidth: 70,
+              leading: InkWell(
+                onTap: () {
+                  _focusNode.unfocus();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BottomNavScreen(),
+                      ));
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [
+                    Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    CircleAvatar(
+                      radius: 19,
+                      backgroundImage:
+                          AssetImage('assets/images/profile-image.png'),
+                    )
+                  ],
+                ),
+              ),
+              title: InkWell(
+                onTap: () {},
+                child: Column(
+                  children: [
+                    Text(
+                      widget.data.groupName,
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    // Text(' '),
+                  ],
+                ),
+              ),
+              backgroundColor: kBackgroundColor,
+              // actions: [
+              //   PopupMenuButton(
+              //     itemBuilder: (context) => [
+              //       const PopupMenuItem(
+              //         child: Text('Add Event'),
+              //       ),
+              //       const PopupMenuItem(
+              //         child: Text('Add Rides'),
+              //       )
+              //     ],
+              //   )
+              // ],
+            ),
+            body: Consumer<ChatProvider>(builder: (context, value, _) {
+              controller = value.listMsg;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                      child: StreamBuilder<List<ChatModel>>(
+                          stream: controller.stream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final data1 = snapshot.data!;
+                              final data = data1.reversed.toList();
+                              return ListView.builder(
+                                reverse: true,
+                                itemCount: data.length,
+                                itemBuilder: (context, index) {
+                                  // value.listMsg[index].name;
+                                  if (data[index].name == value.user.email) {
+                                    return OwnMessageCard(
+                                      text: data[index].text,
+                                      name: data[index].name,
+                                      time: data[index].time,
+                                    );
+                                  } else {
+                                    log('${data[index].email} ${value.user.email}');
+                                    return ReplyCard(
+                                      name: data[index].name,
+                                      text: data[index].text,
+                                      time: data[index].time,
+                                    );
+                                  }
+                                },
+                              );
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                  child: Lottie.asset(
+                                      'assets/lottie/76699-error.json'));
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          })),
+                  SizedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                            width: size.width - 70,
+                            child: Card(
+                                elevation: 2,
+                                margin: const EdgeInsets.only(
+                                    left: 2, right: 2, bottom: 8),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: TextFormField(
+                                  focusNode: _focusNode,
+                                  controller: value.textController,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: 5,
+                                  minLines: 1,
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Type here....',
+                                    contentPadding: EdgeInsets.all(15),
+                                  ),
+                                ))),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 8, right: 5, left: 2),
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: kBackgroundColor,
+                            child: IconButton(
+                              onPressed: () {
+                                if (value.textController.text.isNotEmpty) {
+                                  value.sendMsg(
+                                      message: value.textController.text,
+                                      groupId: widget.data.id);
                                 }
                               },
-                            );
-                          } else if (snapshot.hasError) {
-                            return Center(
-                                child: Lottie.asset(
-                                    'assets/lottie/76699-error.json'));
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        })),
-                SizedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                          width: size.width - 70,
-                          child: Card(
-                              elevation: 2,
-                              margin: const EdgeInsets.only(
-                                  left: 2, right: 2, bottom: 8),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25)),
-                              child: TextFormField(
-                                controller: value.textController,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: 5,
-                                minLines: 1,
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Type here....',
-                                  contentPadding: EdgeInsets.all(15),
-                                ),
-                              ))),
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(bottom: 8, right: 5, left: 2),
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: kBackgroundColor,
-                          child: IconButton(
-                            onPressed: () {
-                              if (value.textController.text.isNotEmpty) {
-                                value.sendMsg(
-                                    message: value.textController.text,
-                                    groupId: widget.data.id);
-                              }
-                            },
-                            icon: Icon(Icons.send, color: Colors.white),
+                              icon: Icon(Icons.send, color: Colors.white),
+                            ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            );
-          }),
-        ),
-      ],
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
 
   @override
-  void dispose() {
+  void deactivate() {
     _timer.cancel();
-    // controller.close();
-    log('Disposed');
-    super.dispose();
+    FocusScope.of(context).unfocus();
+    super.deactivate();
   }
+  // @override
+  // void dispose() {
+  //   // _focusNode.dispose();
+  //   // controller.close();
+  //   log('Disposed');
+  //   super.dispose();
+  // }
 }

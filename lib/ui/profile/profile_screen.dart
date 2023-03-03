@@ -1,9 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/core/constants/constants.dart';
-import 'package:ridigo/ui/profile/provider/user_data_provider.dart';
+import 'package:ridigo/core/model/user.dart';
+import 'package:ridigo/ui/profile/provider/user_provider.dart';
 import 'package:ridigo/ui/settings/settings_screen.dart';
+
+import '../../common/api_base_url.dart';
+import '../../common/api_end_points.dart';
 
 class ProfileScreen extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser!;
@@ -11,6 +16,9 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<UserProvider>(context, listen: false).getUser();
+    });
     final size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
@@ -64,119 +72,143 @@ class ProfileScreen extends StatelessWidget {
             )
           ],
         ),
-        body: Column(
-          children: [
-            profileSection(size, context),
-            Expanded(
-                child: SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Card(
-                      elevation: 4,
-                      child: InkWell(
-                        onTap: () {},
-                        child: SizedBox(
-                          height: size.height * 0.06,
-                          width: double.infinity,
-                          child: Center(
-                              child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.bookmark_border_outlined,
-                                size: 25,
+        body: Consumer<UserProvider>(builder: (context, value, _) {
+          return FutureBuilder(
+              future: value.futureUserData,
+              builder: (context, snapshot) {
+                final data = snapshot.data;
+                if (snapshot.hasData) {
+                  return Column(
+                    children: [
+                      profileSection(size, context, data),
+                      Expanded(
+                          child: SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Card(
+                                elevation: 4,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: SizedBox(
+                                    height: size.height * 0.06,
+                                    width: double.infinity,
+                                    child: Center(
+                                        child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          Icons.bookmark_border_outlined,
+                                          size: 25,
+                                        ),
+                                        Text(
+                                          'Saved Events & Rides',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    )),
+                                  ),
+                                ),
                               ),
-                              Text(
-                                'Saved Events & Rides',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              SizedBox(
+                                height: size.width * 0.02,
                               ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Card(
+                                      color: Colors.lightBlueAccent,
+                                      elevation: 4,
+                                      child: InkWell(
+                                        onTap: () {},
+                                        child: SizedBox(
+                                          height: size.height * 0.06,
+                                          child: Center(
+                                              child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(
+                                                Icons.event_available,
+                                                size: 25,
+                                                color: Colors.white,
+                                              ),
+                                              SizedBox(
+                                                  width: size.width * 0.02),
+                                              const Text(
+                                                'Events',
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          )),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Card(
+                                      color: Colors.deepPurpleAccent,
+                                      elevation: 4,
+                                      child: InkWell(
+                                        onTap: () {},
+                                        child: SizedBox(
+                                          height: size.height * 0.06,
+                                          child: Center(
+                                              child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Icon(
+                                                Icons.two_wheeler_rounded,
+                                                size: 25,
+                                                color: Colors.white,
+                                              ),
+                                              SizedBox(
+                                                  width: size.width * 0.02),
+                                              const Text(
+                                                'Rides',
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          )),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
-                          )),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: size.width * 0.02,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Card(
-                            color: Colors.lightBlueAccent,
-                            elevation: 4,
-                            child: InkWell(
-                              onTap: () {},
-                              child: SizedBox(
-                                height: size.height * 0.06,
-                                child: Center(
-                                    child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.event_available,
-                                      size: 25,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: size.width * 0.02),
-                                    const Text(
-                                      'Events',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                  ],
-                                )),
-                              ),
-                            ),
                           ),
                         ),
-                        Expanded(
-                          child: Card(
-                            color: Colors.deepPurpleAccent,
-                            elevation: 4,
-                            child: InkWell(
-                              onTap: () {},
-                              child: SizedBox(
-                                height: size.height * 0.06,
-                                child: Center(
-                                    child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.two_wheeler_rounded,
-                                      size: 25,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: size.width * 0.02),
-                                    const Text(
-                                      'Rides',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                  ],
-                                )),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ))
-          ],
-        ));
+                      ))
+                    ],
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Lottie.asset('assets/lottie/76699-error.json',
+                        height: 20),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              });
+        }));
   }
 
-  Stack profileSection(Size size, BuildContext context) {
+  Stack profileSection(Size size, BuildContext context, UserModel? data) {
     return Stack(
       children: [
         Container(
@@ -193,10 +225,7 @@ class ProfileScreen extends StatelessWidget {
                 backgroundColor: kBackgroundColor,
                 radius: size.width * 0.16,
                 child: CircleAvatar(
-                  radius: size.width * 0.14,
-                  backgroundImage:
-                      const AssetImage('assets/images/profile-avatar.jpg'),
-                ),
+                    radius: size.width * 0.14, backgroundImage: getDp(data)),
               ),
             ),
             Expanded(
@@ -215,16 +244,13 @@ class ProfileScreen extends StatelessWidget {
                               Expanded(
                                 child: Row(
                                   children: [
-                                    Consumer<UserDataProvider>(
-                                        builder: (context, value, _) {
-                                      return Text(
-                                        user.displayName ?? value.userName,
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      );
-                                    }),
+                                    Text(
+                                      user.displayName ?? 'User',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                     IconButton(
                                       onPressed: () {},
                                       icon: const Icon(
@@ -262,6 +288,18 @@ class ProfileScreen extends StatelessWidget {
         )
       ],
     );
+  }
+
+  ImageProvider<Object> getDp(UserModel? data) {
+    if (data != null) {
+      if (data.profileImage != null) {
+        return NetworkImage(
+            kBaseUrl + ApiEndPoints.getImage + data.profileImage!);
+      }
+    }
+    return Image.asset(
+      'assets/images/profile-avatar.jpg',
+    ).image;
   }
 
   Expanded eventsRidesAttended({required int count, required String text}) {
