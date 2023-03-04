@@ -8,6 +8,7 @@ class Group {
     required this.rides,
     required this.createdAt,
     required this.updatedAt,
+    this.image,
   });
 
   String id;
@@ -18,17 +19,18 @@ class Group {
   List<dynamic> rides;
   DateTime createdAt;
   DateTime updatedAt;
+  String? image;
 
   factory Group.fromJson(Map<String, dynamic> json) => Group(
-        id: json["_id"],
-        admin: json["admin"],
-        groupName: json["groupName"],
-        members: List<String>.from(json["members"].map((x) => x)),
-        events: List<dynamic>.from(json["events"].map((x) => x)),
-        rides: List<dynamic>.from(json["rides"].map((x) => x)),
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-      );
+      id: json["_id"],
+      admin: json["admin"],
+      groupName: json["groupName"],
+      members: List<String>.from(json["members"].map((x) => x)),
+      events: List<dynamic>.from(json["events"].map((x) => x)),
+      rides: List<dynamic>.from(json["rides"].map((x) => x)),
+      createdAt: DateTime.parse(json["createdAt"]),
+      updatedAt: DateTime.parse(json["updatedAt"]),
+      image: json["image"]);
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -39,5 +41,6 @@ class Group {
         "rides": List<dynamic>.from(rides.map((x) => x)),
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
+        "image": image
       };
 }

@@ -11,9 +11,10 @@ import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
 import 'package:ridigo/ui/community_chat/views/chat_groups.dart';
 import 'package:ridigo/ui/home/views/home_page.dart';
 import 'package:ridigo/ui/map/view/map_screen.dart';
-import 'package:ridigo/ui/profile/profile_screen.dart';
+import 'package:ridigo/ui/profile/views/profile_screen.dart';
 
 import '../../common/api_base_url.dart';
+import '../profile/provider/user_provider.dart';
 
 class BottomNavScreen extends StatelessWidget {
   BottomNavScreen({super.key});
@@ -27,8 +28,13 @@ class BottomNavScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    dbLogin(user);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<UserProvider>(context, listen: false).getUser();
+
+      final user = FirebaseAuth.instance.currentUser;
+
+      dbLogin(user);
+    });
     Future<bool> showExitPopup() async {
       return await showDialog(
             context: context,

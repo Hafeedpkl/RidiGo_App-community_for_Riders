@@ -14,6 +14,9 @@ import 'package:ridigo/ui/community_chat/provider/chat_provider.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import '../../../common/api_base_url.dart';
+import '../../../common/api_end_points.dart';
+
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key, required this.data});
   final Group data;
@@ -72,6 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
               leading: InkWell(
                 onTap: () {
                   _focusNode.unfocus();
+                  _timer.cancel();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -80,18 +84,17 @@ class _ChatScreenState extends State<ChatScreen> {
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    Icon(
+                  children: [
+                    const Icon(
                       Icons.arrow_back,
                       color: Colors.white,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     CircleAvatar(
                       radius: 19,
-                      backgroundImage:
-                          AssetImage('assets/images/profile-image.png'),
+                      backgroundImage: getDp(widget.data),
                     )
                   ],
                 ),
@@ -218,17 +221,27 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  @override
-  void deactivate() {
-    _timer.cancel();
-    FocusScope.of(context).unfocus();
-    super.deactivate();
+  ImageProvider<Object> getDp(Group? data) {
+    if (data!.image != null) {
+      return NetworkImage(kBaseUrl + ApiEndPoints.getImage + data.image!);
+    }
+    return Image.asset(
+      'assets/images/profile-image.png',
+    ).image;
   }
+
   // @override
-  // void dispose() {
-  //   // _focusNode.dispose();
-  //   // controller.close();
-  //   log('Disposed');
-  //   super.dispose();
+  // void deactivate() {
+  //   _timer.cancel();
+  //   FocusScope.of(context).unfocus();
+  //   super.deactivate();
   // }
+  @override
+  void dispose() {
+    FocusScope.of(context).unfocus();
+    _timer.cancel();
+    // controller.close();
+    log('Disposed');
+    super.dispose();
+  }
 }

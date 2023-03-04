@@ -7,6 +7,10 @@ import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
 import 'package:ridigo/ui/community_chat/services/group_services.dart';
 
+import '../../../common/api_base_url.dart';
+import '../../../common/api_end_points.dart';
+import '../model/group_model.dart';
+
 class JoinGroup extends StatelessWidget {
   const JoinGroup({super.key});
 
@@ -43,10 +47,14 @@ class JoinGroup extends StatelessWidget {
                         itemCount: value.foundedJoinList.length,
                         itemBuilder: (context, index) {
                           return ListTile(
-                            leading: const CircleAvatar(
-                              backgroundImage:
-                                  AssetImage('assets/images/profile-image.png'),
-                              radius: 30,
+                            leading: CircleAvatar(
+                              radius: 26,
+                              backgroundColor: Colors.black,
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    getDp(value.foundedJoinList[index]),
+                                radius: 25,
+                              ),
                             ),
                             title: Text(
                               value.foundedJoinList[index].groupName,
@@ -78,5 +86,14 @@ class JoinGroup extends StatelessWidget {
               );
       }),
     );
+  }
+
+  ImageProvider<Object> getDp(Group? data) {
+    if (data!.image != null) {
+      return NetworkImage(kBaseUrl + ApiEndPoints.getImage + data.image!);
+    }
+    return Image.asset(
+      'assets/images/profile-image.png',
+    ).image;
   }
 }
