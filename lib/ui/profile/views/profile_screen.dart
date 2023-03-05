@@ -241,23 +241,27 @@ class ProfileScreen extends StatelessWidget {
             Expanded(
               child: CircleAvatar(
                 backgroundColor: kBackgroundColor,
-                radius: size.width * 0.15,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfileImageScreen(
-                              image: data!.profileImage != null
-                                  ? NetworkImage(kBaseUrl +
-                                      ApiEndPoints.getImage +
-                                      data.profileImage!)
-                                  : const AssetImage(
-                                      'assets/images/profile-avatar.jpg')),
-                        ));
-                  },
-                  child: CircleAvatar(
-                      radius: size.width * 0.14, backgroundImage: getDp(data)),
+                radius: size.width * 0.17,
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileImageScreen(
+                                image: data!.profileImage != null
+                                    ? NetworkImage(kBaseUrl +
+                                        ApiEndPoints.getImage +
+                                        data.profileImage!)
+                                    : const AssetImage(
+                                        'assets/images/profile-avatar.jpg')),
+                          ));
+                    },
+                    child: CircleAvatar(
+                      radius: size.width * 0.15,
+                      backgroundImage: getDp(data),
+                    ),
+                  ),
                 ),
               ),
             ),

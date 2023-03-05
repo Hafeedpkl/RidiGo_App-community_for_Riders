@@ -11,6 +11,7 @@ import 'package:ridigo/ui/community_chat/foundation/reply_card.dart';
 import 'package:ridigo/ui/community_chat/model/chat_model.dart';
 import 'package:ridigo/ui/community_chat/model/group_model.dart';
 import 'package:ridigo/ui/community_chat/provider/chat_provider.dart';
+import 'package:ridigo/ui/community_chat/views/group_infro.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -100,16 +101,29 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
               title: InkWell(
-                onTap: () {},
-                child: Column(
-                  children: [
-                    Text(
-                      widget.data.groupName,
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                    // Text(' '),
-                  ],
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            GroupInfoScreen(groupData: widget.data),
+                      ));
+                },
+                child: SizedBox(
+                  height: size.height * 0.05,
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.data.groupName,
+                        style: const TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      // Text(' '),
+                    ],
+                  ),
                 ),
               ),
               backgroundColor: kBackgroundColor,
