@@ -42,6 +42,7 @@ dependencies:
   flutter_svg: ^2.0.0+1
   google_fonts: ^4.0.3
   google_sign_in: ^5.4.4
+  http_parser: ^4.0.2
   image_picker: ^0.8.6+4
   intl: ^0.17.0
   intro_screen_onboarding_flutter: ^1.0.0
