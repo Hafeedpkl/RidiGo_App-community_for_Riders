@@ -18,10 +18,6 @@ class ProfileImageScreen extends StatelessWidget {
   final _picker = ImagePicker();
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    final token = user!.getIdToken();
-
-    print(user.displayName.toString());
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -30,7 +26,7 @@ class ProfileImageScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
                 color: Colors.white,
               )),
@@ -39,16 +35,14 @@ class ProfileImageScreen extends StatelessWidget {
                 onPressed: () {
                   changeImage(context);
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.edit,
                   color: Colors.white,
                 ))
           ]),
       body: Center(
-          child: Container(
-        child: PhotoView(
-          imageProvider: image,
-        ),
+          child: PhotoView(
+        imageProvider: image,
       )),
     );
   }
@@ -80,6 +74,7 @@ class ProfileImageScreen extends StatelessWidget {
             TextButton(
                 onPressed: () async {
                   await uploadImage(context);
+                  // ignore: use_build_context_synchronously
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -95,7 +90,7 @@ class ProfileImageScreen extends StatelessWidget {
 
   Future<void> uploadImage(context) async {
     final user = FirebaseAuth.instance.currentUser;
-    final token = user!.getIdToken();
+    final token = await user!.getIdToken();
     var dio = Dio();
     final pickedFile = await _picker.pickImage(
       source: ImageSource.gallery,
@@ -112,7 +107,7 @@ class ProfileImageScreen extends StatelessWidget {
             await dio.post(kBaseUrl + ApiEndPoints.editProfileImage,
                 data: formData,
                 options: Options(headers: {
-                  'authorization': 'Bearer ' + await token,
+                  'authorization': 'Bearer $token',
                 }));
         if (response.statusCode == 200 || response.statusCode == 201) {
           log(response.data.toString(), name: 'profile image');
