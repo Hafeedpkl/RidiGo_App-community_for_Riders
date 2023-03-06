@@ -25,7 +25,7 @@ class ChatProvider extends ChangeNotifier {
   }
 
   void connect() {
-    socket = IO.io(kBaseUrl2, <String, dynamic>{
+    socket = IO.io(kBaseUrl, <String, dynamic>{
       "transports": ["websocket"],
       "autoConnect": false,
     });

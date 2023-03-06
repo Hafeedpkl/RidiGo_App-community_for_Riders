@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ridigo/common/api_base_url.dart';
 
@@ -11,7 +12,12 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     String image = 'public\\Profile\\2023-02-23T04-46-56.232Zimages.png';
+
+    
+
+    //
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -30,11 +36,19 @@ class SettingsScreen extends StatelessWidget {
               onPressed: checkGet,
               child: Text('Get'),
             ),
+            // FutureBuilder(
+            //   future: token,
+            //   builder: (context, snapshot) {
+            //     return Text(snapshot.data);
+            //   },
+            // )
           ],
         ),
       )),
     );
   }
+
+
 }
 
 void checkGet() async {
@@ -42,7 +56,7 @@ void checkGet() async {
   log("${kBaseUrl}profile/showProfile");
   try {
     var response = await dio.post('${kBaseUrl}profile/showProfile',
-        data: {'email': 'hafeed123@gmail.com'});
+        data: {'email': 'hafeed123@gmail.com'},);
     if (response.statusCode == 200) {
       log('done');
       print(response.data.toString());

@@ -11,9 +11,13 @@ class UserServices {
   Dio dio = Dio();
 
   Future<UserModel?> getUser() async {
+    final token = await user.getIdToken();
     try {
       Response response = await dio.post(kBaseUrl + ApiEndPoints.showProfile,
-          data: {"email": "${user.email}"});
+          data: {"email": "${user.email}"},
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
       if (response.statusCode == 200 || response.statusCode == 201) {
         // log(response.data.toString());
         return UserModel.fromJson(response.data);

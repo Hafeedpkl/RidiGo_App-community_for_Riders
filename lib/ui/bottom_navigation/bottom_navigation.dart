@@ -33,7 +33,7 @@ class BottomNavScreen extends StatelessWidget {
 
       final user = FirebaseAuth.instance.currentUser;
 
-      dbLogin(user);
+      dbLogin2(user);
     });
     Future<bool> showExitPopup() async {
       return await showDialog(
@@ -119,9 +119,28 @@ class BottomNavScreen extends StatelessWidget {
   Future dbLogin(user) async {
     Dio dio = Dio();
     try {
-      final url = Uri.parse("${kBaseUrl}profile/addNew");
+      final url = Uri.parse("${kBaseUrl}/api/profile/addNew");
       final response = await dio.post(url.toString(),
           data: {"email": "${user.email}", "uid": user.uid.toString()});
+      log(response.data.toString());
+      log(response.statusCode.toString());
+    } on DioError catch (e) {
+      log(e.toString());
+    }
+  }
+
+  Future dbLogin2(user) async {
+    Dio dio = Dio();
+    final user = FirebaseAuth.instance.currentUser;
+    String token = await user!.getIdToken();
+    log(token);
+    try {
+      final url = Uri.parse("${kBaseUrl}/api/profile/addNew");
+      final response = await dio.post(url.toString(),
+          data: {"email": "${user.email}", "uid": user.uid.toString()},
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
       log(response.data.toString());
       log(response.statusCode.toString());
     } on DioError catch (e) {

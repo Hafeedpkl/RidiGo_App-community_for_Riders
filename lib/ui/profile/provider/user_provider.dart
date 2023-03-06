@@ -11,4 +11,5 @@ class UserProvider extends ChangeNotifier {
     futureUserData = UserServices().getUser();
     log(futureUserData.toString());
   }
+  
 }

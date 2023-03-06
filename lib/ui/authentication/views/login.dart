@@ -32,7 +32,7 @@ class LogInScreen extends StatelessWidget {
           width: size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center, 
             children: [
               SizedBox(
                 height: size.width * 0.3,
@@ -296,7 +296,6 @@ class LogInScreen extends StatelessWidget {
           );
         });
   }
-  
 
   Future verifyEmail({context, controller}) async {
     showDialog(

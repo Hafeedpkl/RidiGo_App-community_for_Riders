@@ -1,9 +1,9 @@
 class ApiEndPoints {
-  static String signUp = 'profile/addNew';
-  static String getgroup = 'createGroup/get';
-  static String createGroup = 'createGroup/create';
-  static String joinGroup = 'createGroup/join';
-  static String getImage = 'profile/image?q=';
-  static String message = 'createGroup/message';
-  static String showProfile = 'profile/showProfile';
+  static String signUp = '/api/profile/addNew';
+  static String getgroup = '/api/createGroup/get';
+  static String createGroup = '/api/createGroup/create';
+  static String joinGroup = '/api/createGroup/join';
+  static String getImage = '/api/profile/image?q=';
+  static String message = '/api/createGroup/message';
+  static String showProfile = '/api/profile/showProfile';
 }

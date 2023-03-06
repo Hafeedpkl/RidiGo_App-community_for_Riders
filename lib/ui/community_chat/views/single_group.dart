@@ -11,7 +11,7 @@ import 'package:ridigo/ui/community_chat/foundation/reply_card.dart';
 import 'package:ridigo/ui/community_chat/model/chat_model.dart';
 import 'package:ridigo/ui/community_chat/model/group_model.dart';
 import 'package:ridigo/ui/community_chat/provider/chat_provider.dart';
-import 'package:ridigo/ui/community_chat/views/group_infro.dart';
+import 'package:ridigo/ui/community_chat/views/group_info_screen.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -36,9 +36,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void didChangeDependencies() {
     _timer = Timer.periodic(const Duration(seconds: 2), (_) {
-      if (context.mounted) {
-        Provider.of<ChatProvider>(context, listen: false).getMessages();
-      }
+      // if (context.mounted) {
+      Provider.of<ChatProvider>(context, listen: false).getMessages();
+      // }
     });
     super.didChangeDependencies();
   }
@@ -56,182 +56,176 @@ class _ChatScreenState extends State<ChatScreen> {
     });
 
     final size = MediaQuery.of(context).size;
-    return WillPopScope(
-      onWillPop: () async {
-        _focusNode.unfocus();
-        return true;
-      },
-      child: Stack(
-        children: [
-          Image.asset(
-            'assets/images/chat_background.png',
-            height: size.height,
-            width: size.width,
-            fit: BoxFit.cover,
-          ),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              leadingWidth: 70,
-              leading: InkWell(
-                onTap: () {
-                  _focusNode.unfocus();
-                  _timer.cancel();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BottomNavScreen(),
-                      ));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+    return Stack(
+      children: [
+        Image.asset(
+          'assets/images/chat_background.png',
+          height: size.height,
+          width: size.width,
+          fit: BoxFit.cover,
+        ),
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            leadingWidth: 70,
+            leading: InkWell(
+              onTap: () {
+                _focusNode.unfocus();
+                _timer.cancel();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BottomNavScreen(),
+                    ));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  CircleAvatar(
+                    radius: 19,
+                    backgroundImage: getDp(widget.data),
+                  )
+                ],
+              ),
+            ),
+            title: InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          GroupInfoScreen(groupData: widget.data),
+                    ));
+              },
+              child: SizedBox(
+                height: size.height * 0.05,
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
+                    Text(
+                      widget.data.groupName,
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    CircleAvatar(
-                      radius: 19,
-                      backgroundImage: getDp(widget.data),
-                    )
+                    // Text(' '),
                   ],
                 ),
               ),
-              title: InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            GroupInfoScreen(groupData: widget.data),
-                      ));
-                },
-                child: SizedBox(
-                  height: size.height * 0.05,
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.data.groupName,
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                      // Text(' '),
-                    ],
-                  ),
-                ),
-              ),
-              backgroundColor: kBackgroundColor,
-              // actions: [
-              //   PopupMenuButton(
-              //     itemBuilder: (context) => [
-              //       const PopupMenuItem(
-              //         child: Text('Add Event'),
-              //       ),
-              //       const PopupMenuItem(
-              //         child: Text('Add Rides'),
-              //       )
-              //     ],
-              //   )
-              // ],
             ),
-            body: Consumer<ChatProvider>(builder: (context, value, _) {
-              controller = value.listMsg;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                      child: StreamBuilder<List<ChatModel>>(
-                          stream: controller.stream,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              final data1 = snapshot.data!;
-                              final data = data1.reversed.toList();
-                              return ListView.builder(
-                                reverse: true,
-                                itemCount: data.length,
-                                itemBuilder: (context, index) {
-                                  // value.listMsg[index].name;
-                                  if (data[index].name == value.user.email) {
-                                    return OwnMessageCard(
-                                      text: data[index].text,
-                                      name: data[index].name,
-                                      time: data[index].time,
-                                    );
-                                  } else {
-                                    log('${data[index].email} ${value.user.email}');
-                                    return ReplyCard(
-                                      name: data[index].name,
-                                      text: data[index].text,
-                                      time: data[index].time,
-                                    );
-                                  }
-                                },
-                              );
-                            } else if (snapshot.hasError) {
-                              return Center(
-                                  child: Lottie.asset(
-                                      'assets/lottie/76699-error.json'));
-                            } else {
-                              return Center(child: CircularProgressIndicator());
-                            }
-                          })),
-                  SizedBox(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                            width: size.width - 70,
-                            child: Card(
-                                elevation: 2,
-                                margin: const EdgeInsets.only(
-                                    left: 2, right: 2, bottom: 8),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25)),
-                                child: TextFormField(
-                                  focusNode: _focusNode,
-                                  controller: value.textController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: 5,
-                                  minLines: 1,
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Type here....',
-                                    contentPadding: EdgeInsets.all(15),
-                                  ),
-                                ))),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: 8, right: 5, left: 2),
-                          child: CircleAvatar(
-                            radius: 25,
-                            backgroundColor: kBackgroundColor,
-                            child: IconButton(
-                              onPressed: () {
-                                if (value.textController.text.isNotEmpty) {
-                                  value.sendMsg(
-                                      message: value.textController.text,
-                                      groupId: widget.data.id);
+            backgroundColor: kBackgroundColor,
+            // actions: [
+            //   PopupMenuButton(
+            //     itemBuilder: (context) => [
+            //       const PopupMenuItem(
+            //         child: Text('Add Event'),
+            //       ),
+            //       const PopupMenuItem(
+            //         child: Text('Add Rides'),
+            //       )
+            //     ],
+            //   )
+            // ],
+          ),
+          body: Consumer<ChatProvider>(builder: (context, value, _) {
+            controller = value.listMsg;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                    child: StreamBuilder<List<ChatModel>>(
+                        stream: controller.stream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final data1 = snapshot.data!;
+                            final data = data1.reversed.toList();
+                            return ListView.builder(
+                              reverse: true,
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                // value.listMsg[index].name;
+                                if (data[index].name == value.user.email) {
+                                  return OwnMessageCard(
+                                    text: data[index].text,
+                                    name: data[index].name,
+                                    time: data[index].time,
+                                  );
+                                } else {
+                                  log('${data[index].email} ${value.user.email}');
+                                  return ReplyCard(
+                                    name: data[index].name,
+                                    text: data[index].text,
+                                    time: data[index].time,
+                                  );
                                 }
                               },
-                              icon: Icon(Icons.send, color: Colors.white),
-                            ),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Lottie.asset(
+                                    'assets/lottie/76699-error.json'));
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        })),
+                SizedBox(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                          width: size.width - 70,
+                          child: Card(
+                              elevation: 2,
+                              margin: const EdgeInsets.only(
+                                  left: 2, right: 2, bottom: 8),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: TextFormField(
+                                focusNode: _focusNode,
+                                controller: value.textController,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: 5,
+                                minLines: 1,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Type here....',
+                                  contentPadding: EdgeInsets.all(15),
+                                ),
+                              ))),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(bottom: 8, right: 5, left: 2),
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: kBackgroundColor,
+                          child: IconButton(
+                            onPressed: () {
+                              if (value.textController.text.isNotEmpty) {
+                                value.sendMsg(
+                                    message: value.textController.text,
+                                    groupId: widget.data.id);
+                              }
+                            },
+                            icon: Icon(Icons.send, color: Colors.white),
                           ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              );
-            }),
-          ),
-        ],
-      ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            );
+          }),
+        ),
+      ],
     );
   }
 
@@ -244,15 +238,16 @@ class _ChatScreenState extends State<ChatScreen> {
     ).image;
   }
 
-  // @override
-  // void deactivate() {
-  //   _timer.cancel();
-  //   FocusScope.of(context).unfocus();
-  //   super.deactivate();
-  // }
+  @override
+  void deactivate() {
+    FocusScope.of(context).unfocus();
+    _timer.cancel();
+    super.deactivate();
+  }
+
   @override
   void dispose() {
-    FocusScope.of(context).unfocus();
+    // FocusScope.of(context).unfocus();
     _timer.cancel();
     // controller.close();
     log('Disposed');

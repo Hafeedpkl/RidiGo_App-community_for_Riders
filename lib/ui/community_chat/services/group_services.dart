@@ -11,10 +11,12 @@ class GroupService {
 
   Dio dio = Dio();
   Future<List<Group>?> getGroup() async {
+    final token = await user.getIdToken();
     try {
-      Response response = await dio.get(
-        kBaseUrl + ApiEndPoints.getgroup,
-      );
+      Response response = await dio.get(kBaseUrl + ApiEndPoints.getgroup,
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
       log(response.statusCode.toString(), name: 'getGroup');
       if (response.statusCode == 200 || response.statusCode == 201) {
         List<Group> groupList =
@@ -24,14 +26,18 @@ class GroupService {
         return null;
       }
     } on DioError catch (e) {
-      log(e.message);
+      log(e.message, name: 'get groups');
     }
     return null;
   }
 
   Future<List<Group>?> joinedGroups() async {
+    final token = await user.getIdToken();
     try {
-      Response response = await dio.get(kBaseUrl + ApiEndPoints.getgroup);
+      Response response = await dio.get(kBaseUrl + ApiEndPoints.getgroup,
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
       if (response.statusCode == 200 || response.statusCode == 201) {
         final List<Group> jsonData =
             (response.data as List).map((e) => Group.fromJson(e)).toList();
@@ -47,16 +53,20 @@ class GroupService {
         return null;
       }
     } on DioError catch (e) {
-      log(e.message);
+      log(e.message, name: 'joinedGroups');
     }
     return null;
   }
 
   Future<void> createGroup({roomName}) async {
+    final token = await user.getIdToken();
     try {
       log('create Group');
       Response response = await dio.post(kBaseUrl + ApiEndPoints.createGroup,
-          data: '{"adminName":"${user.email}","roomName":"$roomName"}');
+          data: '{"adminName":"${user.email}","roomName":"$roomName"}',
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         log(response.data.toString(), name: 'createGp');
@@ -67,9 +77,13 @@ class GroupService {
   }
 
   Future<void> joinGroup({groupId}) async {
+    final token = await user.getIdToken();
     try {
       Response response = await dio.post(kBaseUrl + ApiEndPoints.joinGroup,
-          data: '{"selection":"${groupId}","username":"${user.email}"}');
+          data: '{"selection":"${groupId}","username":"${user.email}"}',
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
       if (response.statusCode == 200 || response.statusCode == 201) {
         log(response.data.toString());
       }
