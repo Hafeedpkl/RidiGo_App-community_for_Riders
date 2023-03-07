@@ -97,7 +97,8 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             title: InkWell(
               onTap: () {
-                Navigator.push(
+                // _timer.cancel();
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>

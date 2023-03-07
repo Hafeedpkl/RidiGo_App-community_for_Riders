@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/community_chat/views/widgets/group_image_viewer.dart';
 
 import '../../../common/api_base_url.dart';
@@ -161,7 +165,7 @@ class GroupInfoScreen extends StatelessWidget {
     );
   }
 
-  Future editGrpName(controller, context) async {
+  Future editGrpName(TextEditingController controller, context) async {
     final formkey1 = GlobalKey<FormState>();
     showDialog(
         context: context,
@@ -202,8 +206,14 @@ class GroupInfoScreen extends StatelessWidget {
                   )),
               TextButton(
                 child: Text('change', style: GoogleFonts.poppins()),
-                onPressed: () async {
-                  if (formkey1.currentState!.validate()) return;
+                onPressed: () {
+                  if (!formkey1.currentState!.validate()) return;
+                  changeGroupName(controller.text.trim());
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BottomNavScreen(),
+                      ));
                 },
               )
             ],
@@ -211,9 +221,22 @@ class GroupInfoScreen extends StatelessWidget {
         });
   }
 
-  Future<void> changeGroupName() async {
+  Future<void> changeGroupName(text) async {
     var dio = Dio();
-    
+    final user = FirebaseAuth.instance.currentUser;
+    final token = await user!.getIdToken();
+    try {
+      Response response = await dio.post(kBaseUrl + ApiEndPoints.editGroupName,
+          data: {"id": groupData!.id, "grpName": text},
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log(response.data.toString(), name: 'changeGroupName');
+      }
+    } on DioError catch (e) {
+      log(e.message);
+    }
   }
 
   Card postCard({String? name, List<dynamic>? list, Color? color, Size? size}) {
