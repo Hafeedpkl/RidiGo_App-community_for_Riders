@@ -58,38 +58,49 @@ class ChatGroups extends StatelessWidget {
           )
         ],
       ),
-      body: Consumer<GroupProvider>(builder: (context, value, _) {
-        return value.isLoading == true
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : ListView.separated(
-                itemCount: value.indvidualGroupList.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      radius: 28,
-                      backgroundColor: Colors.black,
-                      child: CircleAvatar(
-                        backgroundImage: getDp(value.indvidualGroupList[index]),
-                        radius: 27,
-                      ),
-                    ),
-                    title: Text(
-                      value.indvidualGroupList[index].groupName,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ChatScreen(data: value.indvidualGroupList[index]),
-                        )),
-                  );
-                },
-                separatorBuilder: (context, index) => Divider(thickness: 0.3),
-              );
-      }),
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            child: Consumer<GroupProvider>(builder: (context, value, _) {
+              return value.isLoading == true
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ListView.separated(
+                      itemCount: value.indvidualGroupList.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: CircleAvatar(
+                            radius: 28,
+                            backgroundColor: Colors.black,
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  getDp(value.indvidualGroupList[index]),
+                              radius: 27,
+                            ),
+                          ),
+                          title: Text(
+                            value.indvidualGroupList[index].groupName,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatScreen(
+                                    data: value.indvidualGroupList[index]),
+                              )),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          Divider(thickness: 0.3),
+                    );
+            }),
+          ),
+        ],
+      ),
     );
   }
 

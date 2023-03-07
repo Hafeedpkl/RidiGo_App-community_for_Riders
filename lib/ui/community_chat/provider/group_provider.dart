@@ -72,4 +72,5 @@ class GroupProvider extends ChangeNotifier {
     foundedJoinList = results;
     notifyListeners();
   }
+  
 }

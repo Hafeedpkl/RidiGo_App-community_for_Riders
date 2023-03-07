@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ridigo/ui/community_chat/views/widgets/group_image_viewer.dart';
 
 import '../../../common/api_base_url.dart';
@@ -10,6 +12,7 @@ class GroupInfoScreen extends StatelessWidget {
   final Group? groupData;
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -30,8 +33,7 @@ class GroupInfoScreen extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          GroupImageViewer(data: groupData),
+                      builder: (context) => GroupImageViewer(data: groupData),
                     ));
               },
               child: SizedBox(
@@ -66,9 +68,10 @@ class GroupInfoScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   groupData!.groupName,
+                                  maxLines: 3,
                                   style: const TextStyle(
                                       color: Colors.white,
-                                      fontSize: 35,
+                                      fontSize: 32,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
@@ -84,6 +87,19 @@ class GroupInfoScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                    Positioned(
+                        bottom: size.width * 0.06,
+                        right: 0,
+                        child: IconButton(
+                            onPressed: () {
+                              controller = TextEditingController(
+                                  text: groupData!.groupName);
+                              editGrpName(controller, context);
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            )))
                   ],
                 ),
               ),
@@ -121,7 +137,7 @@ class GroupInfoScreen extends StatelessWidget {
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: groupData!.members.length,
                       itemBuilder: (context, index) {
@@ -145,12 +161,67 @@ class GroupInfoScreen extends StatelessWidget {
     );
   }
 
+  Future editGrpName(controller, context) async {
+    final formkey1 = GlobalKey<FormState>();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Change name'),
+            content: Form(
+              key: formkey1,
+              child: TextFormField(
+                controller: controller,
+                validator: (value) =>
+                    value != null && value.length < 3 ? 'Enter Name' : null,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                    labelText: 'Group name',
+                    labelStyle: GoogleFonts.poppins(color: Colors.black),
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 5),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: const BorderSide(
+                        width: 2,
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          width: 2,
+                        ))),
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    'cancel',
+                    style: GoogleFonts.poppins(color: Colors.black),
+                  )),
+              TextButton(
+                child: Text('change', style: GoogleFonts.poppins()),
+                onPressed: () async {
+                  if (formkey1.currentState!.validate()) return;
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<void> changeGroupName() async {
+    var dio = Dio();
+    
+  }
+
   Card postCard({String? name, List<dynamic>? list, Color? color, Size? size}) {
     return Card(
       elevation: 3,
-      shape: RoundedRectangleBorder(),
+      shape: const RoundedRectangleBorder(),
       color: color,
-      child: Container(
+      child: SizedBox(
         height: size!.height * 0.15,
         width: size.width,
         child: Padding(

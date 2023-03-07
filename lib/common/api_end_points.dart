@@ -5,6 +5,7 @@ class ApiEndPoints {
   static String joinGroup = '/api/createGroup/join';
   static String message = '/api/createGroup/message';
   static String editGroupImage = '/api/createGroup/editImage';
+  static String editGroupName = '/api/createGroup/editGroupName';
 
 //profile
   static String signUp = '/api/profile/addNew';
