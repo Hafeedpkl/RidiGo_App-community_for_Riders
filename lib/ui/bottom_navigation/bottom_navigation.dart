@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:ridigo/common/api_end_points.dart';
 import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
 import 'package:ridigo/ui/community_chat/views/chat_groups.dart';
 import 'package:ridigo/ui/home/views/home_page.dart';
@@ -33,7 +34,7 @@ class BottomNavScreen extends StatelessWidget {
 
       final user = FirebaseAuth.instance.currentUser;
 
-      dbLogin2(user);
+      dbLogin(user);
     });
     Future<bool> showExitPopup() async {
       return await showDialog(
@@ -118,25 +119,11 @@ class BottomNavScreen extends StatelessWidget {
 
   Future dbLogin(user) async {
     Dio dio = Dio();
-    try {
-      final url = Uri.parse("${kBaseUrl}/api/profile/addNew");
-      final response = await dio.post(url.toString(),
-          data: {"email": "${user.email}", "uid": user.uid.toString()});
-      log(response.data.toString());
-      log(response.statusCode.toString());
-    } on DioError catch (e) {
-      log(e.toString());
-    }
-  }
-
-  Future dbLogin2(user) async {
-    Dio dio = Dio();
     final user = FirebaseAuth.instance.currentUser;
     String token = await user!.getIdToken();
     log(token);
     try {
-      final url = Uri.parse("${kBaseUrl}/api/profile/addNew");
-      final response = await dio.post(url.toString(),
+      final response = await dio.post(kBaseUrl + ApiEndPoints.signUp,
           data: {"email": "${user.email}", "uid": user.uid.toString()},
           options: Options(headers: {
             'authorization': 'Bearer $token',

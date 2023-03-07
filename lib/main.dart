@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/ui/community_chat/provider/chat_provider.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+          builder: FToastBuilder(),
           navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',

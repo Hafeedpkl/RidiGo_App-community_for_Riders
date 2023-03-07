@@ -31,7 +31,7 @@ class GroupInfoScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          GroupImageViewer(image: getDp(groupData)),
+                          GroupImageViewer(data: groupData),
                     ));
               },
               child: SizedBox(
@@ -68,11 +68,11 @@ class GroupInfoScreen extends StatelessWidget {
                                   groupData!.groupName,
                                   style: const TextStyle(
                                       color: Colors.white,
-                                      fontSize: 30,
+                                      fontSize: 35,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Text(
-                                  'created by ${groupData!.admin} ',
+                                  'Created by ${groupData!.admin} ',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 15,
@@ -115,7 +115,7 @@ class GroupInfoScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Members',
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
@@ -125,10 +125,12 @@ class GroupInfoScreen extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: groupData!.members.length,
                       itemBuilder: (context, index) {
-                        return Text(
-                          groupData!.members[index],
-                          style: const TextStyle(
-                            fontSize: 16,
+                        return ListTile(
+                          title: Text(
+                            groupData!.members[index],
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
                           ),
                         );
                       },

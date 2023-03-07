@@ -63,25 +63,21 @@ class ChatGroups extends StatelessWidget {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : ListView.builder(
+            : ListView.separated(
                 itemCount: value.indvidualGroupList.length,
                 itemBuilder: (context, index) {
                   return ListTile(
                     leading: CircleAvatar(
-                      radius: 26,
+                      radius: 28,
                       backgroundColor: Colors.black,
                       child: CircleAvatar(
                         backgroundImage: getDp(value.indvidualGroupList[index]),
-                        radius: 25,
+                        radius: 27,
                       ),
                     ),
                     title: Text(
                       value.indvidualGroupList[index].groupName,
                       style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: const Text(
-                      ' ',
-                      style: TextStyle(fontSize: 12, color: Colors.black54),
                     ),
                     onTap: () => Navigator.push(
                         context,
@@ -91,6 +87,7 @@ class ChatGroups extends StatelessWidget {
                         )),
                   );
                 },
+                separatorBuilder: (context, index) => Divider(thickness: 0.3),
               );
       }),
     );
