@@ -64,11 +64,8 @@ class ProfileScreen extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             FirebaseAuth.instance.signOut();
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SplashScreen(),
-                                ));
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/splashScreen', (route) => false);
                           },
                           child: const Text('Yes'),
                         ),

@@ -19,8 +19,15 @@ class GroupService {
           }));
       log(response.statusCode.toString(), name: 'getGroup');
       if (response.statusCode == 200 || response.statusCode == 201) {
-        List<Group> groupList =
+        final List<Group> jsonData =
             (response.data as List).map((e) => Group.fromJson(e)).toList();
+        final List<Group> groupList = [];
+        for (var data in jsonData) {
+          final members = List<String>.from(data.members);
+          if (!members.contains('${user.email}')) {
+            groupList.add(data);
+          }
+        }
         return groupList;
       } else {
         return null;
@@ -78,6 +85,8 @@ class GroupService {
 
   Future<void> joinGroup({groupId}) async {
     final token = await user.getIdToken();
+    final List<Group> members;
+
     try {
       Response response = await dio.post(kBaseUrl + ApiEndPoints.joinGroup,
           data: '{"selection":"${groupId}","username":"${user.email}"}',
@@ -86,6 +95,7 @@ class GroupService {
           }));
       if (response.statusCode == 200 || response.statusCode == 201) {
         log(response.data.toString());
+        getGroup();
       }
     } on DioError catch (e) {
       log(e.message);

@@ -70,7 +70,8 @@ class JoinGroup extends StatelessWidget {
                                 onPressed: () {
                                   GroupService().joinGroup(
                                       groupId: value.foundedJoinList[index].id);
-                                  Navigator.push(
+                                  value.getGroup();
+                                  Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => BottomNavScreen(),

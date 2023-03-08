@@ -20,7 +20,6 @@ class GroupInfoScreen extends StatelessWidget {
     TextEditingController controller = TextEditingController();
     final size = MediaQuery.of(context).size;
     final user = FirebaseAuth.instance.currentUser;
-
     return SafeArea(
       child: Scaffold(
         // appBar: AppBar(
@@ -103,7 +102,7 @@ class GroupInfoScreen extends StatelessWidget {
                                 Fluttertoast.showToast(
                                     msg: "Only Admin can edit group name",
                                     toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
+                                    gravity: ToastGravity.BOTTOM,
                                     timeInSecForIosWeb: 1,
                                     backgroundColor: Colors.black54,
                                     textColor: Colors.white,

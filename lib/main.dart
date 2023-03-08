@@ -46,15 +46,17 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-          builder: FToastBuilder(),
-          navigatorKey: navigatorKey,
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
-          theme: ThemeData(
-              fontFamily: GoogleFonts.poppins().fontFamily,
-              primarySwatch: Colors.blue,
-              useMaterial3: true),
-          home: const SplashScreen()),
+        builder: FToastBuilder(),
+        navigatorKey: navigatorKey,
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+            fontFamily: GoogleFonts.poppins().fontFamily,
+            primarySwatch: Colors.blue,
+            useMaterial3: true),
+        home: const SplashScreen(),
+        routes: {'/splashScreen': (context) => SplashScreen()},
+      ),
     );
   }
 }
