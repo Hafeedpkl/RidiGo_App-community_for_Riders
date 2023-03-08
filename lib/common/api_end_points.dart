@@ -10,6 +10,6 @@ class ApiEndPoints {
 //profile
   static String signUp = '/api/profile/addNew';
   static String showProfile = '/api/profile/showProfile';
-  static String getImage = '/api/profile/image?q=';
+  static String getImage = '/api/profile/image?q='; 
   static String editProfileImage = '/api/profile/editImage';
 }

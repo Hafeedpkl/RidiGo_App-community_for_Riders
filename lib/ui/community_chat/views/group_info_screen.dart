@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/community_chat/views/widgets/group_image_viewer.dart';
@@ -18,6 +19,8 @@ class GroupInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
     final size = MediaQuery.of(context).size;
+    final user = FirebaseAuth.instance.currentUser;
+
     return SafeArea(
       child: Scaffold(
         // appBar: AppBar(
@@ -96,9 +99,20 @@ class GroupInfoScreen extends StatelessWidget {
                         right: 0,
                         child: IconButton(
                             onPressed: () {
-                              controller = TextEditingController(
-                                  text: groupData!.groupName);
-                              editGrpName(controller, context);
+                              if (groupData!.admin != user!.email) {
+                                Fluttertoast.showToast(
+                                    msg: "Only Admin can edit group name",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.black54,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              } else {
+                                controller = TextEditingController(
+                                    text: groupData!.groupName);
+                                editGrpName(controller, context);
+                              }
                             },
                             icon: const Icon(
                               Icons.edit,
