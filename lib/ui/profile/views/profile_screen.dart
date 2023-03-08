@@ -9,6 +9,7 @@ import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/profile/views/profile_image_screen.dart';
 import 'package:ridigo/ui/profile/provider/user_provider.dart';
 import 'package:ridigo/ui/settings/settings_screen.dart';
+import 'package:ridigo/ui/splash/splash_screen.dart';
 
 import '../../../common/api_base_url.dart';
 import '../../../common/api_end_points.dart';
@@ -63,7 +64,11 @@ class ProfileScreen extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             FirebaseAuth.instance.signOut();
-                            Navigator.pop(context);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SplashScreen(),
+                                ));
                           },
                           child: const Text('Yes'),
                         ),
