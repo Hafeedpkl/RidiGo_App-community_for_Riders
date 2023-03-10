@@ -2,12 +2,11 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ridigo/common/api_base_url.dart';
-import 'package:ridigo/core/services/all_services.dart';
 
 import '../../common/api_end_points.dart';
+import '../community_chat/model/group_model.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -34,7 +33,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                checkGet;
+                openGroup(groupId: '63f3765d22bee0f28806b361');
               },
               child: Text('Get'),
             ),
@@ -71,4 +70,26 @@ void checkGet() async {
   } on DioError catch (e) {
     print(e);
   }
+}
+
+Future<Group?> openGroup({groupId}) async {
+  var dio = Dio();
+  final user = FirebaseAuth.instance.currentUser;
+  final token = await user!.getIdToken();
+  try {
+    Response response = await dio.post(kBaseUrl + ApiEndPoints.openGroup,
+        data: {"details": "${groupId}"},
+        options: Options(headers: {
+          'authorization': 'Bearer $token',
+        }));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      log(response.data.toString());
+      return Group.fromJson(response.data);
+    } else {
+      return null;
+    }
+  } on DioError catch (e) {
+    print(e.message);
+  }
+  return null;
 }

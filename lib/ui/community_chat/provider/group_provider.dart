@@ -1,11 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ridigo/ui/community_chat/model/group_model.dart';
 
 import '../../../core/services/all_services.dart';
 
 class GroupProvider extends ChangeNotifier {
-  final user = FirebaseAuth.instance.currentUser!;
   TextEditingController groupNameController = TextEditingController();
 
   List<Group> groupList = [];

@@ -106,6 +106,26 @@ class AllServices {
     }
   }
 
+  Future<Group?> openGroup({groupId}) async {
+    final token = await user.getIdToken();
+    try {
+      Response response = await dio.post(kBaseUrl + ApiEndPoints.openGroup,
+          data: {"details": "$groupId"},
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // log(response.data.toString());
+        return Group.fromJson(response.data);
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      print(e.message);
+    }
+    return null;
+  }
+
 //Chat Screen
 
   Future<List<ChatModel>?> getMessages({required groupId}) async {
