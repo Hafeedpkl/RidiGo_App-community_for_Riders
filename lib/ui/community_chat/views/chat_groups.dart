@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/core/constants/constants.dart';
+import 'package:ridigo/core/services/services.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/community_chat/model/group_model.dart';
 import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
-import 'package:ridigo/ui/community_chat/services/group_services.dart';
 import 'package:ridigo/ui/community_chat/views/join_group.dart';
 import 'package:ridigo/ui/community_chat/views/single_group.dart';
 
@@ -160,7 +160,7 @@ class ChatGroups extends StatelessWidget {
                 onPressed: () async {
                   final isvalid = formkey1.currentState!.validate();
                   if (!isvalid) return;
-                  await GroupService()
+                  await Services()
                       .createGroup(roomName: controller.text.trim());
                   // ignore: use_build_context_synchronously
                   Navigator.push(

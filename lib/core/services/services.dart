@@ -2,14 +2,18 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ridigo/common/api_base_url.dart';
-import 'package:ridigo/common/api_end_points.dart';
-import 'package:ridigo/ui/community_chat/model/group_model.dart';
 
-class GroupService {
+import '../../common/api_base_url.dart';
+import '../../common/api_end_points.dart';
+import '../../ui/community_chat/model/chat_model.dart';
+import '../../ui/community_chat/model/group_model.dart';
+import '../model/user.dart';
+
+class Services {
   final user = FirebaseAuth.instance.currentUser!;
-
   Dio dio = Dio();
+
+  //Group Section
   Future<List<Group>?> getGroup() async {
     final token = await user.getIdToken();
     try {
@@ -100,5 +104,51 @@ class GroupService {
     } on DioError catch (e) {
       log(e.message);
     }
+  }
+
+//Chat Screen
+
+  Future<List<ChatModel>?> getMessages({required groupId}) async {
+    final token = await user.getIdToken();
+    try {
+      Response response = await dio.post(kBaseUrl + ApiEndPoints.message,
+          data: {"details": "$groupId"},
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
+      log(response.statusCode.toString(), name: 'get messages');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        List<ChatModel> messageList =
+            (response.data as List).map((e) => ChatModel.fromJson(e)).toList();
+        return messageList;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      log(e.message);
+    }
+    return null;
+  }
+
+
+  //User section
+  Future<UserModel?> getUser() async {
+    final token = await user.getIdToken();
+    try {
+      Response response = await dio.post(kBaseUrl + ApiEndPoints.showProfile,
+          data: {"email": "${user.email}"},
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // log(response.data.toString());
+        return UserModel.fromJson(response.data);
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      print(e.message);
+    }
+    return null;
   }
 }

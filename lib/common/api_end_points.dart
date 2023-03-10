@@ -12,4 +12,5 @@ class ApiEndPoints {
   static String showProfile = '/api/profile/showProfile';
   static String getImage = '/api/profile/image?q='; 
   static String editProfileImage = '/api/profile/editImage';
+  
 }

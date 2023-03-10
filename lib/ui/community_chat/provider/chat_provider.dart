@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ridigo/ui/community_chat/services/chat_services.dart';
+import 'package:ridigo/core/services/services.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../common/api_base_url.dart';
@@ -41,7 +41,7 @@ class ChatProvider extends ChangeNotifier {
   Future<void> getMessages() async {
     isLoading = true;
     notifyListeners();
-    await ChatServices().getMessages(groupId: groupId).then((value) {
+    await Services().getMessages(groupId: groupId).then((value) {
       if (value != null) {
         listMsg.add(value);
         notifyListeners();

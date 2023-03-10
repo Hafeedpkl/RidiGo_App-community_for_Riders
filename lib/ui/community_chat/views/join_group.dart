@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
-import 'package:ridigo/ui/community_chat/services/group_services.dart';
 
 import '../../../common/api_base_url.dart';
 import '../../../common/api_end_points.dart';
+import '../../../core/services/services.dart';
 import '../model/group_model.dart';
 
 class JoinGroup extends StatelessWidget {
@@ -68,7 +68,7 @@ class JoinGroup extends StatelessWidget {
                             ),
                             trailing: ElevatedButton(
                                 onPressed: () {
-                                  GroupService().joinGroup(
+                                  Services().joinGroup(
                                       groupId: value.foundedJoinList[index].id);
                                   value.getGroup();
                                   Navigator.pushReplacement(
