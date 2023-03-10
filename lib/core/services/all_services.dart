@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ridigo/core/model/post.dart';
 
 import '../../common/api_base_url.dart';
 import '../../common/api_end_points.dart';
@@ -9,7 +10,7 @@ import '../../ui/community_chat/model/chat_model.dart';
 import '../../ui/community_chat/model/group_model.dart';
 import '../model/user.dart';
 
-class Services {
+class AllServices {
   final user = FirebaseAuth.instance.currentUser!;
   Dio dio = Dio();
 
@@ -89,11 +90,10 @@ class Services {
 
   Future<void> joinGroup({groupId}) async {
     final token = await user.getIdToken();
-    final List<Group> members;
 
     try {
       Response response = await dio.post(kBaseUrl + ApiEndPoints.joinGroup,
-          data: '{"selection":"${groupId}","username":"${user.email}"}',
+          data: '{"selection":"$groupId","username":"${user.email}"}',
           options: Options(headers: {
             'authorization': 'Bearer $token',
           }));
@@ -130,7 +130,6 @@ class Services {
     return null;
   }
 
-
   //User section
   Future<UserModel?> getUser() async {
     final token = await user.getIdToken();
@@ -148,6 +147,31 @@ class Services {
       }
     } on DioError catch (e) {
       print(e.message);
+    }
+    return null;
+  }
+
+  //User Posts
+  Future<List<UserPost>?> getPosts() async {
+    final token = user.getIdToken();
+    try {
+      Response response = await dio.get(kBaseUrl + ApiEndPoints.getPosts,
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final List<UserPost> postList = (response.data as List)
+            .map(
+              (e) => UserPost.fromJson(e),
+            )
+            .toList();
+        log(response.data.toString());
+        return postList;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      log(e.message);
     }
     return null;
   }

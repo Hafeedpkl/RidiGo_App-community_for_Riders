@@ -8,7 +8,7 @@ import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
 
 import '../../../common/api_base_url.dart';
 import '../../../common/api_end_points.dart';
-import '../../../core/services/services.dart';
+import '../../../core/services/all_services.dart';
 import '../model/group_model.dart';
 
 class JoinGroup extends StatelessWidget {
@@ -68,7 +68,7 @@ class JoinGroup extends StatelessWidget {
                             ),
                             trailing: ElevatedButton(
                                 onPressed: () {
-                                  Services().joinGroup(
+                                  AllServices().joinGroup(
                                       groupId: value.foundedJoinList[index].id);
                                   value.getGroup();
                                   Navigator.pushReplacement(

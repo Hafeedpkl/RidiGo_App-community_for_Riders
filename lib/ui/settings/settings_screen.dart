@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ridigo/common/api_base_url.dart';
+import 'package:ridigo/core/services/all_services.dart';
 
 import '../../common/api_end_points.dart';
 
@@ -31,8 +32,10 @@ class SettingsScreen extends StatelessWidget {
               backgroundImage:
                   NetworkImage(kBaseUrl + ApiEndPoints.getImage + image),
             ),
-            const ElevatedButton(
-              onPressed: checkGet,
+            ElevatedButton(
+              onPressed: () async {
+                checkGet;
+              },
               child: Text('Get'),
             ),
             // FutureBuilder(

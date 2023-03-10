@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ridigo/ui/community_chat/model/group_model.dart';
 
-import '../../../core/services/services.dart';
+import '../../../core/services/all_services.dart';
 
 class GroupProvider extends ChangeNotifier {
   final user = FirebaseAuth.instance.currentUser!;
@@ -22,7 +22,7 @@ class GroupProvider extends ChangeNotifier {
   void getGroup() async {
     isLoading = true;
     notifyListeners();
-    await Services().getGroup().then((value) {
+    await AllServices().getGroup().then((value) {
       if (value != null) {
         groupList = value;
         notifyListeners();
@@ -39,7 +39,7 @@ class GroupProvider extends ChangeNotifier {
   void getJoinedGroup() async {
     isLoading = true;
     notifyListeners();
-    await Services().joinedGroups().then((value) {
+    await AllServices().joinedGroups().then((value) {
       if (value != null) {
         indvidualGroupList = value;
         notifyListeners();
