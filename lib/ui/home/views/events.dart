@@ -129,7 +129,7 @@ class EventsScreen extends StatelessWidget {
                                       } else {
                                         return const SizedBox(
                                           child: CircularProgressIndicator(
-                                            color: kBackgroundColor,
+                                              color: kBackgroundColor,
                                               strokeWidth: 2),
                                         );
                                       }
@@ -149,12 +149,16 @@ class EventsScreen extends StatelessWidget {
                               Expanded(
                                   flex: 2,
                                   child: ElevatedButton(
+                                      style: const ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStatePropertyAll(
+                                                  Colors.blueAccent)),
                                       onPressed: () {},
                                       child: const Text(
                                         'register',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.black),
+                                            color: Colors.white),
                                       )))
                             ],
                           ))

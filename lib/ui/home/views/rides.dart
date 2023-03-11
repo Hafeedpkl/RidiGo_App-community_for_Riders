@@ -21,7 +21,7 @@ class RidesScreen extends StatelessWidget {
       height: double.infinity,
       child: Consumer<PostProvider>(builder: (context, value, _) {
         if (value.isLoading == true) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         } else {
@@ -147,12 +147,16 @@ class RidesScreen extends StatelessWidget {
                             ),
                             Expanded(
                                 child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStatePropertyAll(
+                                                Colors.blueAccent)),
                                     onPressed: () {},
                                     child: const Text(
                                       'Join',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.black),
+                                          color: Colors.white),
                                     )))
                           ],
                         ),

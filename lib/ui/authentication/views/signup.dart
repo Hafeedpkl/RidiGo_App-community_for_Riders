@@ -163,7 +163,8 @@ class SignupScreen extends StatelessWidget {
                                         borderSide: const BorderSide(
                                           width: 2,
                                         ))),
-                              )
+                              ),
+                              
                             ],
                           ),
                         )),

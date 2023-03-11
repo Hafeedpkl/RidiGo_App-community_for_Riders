@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +14,7 @@ import 'package:ridigo/ui/community_chat/model/chat_model.dart';
 import 'package:ridigo/ui/community_chat/model/group_model.dart';
 import 'package:ridigo/ui/community_chat/provider/chat_provider.dart';
 import 'package:ridigo/ui/community_chat/views/group_info_screen.dart';
+import 'package:ridigo/ui/home/views/add_post_screen.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -54,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
       Provider.of<ChatProvider>(context, listen: false).getMessages();
     });
-
+    final user = FirebaseAuth.instance.currentUser;
     final size = MediaQuery.of(context).size;
     return Stack(
       children: [
@@ -123,18 +126,24 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             backgroundColor: kBackgroundColor,
-            // actions: [
-            //   PopupMenuButton(
-            //     itemBuilder: (context) => [
-            //       const PopupMenuItem(
-            //         child: Text('Add Event'),
-            //       ),
-            //       const PopupMenuItem(
-            //         child: Text('Add Rides'),
-            //       )
-            //     ],
-            //   )
-            // ],
+            actions: [
+              widget.data.admin == user!.email
+                  ? IconButton(
+                      onPressed: () {
+                        _timer.cancel();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  AddPostScreen(groupData: widget.data),
+                            ));
+                      },
+                      icon: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ))
+                  : const SizedBox()
+            ],
           ),
           body: Consumer<ChatProvider>(builder: (context, value, _) {
             controller = value.listMsg;
