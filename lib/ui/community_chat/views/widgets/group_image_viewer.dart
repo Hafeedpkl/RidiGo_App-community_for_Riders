@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:ridigo/core/services/all_services.dart';
 
 import '../../../../common/api_base_url.dart';
 import '../../../../common/api_end_points.dart';
@@ -83,7 +84,9 @@ class GroupImageViewer extends StatelessWidget {
                 child: const Text('no')),
             TextButton(
                 onPressed: () async {
-                  await uploadImage(data: data, context: context);
+                  await AllServices().uploadImage(
+                    data: data,
+                  );
                   // ignore: use_build_context_synchronously
                   Navigator.push(
                       context,
@@ -96,39 +99,6 @@ class GroupImageViewer extends StatelessWidget {
         );
       },
     );
-  }
-
-  Future<void> uploadImage({context, Group? data}) async {
-    final user = FirebaseAuth.instance.currentUser;
-    final token = await user!.getIdToken();
-    final picker = ImagePicker();
-    final id = data!.id;
-    File? pickedImage;
-    var dio = Dio();
-    final pickedFile =
-        await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
-    if (pickedFile != null) {
-      pickedImage = File(pickedFile.path);
-      final FormData formData = FormData.fromMap({
-        "id": id,
-        "postImage": await MultipartFile.fromFile(pickedImage.path,
-            contentType: MediaType('Image', 'JPEG')),
-      });
-
-      try {
-        Response response =
-            await dio.post(kBaseUrl + ApiEndPoints.editGroupImage,
-                data: formData,
-                options: Options(headers: {
-                  'authorization': 'Bearer $token',
-                }));
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          log(response.data.toString(), name: 'profile image');
-        }
-      } on DioError catch (e) {
-        log(e.message);
-      }
-    }
   }
 
   ImageProvider<Object> getDp(Group? data) {

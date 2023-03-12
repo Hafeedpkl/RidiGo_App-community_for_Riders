@@ -1,7 +1,10 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ridigo/core/model/post.dart';
 
 import '../../common/api_base_url.dart';
@@ -126,6 +129,38 @@ class AllServices {
     return null;
   }
 
+  Future<void> uploadImage({Group? data}) async {
+    final user = FirebaseAuth.instance.currentUser;
+    final token = await user!.getIdToken();
+    final picker = ImagePicker();
+    final id = data!.id;
+    File? pickedImage;
+    final pickedFile =
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+    if (pickedFile != null) {
+      pickedImage = File(pickedFile.path);
+      final FormData formData = FormData.fromMap({
+        "id": id,
+        "postImage": await MultipartFile.fromFile(pickedImage.path,
+            contentType: MediaType('Image', 'JPEG')),
+      });
+
+      try {
+        Response response =
+            await dio.post(kBaseUrl + ApiEndPoints.editGroupImage,
+                data: formData,
+                options: Options(headers: {
+                  'authorization': 'Bearer $token',
+                }));
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          log(response.data.toString(), name: 'profile image');
+        }
+      } on DioError catch (e) {
+        log(e.message);
+      }
+    }
+  }
+
 //Chat Screen
 
   Future<List<ChatModel>?> getMessages({required groupId}) async {
@@ -171,9 +206,40 @@ class AllServices {
     return null;
   }
 
+  Future<void> uploadProfileImage(context) async {
+    final user = FirebaseAuth.instance.currentUser;
+    final token = await user!.getIdToken();
+    final picker = ImagePicker();
+    File? pickedImage;
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      pickedImage = File(pickedFile.path);
+      final FormData formData = FormData.fromMap({
+        "postImage": await MultipartFile.fromFile(pickedImage.path,
+            contentType: MediaType('Image', 'JPEG')),
+        "email": "${user.email}"
+      });
+      try {
+        Response response =
+            await dio.post(kBaseUrl + ApiEndPoints.editProfileImage,
+                data: formData,
+                options: Options(headers: {
+                  'authorization': 'Bearer $token',
+                }));
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          log(response.data.toString(), name: 'profile image');
+        }
+      } on DioError catch (e) {
+        log(e.message);
+      }
+    }
+  }
+
   //User Posts
   Future<List<UserPost>?> getPosts() async {
-    final token = user.getIdToken();
+    final token = await user.getIdToken();
     try {
       Response response = await dio.get(kBaseUrl + ApiEndPoints.getPosts,
           options: Options(headers: {
@@ -185,7 +251,7 @@ class AllServices {
               (e) => UserPost.fromJson(e),
             )
             .toList();
-        log(response.data.toString());
+        // log(response.data.toString());
         return postList;
       } else {
         return null;
@@ -194,5 +260,37 @@ class AllServices {
       log(e.message);
     }
     return null;
+  }
+
+  void addPost(
+      {required String title,
+      required String desctription,
+      required String details,
+      required String event,
+      required String registrationEndsOn,
+      required File image}) async {
+    final pickedImage = File(image.path);
+    final token = await user.getIdToken();
+    final FormData formData = FormData.fromMap({
+      "postImage": await MultipartFile.fromFile(pickedImage.path,
+          contentType: MediaType('Image', 'JPEG')),
+      "title": title,
+      "details": details,
+      "description": desctription,
+      "event": event,
+      "registrationEndsOn": registrationEndsOn,
+    });
+    try {
+      Response response = await dio.post(kBaseUrl + ApiEndPoints.addPost,
+          data: formData,
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log(response.data.toString(), name: 'addPost');
+      }
+    } on DioError catch (e) {
+      log(e.message);
+    }
   }
 }

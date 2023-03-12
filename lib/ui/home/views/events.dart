@@ -15,7 +15,6 @@ class EventsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    Future<Group?> groupData;
     return Scaffold(
         body: SizedBox(
       height: double.infinity,
@@ -28,9 +27,10 @@ class EventsScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: value.eventList.length,
             itemBuilder: (context, index) {
-              print(value.eventList[index].group);
+              // print(value.eventList[index].group);
               value.openGroup(groupId: value.eventList[index].group);
-
+              final daysLeft =
+                  getDaysleft(value.eventList[index].expirationDate);
               final data = value.eventList[index];
               return Padding(
                 padding: const EdgeInsets.only(
@@ -43,8 +43,55 @@ class EventsScreen extends StatelessWidget {
                   // height: size.width * 0.8,
                   child: Column(
                     children: [
-                      Image.network(
-                          kBaseUrl + ApiEndPoints.getImage + data.image),
+                      SizedBox(
+                        child: Stack(
+                          children: [
+                            Image.network(
+                                kBaseUrl + ApiEndPoints.getImage + data.image),
+                            Positioned(
+                              left: 0,
+                              bottom: 0,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.black26,
+                                  ),
+                                  height: 30,
+                                  width: 80,
+                                  child: daysLeft.isNegative
+                                      ? Center(
+                                          child: Text('Expired',
+                                              style: GoogleFonts.sarala(
+                                                  fontSize: 13,
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold)),
+                                        )
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(daysLeft.toString(),
+                                                style: GoogleFonts.sarala(
+                                                    fontSize: 13,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            const Text(
+                                              ' days left',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            )
+                                          ],
+                                        ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Column(
@@ -171,6 +218,13 @@ class EventsScreen extends StatelessWidget {
         }
       }),
     ));
+  }
+
+  int getDaysleft(DateTime dateTime) {
+    DateTime currentDate = DateTime.now();
+    Duration difference = dateTime.difference(currentDate);
+    int daysLeft = difference.inSeconds ~/ 86400;
+    return daysLeft;
   }
 
   ImageProvider<Object> getDp(Group? data) {

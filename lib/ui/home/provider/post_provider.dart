@@ -13,7 +13,9 @@ class PostProvider extends ChangeNotifier {
   List<UserPost> eventList = [];
   List<UserPost> postList = [];
   Future<Group?>? futureGroupData;
- final formKey = GlobalKey<FormState>();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   bool isLoading = false;
   PostProvider() {
     getEvents();
@@ -52,10 +54,17 @@ class PostProvider extends ChangeNotifier {
   }
 
   int selectedValue = 1;
-
-  void handleRadioValueChange(int value) {
+  String selectedPostType = 'event';
+  void handleRadioValueChange(value) {
     selectedValue = value;
     notifyListeners();
+    if (value == 1) {
+      selectedPostType = 'event';
+      notifyListeners();
+    } else if (value == 2) {
+      selectedPostType = 'ride';
+      notifyListeners();
+    }
   }
 
   String? selectDate;

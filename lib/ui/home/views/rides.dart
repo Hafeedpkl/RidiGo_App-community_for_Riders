@@ -29,6 +29,8 @@ class RidesScreen extends StatelessWidget {
             itemCount: value.ridesList.length,
             itemBuilder: (context, index) {
               value.openGroup(groupId: value.ridesList[index].group);
+              final daysLeft =
+                  getDaysleft(value.ridesList[index].expirationDate);
               final data = value.ridesList[index];
               return Padding(
                 padding: const EdgeInsets.only(
@@ -41,9 +43,56 @@ class RidesScreen extends StatelessWidget {
                   // height: size.width * 0.8,
                   child: Column(
                     children: [
-                      Image.network(
-                        kBaseUrl + ApiEndPoints.getImage + data.image,
-                        fit: BoxFit.contain,
+                      SizedBox(
+                        child: Stack(
+                          children: [
+                            Image.network(
+                              kBaseUrl + ApiEndPoints.getImage + data.image,
+                              fit: BoxFit.contain,
+                            ),
+                            Positioned(
+                              left: 0,
+                              bottom: 0,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Colors.black26,
+                                  ),
+                                  height: 30,
+                                  width: 80,
+                                  child: daysLeft.isNegative
+                                      ? Center(
+                                          child: Text('Expired',
+                                              style: GoogleFonts.sarala(
+                                                  fontSize: 13,
+                                                  color: Colors.red,
+                                                  fontWeight: FontWeight.bold)),
+                                        )
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(daysLeft.toString(),
+                                                style: GoogleFonts.sarala(
+                                                    fontSize: 13,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            const Text(
+                                              ' days left',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white),
+                                            )
+                                          ],
+                                        ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -170,6 +219,13 @@ class RidesScreen extends StatelessWidget {
         }
       }),
     ));
+  }
+
+  int getDaysleft(DateTime dateTime) {
+    DateTime currentDate = DateTime.now();
+    Duration difference = dateTime.difference(currentDate);
+    int daysLeft = difference.inSeconds ~/ 86400;
+    return daysLeft;
   }
 
   ImageProvider<Object> getDp(Group? data) {
