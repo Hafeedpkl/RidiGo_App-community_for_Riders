@@ -17,6 +17,7 @@ import 'package:ridigo/ui/community_chat/views/group_info_screen.dart';
 import 'package:ridigo/ui/home/views/add_post_screen.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 
 import '../../../common/api_base_url.dart';
 import '../../../common/api_end_points.dart';
@@ -157,11 +158,36 @@ class _ChatScreenState extends State<ChatScreen> {
                           if (snapshot.hasData) {
                             final data1 = snapshot.data!;
                             final data = data1.reversed.toList();
-                            return ListView.builder(
-                              reverse: true,
-                              itemCount: data.length,
-                              itemBuilder: (context, index) {
-                                // value.listMsg[index].name;
+                            // return ListView.builder(
+                            //   reverse: true,
+                            //   itemCount: data.length,
+                            //   itemBuilder: (context, index) {
+                            //     // value.listMsg[index].name;
+                            //     if (data[index].name == value.user.email) {
+                            //       return OwnMessageCard(
+                            //         text: data[index].text,
+                            //         name: data[index].name,
+                            //         time: data[index].time,
+                            //       );
+                            //     } else {
+                            //       log('${data[index].email} ${value.user.email}');
+                            //       return ReplyCard(
+                            //         name: data[index].name,
+                            //         text: data[index].text,
+                            //         time: data[index].time,
+                            //       );
+                            //     }
+                            //   },
+                            // );
+                            return StickyGroupedListView<ChatModel, DateTime>(
+                              floatingHeader: true,
+                              elements: data,
+                              groupBy: (ChatModel element) => DateTime(
+                                  element.time!.year,
+                                  element.time!.month,
+                                  element.time!.day),
+                              groupSeparatorBuilder: _getGroupSeparator,
+                              indexedItemBuilder: (context, element, index) {
                                 if (data[index].name == value.user.email) {
                                   return OwnMessageCard(
                                     text: data[index].text,
@@ -263,4 +289,70 @@ class _ChatScreenState extends State<ChatScreen> {
     log('Disposed');
     super.dispose();
   }
+}
+
+Widget _getGroupSeparator(ChatModel element) {
+  String? month;
+  switch (element.time!.month) {
+    case 1:
+      month = 'Jan';
+      break;
+    case 2:
+      month = 'Feb';
+      break;
+    case 3:
+      month = 'March';
+      break;
+    case 4:
+      month = 'April';
+      break;
+    case 5:
+      month = 'May';
+      break;
+    case 6:
+      month = 'June';
+      break;
+    case 7:
+      month = 'July';
+      break;
+    case 8:
+      month = 'Aug';
+      break;
+    case 9:
+      month = 'Sept';
+      break;
+    case 10:
+      month = 'Oct';
+      break;
+    case 11:
+      month = 'Nov';
+      break;
+    case 12:
+      month = 'Dec';
+      break;
+  }
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: SizedBox(
+      height: 35,
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          width: 100,
+          decoration: BoxDecoration(
+            color: Colors.blueAccent,
+            border: Border.all(
+              color: Colors.blueAccent,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+          ),
+          child: Text(
+            '${element.time!.day}, $month, ${element.time!.year}',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white, fontSize: 12),
+          ),
+        ),
+      ),
+    ),
+  );
 }
