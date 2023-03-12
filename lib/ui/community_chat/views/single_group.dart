@@ -157,34 +157,61 @@ class _ChatScreenState extends State<ChatScreen> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             final data = snapshot.data!.reversed.toList();
-
-                            return StickyGroupedListView<ChatModel, DateTime>(
-                              order: StickyGroupedListOrder.DESC,
-                              floatingHeader: true,
-                              reverse: true,
-                              elements: data.reversed.toList(),
-                              groupBy: (ChatModel element) => DateTime(
-                                  element.time!.year,
-                                  element.time!.month,
-                                  element.time!.day),
-                              groupSeparatorBuilder: _getGroupSeparator,
-                              indexedItemBuilder: (context, element, index) {
-                                if (data[index].name == value.user.email) {
-                                  return OwnMessageCard(
-                                    text: data[index].text,
-                                    name: data[index].name,
-                                    time: data[index].time,
-                                  );
-                                } else {
-                                  log('${data[index].email} ${value.user.email}');
-                                  return ReplyCard(
-                                    name: data[index].name,
-                                    text: data[index].text,
-                                    time: data[index].time,
-                                  );
-                                }
-                              },
-                            );
+                            if (data.length > 7) {
+                              return StickyGroupedListView<ChatModel, DateTime>(
+                                order: StickyGroupedListOrder.DESC,
+                                floatingHeader: true,
+                                reverse: true,
+                                elements: data.reversed.toList(),
+                                groupBy: (ChatModel element) => DateTime(
+                                    element.time!.year,
+                                    element.time!.month,
+                                    element.time!.day),
+                                groupSeparatorBuilder: _getGroupSeparator,
+                                indexedItemBuilder: (context, element, index) {
+                                  if (data[index].name == value.user.email) {
+                                    return OwnMessageCard(
+                                      text: data[index].text,
+                                      name: data[index].name,
+                                      time: data[index].time,
+                                      date: false,
+                                    );
+                                  } else {
+                                    log('${data[index].email} ${value.user.email}');
+                                    return ReplyCard(
+                                      name: data[index].name,
+                                      text: data[index].text,
+                                      time: data[index].time,
+                                      date: false,
+                                    );
+                                  }
+                                },
+                              );
+                            } else {
+                              return ListView.builder(
+                                reverse: true,
+                                itemCount: data.length,
+                                itemBuilder: (context, index) {
+                                  // value.listMsg[index].name;
+                                  if (data[index].name == value.user.email) {
+                                    return OwnMessageCard(
+                                      text: data[index].text,
+                                      name: data[index].name,
+                                      time: data[index].time,
+                                      date: true,
+                                    );
+                                  } else {
+                                    log('${data[index].email} ${value.user.email}');
+                                    return ReplyCard(
+                                      name: data[index].name,
+                                      text: data[index].text,
+                                      time: data[index].time,
+                                      date: true,
+                                    );
+                                  }
+                                },
+                              );
+                            }
                           } else if (snapshot.hasError) {
                             return Center(
                                 child: Lottie.asset(

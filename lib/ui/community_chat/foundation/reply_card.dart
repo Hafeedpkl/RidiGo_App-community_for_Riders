@@ -3,7 +3,12 @@ import 'package:intl/intl.dart';
 
 class ReplyCard extends StatelessWidget {
   ReplyCard(
-      {super.key, required this.text, required this.name, required this.time});
+      {super.key,
+      required this.text,
+      required this.name,
+      required this.time,
+      required this.date});
+  bool date;
   String text;
   String name;
   DateTime? time;
@@ -52,9 +57,18 @@ class ReplyCard extends StatelessWidget {
                   right: 0,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      formattedTime,
-                      style: TextStyle(fontSize: 10, color: Colors.grey),
+                    child: Row(
+                      children: [
+                        date ? getDate(time!) : const SizedBox(),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          formattedTime,
+                          style:
+                              const TextStyle(fontSize: 10, color: Colors.grey),
+                        ),
+                      ],
                     ),
                   ),
                 )
@@ -63,6 +77,52 @@ class ReplyCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget getDate(DateTime dateTime) {
+    String? month;
+    switch (dateTime.month) {
+      case 1:
+        month = 'Jan';
+        break;
+      case 2:
+        month = 'Feb';
+        break;
+      case 3:
+        month = 'March';
+        break;
+      case 4:
+        month = 'April';
+        break;
+      case 5:
+        month = 'May';
+        break;
+      case 6:
+        month = 'June';
+        break;
+      case 7:
+        month = 'July';
+        break;
+      case 8:
+        month = 'Aug';
+        break;
+      case 9:
+        month = 'Sept';
+        break;
+      case 10:
+        month = 'Oct';
+        break;
+      case 11:
+        month = 'Nov';
+        break;
+      case 12:
+        month = 'Dec';
+        break;
+    }
+    return Text(
+      '${dateTime.day}, $month, ${dateTime.year}',
+      style: const TextStyle(fontSize: 10, color: Colors.grey),
     );
   }
 }

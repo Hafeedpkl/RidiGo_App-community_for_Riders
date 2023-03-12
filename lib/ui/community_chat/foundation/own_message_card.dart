@@ -3,7 +3,12 @@ import 'package:intl/intl.dart';
 
 class OwnMessageCard extends StatelessWidget {
   OwnMessageCard(
-      {super.key, required this.text, required this.name, required this.time});
+      {super.key,
+      required this.text,
+      required this.name,
+      required this.time,
+      required this.date});
+  bool date;
   String text;
   DateTime? time;
   String name;
@@ -52,9 +57,18 @@ class OwnMessageCard extends StatelessWidget {
                 Positioned(
                   bottom: 4,
                   right: 5,
-                  child: Text(
-                    formattedTime,
-                    style: TextStyle(fontSize: 10, color: Colors.grey),
+                  child: Row(
+                    children: [
+                      date ? getDate(time!) : const SizedBox(),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        formattedTime,
+                        style:
+                            const TextStyle(fontSize: 10, color: Colors.grey),
+                      ),
+                    ],
                   ),
                 )
               ],
@@ -62,6 +76,52 @@ class OwnMessageCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget getDate(DateTime dateTime) {
+    String? month;
+    switch (dateTime.month) {
+      case 1:
+        month = 'Jan';
+        break;
+      case 2:
+        month = 'Feb';
+        break;
+      case 3:
+        month = 'March';
+        break;
+      case 4:
+        month = 'April';
+        break;
+      case 5:
+        month = 'May';
+        break;
+      case 6:
+        month = 'June';
+        break;
+      case 7:
+        month = 'July';
+        break;
+      case 8:
+        month = 'Aug';
+        break;
+      case 9:
+        month = 'Sept';
+        break;
+      case 10:
+        month = 'Oct';
+        break;
+      case 11:
+        month = 'Nov';
+        break;
+      case 12:
+        month = 'Dec';
+        break;
+    }
+    return Text(
+      '${dateTime.day}, $month, ${dateTime.year}',
+      style: const TextStyle(fontSize: 10, color: Colors.grey),
     );
   }
 }
