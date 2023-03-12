@@ -156,32 +156,13 @@ class _ChatScreenState extends State<ChatScreen> {
                         stream: controller.stream,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            final data1 = snapshot.data!;
-                            final data = data1.reversed.toList();
-                            // return ListView.builder(
-                            //   reverse: true,
-                            //   itemCount: data.length,
-                            //   itemBuilder: (context, index) {
-                            //     // value.listMsg[index].name;
-                            //     if (data[index].name == value.user.email) {
-                            //       return OwnMessageCard(
-                            //         text: data[index].text,
-                            //         name: data[index].name,
-                            //         time: data[index].time,
-                            //       );
-                            //     } else {
-                            //       log('${data[index].email} ${value.user.email}');
-                            //       return ReplyCard(
-                            //         name: data[index].name,
-                            //         text: data[index].text,
-                            //         time: data[index].time,
-                            //       );
-                            //     }
-                            //   },
-                            // );
+                            final data = snapshot.data!.reversed.toList();
+
                             return StickyGroupedListView<ChatModel, DateTime>(
+                              order: StickyGroupedListOrder.DESC,
                               floatingHeader: true,
-                              elements: data,
+                              reverse: true,
+                              elements: data.reversed.toList(),
                               groupBy: (ChatModel element) => DateTime(
                                   element.time!.year,
                                   element.time!.month,
