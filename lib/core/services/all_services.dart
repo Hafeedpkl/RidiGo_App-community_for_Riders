@@ -17,7 +17,7 @@ class AllServices {
   final user = FirebaseAuth.instance.currentUser!;
   Dio dio = Dio();
 
-  //Group Section
+  //-------------------------Group Section-------------------------
   Future<List<Group>?> getGroup() async {
     final token = await user.getIdToken();
     try {
@@ -161,7 +161,7 @@ class AllServices {
     }
   }
 
-//Chat Screen
+//-------------------------Chat Section------------------------
 
   Future<List<ChatModel>?> getMessages({required groupId}) async {
     final token = await user.getIdToken();
@@ -185,7 +185,7 @@ class AllServices {
     return null;
   }
 
-  //User section
+/*-------------------------User section-----------------------*/
   Future<UserModel?> getUser() async {
     final token = await user.getIdToken();
     try {
@@ -288,6 +288,23 @@ class AllServices {
           }));
       if (response.statusCode == 200 || response.statusCode == 201) {
         log(response.data.toString(), name: 'addPost');
+      }
+    } on DioError catch (e) {
+      log(e.message);
+    }
+  }
+
+  void registerUserPost({postId, groupId}) async {
+    final token = await user.getIdToken();
+    try {
+      Response response = await dio.post(kBaseUrl + ApiEndPoints.regUserPost,
+          data: {"email": user.email, "id": postId},
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        joinGroup(groupId: groupId);
+        log(response.statusCode.toString(), name: 'regUserPost');
       }
     } on DioError catch (e) {
       log(e.message);

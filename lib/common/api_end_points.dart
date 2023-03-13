@@ -16,6 +16,6 @@ class ApiEndPoints {
 
 //UserPost
   static String getPosts = '/api/userPosts';
-  static String addPost= '/api/userPosts/post';
-  
+  static String addPost = '/api/userPosts/post';
+  static String regUserPost = '/api/userPosts/join';
 }

@@ -20,6 +20,7 @@ class GroupInfoScreen extends StatelessWidget {
     TextEditingController controller = TextEditingController();
     final size = MediaQuery.of(context).size;
     final user = FirebaseAuth.instance.currentUser;
+    final memberList = groupData!.members.toSet().toList();
     return SafeArea(
       child: Scaffold(
         // appBar: AppBar(
@@ -156,11 +157,11 @@ class GroupInfoScreen extends StatelessWidget {
                     ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: groupData!.members.length,
+                      itemCount: memberList.length,
                       itemBuilder: (context, index) {
                         return ListTile(
                           title: Text(
-                            groupData!.members[index],
+                            memberList[index],
                             style: const TextStyle(
                               fontSize: 16,
                             ),
@@ -290,9 +291,12 @@ class GroupInfoScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       width: size.width * 0.22,
-                      child: Image(
-                        image: getDp(groupData),
-                        fit: BoxFit.fitHeight,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image(
+                          image: getDp(groupData),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   );
