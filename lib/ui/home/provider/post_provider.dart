@@ -21,9 +21,6 @@ class PostProvider extends ChangeNotifier {
   bool isLoading = false;
   final user = FirebaseAuth.instance.currentUser;
 
-  PostProvider() {
-    getPosts();
-  }
   void getPosts() async {
     isLoading = true;
     notifyListeners();
@@ -109,7 +106,6 @@ class PostProvider extends ChangeNotifier {
       }
     }
     if (registerMemberCount != 0) {
-      
       return true;
     } else {
       return false;

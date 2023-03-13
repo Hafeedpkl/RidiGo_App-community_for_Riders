@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +18,12 @@ class RidesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final postprovider = Provider.of<PostProvider>(context, listen: false);
+      postprovider.ridesList.clear();
+      postprovider.getPosts();
+      log('get post called');
+    });
     final size = MediaQuery.of(context).size;
     return Scaffold(
         body: SizedBox(
