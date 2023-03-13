@@ -1,5 +1,7 @@
+import 'dart:ffi';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -17,10 +19,12 @@ class PostProvider extends ChangeNotifier {
   TextEditingController descriptionController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  final user = FirebaseAuth.instance.currentUser;
+
   PostProvider() {
-    getEvents();
+    getPosts();
   }
-  void getEvents() async {
+  void getPosts() async {
     isLoading = true;
     notifyListeners();
     await AllServices().getPosts().then((value) {
@@ -94,6 +98,21 @@ class PostProvider extends ChangeNotifier {
       notifyListeners();
     } else {
       print('no Image Selected');
+    }
+  }
+
+  bool checkRegistered({regMembers}) {
+    int registerMemberCount = 0;
+    for (var member in regMembers) {
+      if (member['email'] == user!.email) {
+        registerMemberCount++;
+      }
+    }
+    if (registerMemberCount != 0) {
+      
+      return true;
+    } else {
+      return false;
     }
   }
 }

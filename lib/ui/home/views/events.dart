@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,7 @@ import 'package:ridigo/common/api_end_points.dart';
 import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/core/services/all_services.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
+import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
 import 'package:ridigo/ui/community_chat/model/group_model.dart';
 import 'package:ridigo/ui/home/provider/post_provider.dart';
 
@@ -16,6 +18,7 @@ class EventsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
         body: SizedBox(
       height: double.infinity,
@@ -28,6 +31,9 @@ class EventsScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: value.eventList.length,
             itemBuilder: (context, index) {
+              List regMembers = value.eventList[index].regMembers;
+              bool isRegistered = value.checkRegistered(regMembers: regMembers);
+
               // print(value.eventList[index].group);
               value.openGroup(groupId: value.eventList[index].group);
               final daysLeft =
@@ -114,6 +120,7 @@ class EventsScreen extends StatelessWidget {
                                 ),
                               ),
                               ReadMoreText(
+                                textAlign: TextAlign.left,
                                 data.description,
                                 trimLines: 2,
                                 colorClickableText: Colors.pink,
@@ -201,23 +208,50 @@ class EventsScreen extends StatelessWidget {
                                 ),
                                 Expanded(
                                     flex: 2,
-                                    child: ElevatedButton(
-                                        style: const ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStatePropertyAll(
-                                                    Colors.blueAccent)),
-                                        onPressed: () {
-                                          AllServices().registerUserPost(
-                                              postId: value.eventList[index].id,
-                                              groupId:
-                                                  value.eventList[index].group);
-                                        },
-                                        child: const Text(
-                                          'register',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white),
-                                        )))
+                                    child: isRegistered
+                                        ? ElevatedButton(
+                                            style: const ButtonStyle(
+                                                elevation:
+                                                    MaterialStatePropertyAll(5),
+                                                backgroundColor:
+                                                    MaterialStatePropertyAll(
+                                                        Colors.white)),
+                                            onPressed: () {},
+                                            child: const Text(
+                                              'Registered',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                  fontSize: 13),
+                                            ))
+                                        : ElevatedButton(
+                                            style: const ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStatePropertyAll(
+                                                        Colors.blueAccent)),
+                                            onPressed: () {
+                                              AllServices().registerUserPost(
+                                                  postId:
+                                                      value.eventList[index].id,
+                                                  groupId: value
+                                                      .eventList[index].group);
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BottomNavScreen(),
+                                                  ));
+                                              Provider.of<BottomNavProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .bottomChanger(2);
+                                            },
+                                            child: const Text(
+                                              'register',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white),
+                                            )))
                               ],
                             ))
                       ],

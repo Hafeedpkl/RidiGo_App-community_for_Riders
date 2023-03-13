@@ -7,8 +7,8 @@ import 'package:ridigo/common/api_end_points.dart';
 import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/core/services/all_services.dart';
 import 'package:ridigo/ui/home/provider/post_provider.dart';
-
 import '../../bottom_navigation/bottom_navigation.dart';
+import '../../bottom_navigation/provider/bottom_nav_provider.dart';
 import '../../community_chat/model/group_model.dart';
 
 class RidesScreen extends StatelessWidget {
@@ -29,6 +29,8 @@ class RidesScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: value.ridesList.length,
             itemBuilder: (context, index) {
+              List regMembers = value.ridesList[index].regMembers;
+              bool isRegistered = value.checkRegistered(regMembers: regMembers);
               value.openGroup(groupId: value.ridesList[index].group);
               final daysLeft =
                   getDaysleft(value.ridesList[index].expirationDate);
@@ -187,34 +189,57 @@ class RidesScreen extends StatelessWidget {
                                           );
                                         }
                                       })),
-                              Expanded(
-                                child: IconButton(
-                                  iconSize: 25,
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    index % 2 == 0
-                                        ? Icons.bookmark_border
-                                        : Icons.bookmark,
-                                  ),
+                              IconButton(
+                                iconSize: 25,
+                                onPressed: () {},
+                                icon: Icon(
+                                  index % 2 == 0
+                                      ? Icons.bookmark_border
+                                      : Icons.bookmark,
                                 ),
                               ),
-                              Expanded(
-                                  child: ElevatedButton(
-                                      style: ButtonStyle(
+                              isRegistered
+                                  ? ElevatedButton(
+                                      style: const ButtonStyle(
                                           backgroundColor:
                                               MaterialStatePropertyAll(
                                                   Colors.blueAccent)),
                                       onPressed: () {
                                         AllServices().registerUserPost(
                                             postId: value.ridesList[index].id,
-                                            groupId: value.ridesList[index].group);
+                                            groupId:
+                                                value.ridesList[index].group);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BottomNavScreen(),
+                                            ));
+                                        Provider.of<BottomNavProvider>(context,
+                                                listen: false)
+                                            .bottomChanger(2);
                                       },
                                       child: const Text(
                                         'Join',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white),
-                                      )))
+                                      ))
+                                  : ElevatedButton(
+                                      style: const ButtonStyle(
+                                          elevation:
+                                              MaterialStatePropertyAll(5),
+                                          backgroundColor:
+                                              MaterialStatePropertyAll(
+                                                  Colors.white)),
+                                      onPressed: () {},
+                                      child: const Text(
+                                        'Joined',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                            fontSize: 12),
+                                      ))
                             ],
                           ),
                         )
@@ -223,6 +248,7 @@ class RidesScreen extends StatelessWidget {
                   ),
                 );
               }
+              return null;
             },
           );
         }
