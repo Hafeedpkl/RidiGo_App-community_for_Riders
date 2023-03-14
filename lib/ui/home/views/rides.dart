@@ -21,6 +21,7 @@ class RidesScreen extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final postprovider = Provider.of<PostProvider>(context, listen: false);
       postprovider.ridesList.clear();
+      postprovider.eventList.clear();
       postprovider.getPosts();
       log('get post called');
     });
@@ -197,15 +198,8 @@ class RidesScreen extends StatelessWidget {
                                           );
                                         }
                                       })),
-                              IconButton(
-                                iconSize: 25,
-                                onPressed: () {},
-                                icon: Icon(
-                                  index % 2 == 0
-                                      ? Icons.bookmark_border
-                                      : Icons.bookmark,
-                                ),
-                              ),
+                              value.checkWishList(
+                                  postId: value.ridesList[index].id),
                               isRegistered
                                   ? ElevatedButton(
                                       style: const ButtonStyle(

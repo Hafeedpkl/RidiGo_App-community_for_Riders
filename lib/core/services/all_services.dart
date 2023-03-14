@@ -310,4 +310,39 @@ class AllServices {
       log(e.message);
     }
   }
+
+//-----------------WishLIst-------------------
+  void addToWishList({required String postId}) async {
+    final token = await user.getIdToken();
+    try {
+      Response response = await dio.post(kBaseUrl + ApiEndPoints.addToWishlist,
+          data: {'email': user.email, "id": postId},
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log(response.data.toString());
+      }
+    } on DioError catch (e) {
+      log(e.message);
+    }
+  }
+
+  void removeFromWishList({required String postId}) async {
+    final token = await user.getIdToken();
+    try {
+      Response response =
+          await dio.post(kBaseUrl + ApiEndPoints.removeFromWishlist,
+              data: {'email': user.email, "id": postId},
+              options: Options(headers: {
+                'authorization': 'Bearer $token',
+              }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log(response.data.toString());
+      }
+    } on DioError catch (e) {
+      log(e.message);
+    }
+  }
+  
 }

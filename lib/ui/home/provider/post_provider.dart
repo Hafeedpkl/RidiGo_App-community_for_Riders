@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ffi';
 import 'dart:io';
 
@@ -9,6 +10,7 @@ import 'package:ridigo/core/services/all_services.dart';
 import 'package:ridigo/ui/community_chat/model/group_model.dart';
 
 import '../../../core/model/post.dart';
+import '../../../core/model/user.dart';
 
 class PostProvider extends ChangeNotifier {
   List<UserPost> ridesList = [];
@@ -22,6 +24,7 @@ class PostProvider extends ChangeNotifier {
   final user = FirebaseAuth.instance.currentUser;
 
   void getPosts() async {
+    log('getPosts');
     isLoading = true;
     notifyListeners();
     await AllServices().getPosts().then((value) {
@@ -111,4 +114,71 @@ class PostProvider extends ChangeNotifier {
       return false;
     }
   }
+
+  bool isEventWishlistEnabled = false;
+  void eventWishlist() {
+    isEventWishlistEnabled = !isEventWishlistEnabled;
+    notifyListeners();
+  }
+
+  Future<UserModel?>? futureUserData;
+
+  Widget checkWishList({required String postId}) {
+    bool? boolcheck;
+    futureUserData = AllServices().getUser();
+    log(futureUserData.toString());
+    return FutureBuilder(
+      future: futureUserData,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final data = snapshot.data;
+          int count = 0;
+          for (var element in data!.wishList) {
+            if (element == postId) {
+              count++;
+            }
+          }
+          if (count != 0) {
+            boolcheck = true;
+          } else {
+            boolcheck = false;
+          }
+        }
+        return boolcheck == false
+            ? IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.bookmark_outline),
+                iconSize: 25,
+              )
+            : IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.bookmark,
+                  color: Colors.blueAccent,
+                ),
+                iconSize: 25);
+      },
+    );
+  }
+
+  // bool isWishListed = false;
+  // IconButton wishListButton() {
+  //   return isWishListed == false
+  //       ? IconButton(
+  //           iconSize: 25,
+  //           onPressed: () {
+  //             isWishListed = checkWishList(isWishListed);
+  //             notifyListeners();
+  //           },
+  //           icon: Icon(
+  //             Icons.bookmark_border,
+  //           ),
+  //         )
+  //       : IconButton(
+  //           onPressed: () {
+  //             isWishListed = checkWishList(isWishListed);
+  //             notifyListeners();
+  //           },
+  //           icon: Icon(Icons.bookmark));
+  // }
 }

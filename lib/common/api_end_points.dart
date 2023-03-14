@@ -18,4 +18,8 @@ class ApiEndPoints {
   static String getPosts = '/api/userPosts';
   static String addPost = '/api/userPosts/post';
   static String regUserPost = '/api/userPosts/join';
+
+//Wishlist
+  static String addToWishlist = '/api/userPosts/wishList';
+  static String removeFromWishlist = '/api/userPosts/removeSaved';
 }

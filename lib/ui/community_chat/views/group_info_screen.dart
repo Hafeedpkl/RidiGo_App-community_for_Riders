@@ -20,7 +20,7 @@ class GroupInfoScreen extends StatelessWidget {
     TextEditingController controller = TextEditingController();
     final size = MediaQuery.of(context).size;
     final user = FirebaseAuth.instance.currentUser;
-    final memberList = groupData!.members.toSet().toList();
+    final memberList = groupData!.members.toList();
     return SafeArea(
       child: Scaffold(
         // appBar: AppBar(

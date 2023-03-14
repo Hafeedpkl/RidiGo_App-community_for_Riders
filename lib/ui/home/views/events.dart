@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,13 +19,17 @@ class EventsScreen extends StatelessWidget {
   const EventsScreen({super.key});
 
   @override
+  bool get wantKeepAlive => true;
+
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final postprovider = Provider.of<PostProvider>(context, listen: false);
       postprovider.eventList.clear();
+      postprovider.ridesList.clear();
       postprovider.getPosts();
       log('get post called');
     });
+
     final size = MediaQuery.of(context).size;
     final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
@@ -204,16 +209,8 @@ class EventsScreen extends StatelessWidget {
                                       }),
                                 ),
                                 Expanded(
-                                  child: IconButton(
-                                    iconSize: 25,
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      index % 2 == 0
-                                          ? Icons.bookmark_border
-                                          : Icons.bookmark,
-                                    ),
-                                  ),
-                                ),
+                                    child: value.checkWishList(
+                                        postId: value.eventList[index].id)),
                                 Expanded(
                                     flex: 2,
                                     child: isRegistered
