@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -92,73 +93,99 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 )
               ],
             ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 2,
-              height: MediaQuery.of(context).size.height * 0.2,
-              child: PageView.builder(
-                controller: pageController,
-                onPageChanged: (value) {
-                  selectedIndex = value;
-                  currentLocation =
-                      mapMarkers[value].location ?? MapConstants.myLocation;
-                  _animatedMapMove(currentLocation, 11.5);
-                  setState(() {});
-                },
-                itemCount: mapMarkers.length,
-                itemBuilder: (_, index) {
-                  final item = mapMarkers[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: InkWell(
+                      onTap: () {},
+                      child: const CircleAvatar(
+                        backgroundColor: Colors.red,
+                        radius: 30,
+                        child: Icon(
+                          Icons.my_location_sharp,
+                          color: Colors.white,
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                                child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                item.username.toString(),
-                                style: const TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    child: PageView.builder(
+                      controller: pageController,
+                      onPageChanged: (value) {
+                        selectedIndex = value;
+                        currentLocation = mapMarkers[value].location ??
+                            MapConstants.myLocation;
+                        _animatedMapMove(currentLocation, 11.5);
+                        setState(() {});
+                      },
+                      itemCount: mapMarkers.length,
+                      itemBuilder: (_, index) {
+                        final item = mapMarkers[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Card(
+                              elevation: 5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            )),
-                            Expanded(
-                                flex: 3,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          item.title.toString(),
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 15,
-                                              color: Colors.red),
-                                        ),
-                                        Text(
-                                          item.description.toString(),
-                                          style: TextStyle(fontSize: 12),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ))
-                          ],
-                        )),
-                  );
-                },
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                        child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        item.username.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.blueAccent,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )),
+                                    Expanded(
+                                        flex: 3,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: SizedBox(
+                                            width: double.infinity,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  item.title.toString(),
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Colors.red),
+                                                ),
+                                                Text(
+                                                  item.description.toString(),
+                                                  style:
+                                                      TextStyle(fontSize: 12),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ))
+                                  ],
+                                ),
+                              )),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            )
+            ),
           ],
         ));
   }
