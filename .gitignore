@@ -47,5 +47,5 @@ app.*.map.json
 /lib/ui/map/constants/
 
 #api urls
-/lib/common/api_base_url.dart
-/lib/common/api_end_points.dart
+/lib/common/
+
