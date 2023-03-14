@@ -146,12 +146,16 @@ class PostProvider extends ChangeNotifier {
         }
         return boolcheck == false
             ? IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  AllServices().addToWishList(postId: postId);
+                },
                 icon: const Icon(Icons.bookmark_outline),
                 iconSize: 25,
               )
             : IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  AllServices().removeFromWishList(postId: postId);
+                },
                 icon: const Icon(
                   Icons.bookmark,
                   color: Colors.blueAccent,

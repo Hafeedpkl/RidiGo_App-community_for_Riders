@@ -213,7 +213,7 @@ class EventsScreen extends StatelessWidget {
                                         postId: value.eventList[index].id)),
                                 Expanded(
                                     flex: 2,
-                                    child: isRegistered
+                                    child: isRegistered == true  
                                         ? ElevatedButton(
                                             style: const ButtonStyle(
                                                 elevation:

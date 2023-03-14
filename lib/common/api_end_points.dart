@@ -21,5 +21,5 @@ class ApiEndPoints {
 
 //Wishlist
   static String addToWishlist = '/api/userPosts/wishList';
-  static String removeFromWishlist = '/api/userPosts/removeSaved';
+  static String removeFromWishlist = '/api/userPosts/removeSaved'; 
 }

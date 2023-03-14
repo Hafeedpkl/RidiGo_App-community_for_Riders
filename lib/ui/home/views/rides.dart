@@ -200,7 +200,7 @@ class RidesScreen extends StatelessWidget {
                                       })),
                               value.checkWishList(
                                   postId: value.ridesList[index].id),
-                              isRegistered
+                              isRegistered == false
                                   ? ElevatedButton(
                                       style: const ButtonStyle(
                                           backgroundColor:
