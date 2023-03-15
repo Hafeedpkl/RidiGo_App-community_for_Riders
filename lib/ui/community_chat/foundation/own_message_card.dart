@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class OwnMessageCard extends StatelessWidget {
   OwnMessageCard(
       {super.key,
@@ -27,7 +28,7 @@ class OwnMessageCard extends StatelessWidget {
             elevation: 1,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            color: Color.fromARGB(255, 198, 238, 248),
+            color: const Color.fromARGB(255, 198, 238, 248),
             child: Stack(
               children: [
                 Padding(

@@ -56,7 +56,7 @@ class IntroScreen extends StatelessWidget {
       onTapSkipButton: () => Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => SplashScreen(),
+            builder: (context) => const SplashScreen(),
           )),
     );
   }

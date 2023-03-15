@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +10,7 @@ import 'package:ridigo/ui/home/provider/post_provider.dart';
 
 import '../../community_chat/model/group_model.dart';
 
+// ignore: must_be_immutable
 class AddPostScreen extends StatelessWidget {
   AddPostScreen({super.key, required this.groupData});
   Group? groupData;
@@ -83,7 +83,7 @@ class AddPostScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     child: Row(
                       children: [
@@ -145,13 +145,13 @@ class AddPostScreen extends StatelessWidget {
                                 child: Card(
                                   color: Colors.tealAccent,
                                   elevation: 3,
-                                  child: Container(
+                                  child: SizedBox(
                                     height: size.width * 0.1,
                                     width: size.width * 0.3,
                                     child: Center(
                                         child: Text(
                                       value.selectDate ?? 'Choose Date',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     )),
                                   ),

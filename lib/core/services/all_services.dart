@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -20,7 +19,7 @@ class AllServices {
   final user = FirebaseAuth.instance.currentUser!;
   Dio dio = Dio();
 
-  //-------------------------Group Section-------------------------
+  //!-------------------------Group Section-------------------------
   Future<List<Group>?> getGroup() async {
     final token = await user.getIdToken();
     try {
@@ -127,7 +126,7 @@ class AllServices {
         return null;
       }
     } on DioError catch (e) {
-      print(e.message);
+      log(e.message,name: 'openGroup');
     }
     return null;
   }
@@ -164,7 +163,7 @@ class AllServices {
     }
   }
 
-//-------------------------Chat Section------------------------
+//!-------------------------Chat Section------------------------
 
   Future<List<ChatModel>?> getMessages({required groupId}) async {
     final token = await user.getIdToken();
@@ -188,7 +187,7 @@ class AllServices {
     return null;
   }
 
-/*-------------------------User section-----------------------*/
+//!-------------------------User section------------------------------
   Future<UserModel?> getUser() async {
     final token = await user.getIdToken();
     try {
@@ -204,7 +203,7 @@ class AllServices {
         return null;
       }
     } on DioError catch (e) {
-      print(e.message);
+      log(e.message,name: 'getUser');
     }
     return null;
   }
@@ -240,7 +239,8 @@ class AllServices {
     }
   }
 
-  //User Posts
+//!------------------------User Posts---------------------------------------
+
   Future<List<UserPost>?> getPosts() async {
     final token = await user.getIdToken();
     try {
@@ -314,7 +314,7 @@ class AllServices {
     }
   }
 
-//-----------------WishLIst-------------------
+//!-----------------WishList Section-------------------
   void addToWishList({required String postId}) async {
     final token = await user.getIdToken();
     try {
@@ -347,7 +347,6 @@ class AllServices {
       log(e.message);
     }
   }
-//!orujhfas9iouedhjfopiasdjfdioquawehfoiqwuahdoiweujh
 
   Future<SaveModel?> getSavedList() async {
     final token = await user.getIdToken();
@@ -369,7 +368,7 @@ class AllServices {
     return null;
   }
 
-//------------------Map section-----------------------
+//!------------------Map section-----------------------
   Future<List<MapModel>?> getMapPins() async {
     final token = await user.getIdToken();
     try {

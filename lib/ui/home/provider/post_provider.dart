@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -79,9 +80,12 @@ class PostProvider extends ChangeNotifier {
         firstDate: DateTime.now(),
         lastDate: DateTime(2100));
     if (pickedDate != null) {
-      print(pickedDate);
+      if (kDebugMode) {
+        print(pickedDate);
+      }
 
       selectDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+      // ignore: avoid_print
       print(selectDate);
       notifyListeners();
     }
@@ -89,13 +93,14 @@ class PostProvider extends ChangeNotifier {
 
   File? image;
   void getImage() async {
-    final _picker = ImagePicker();
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     notifyListeners();
     if (pickedFile != null) {
       image = File(pickedFile.path);
       notifyListeners();
     } else {
+      // ignore: avoid_print
       print('no Image Selected');
     }
   }

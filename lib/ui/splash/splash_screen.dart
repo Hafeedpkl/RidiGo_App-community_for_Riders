@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/ui/authentication/authentication.dart';
-import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

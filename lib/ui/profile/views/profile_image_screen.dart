@@ -1,21 +1,13 @@
-import 'dart:developer';
-import 'dart:io';
 
-import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:ridigo/common/api_base_url.dart';
-import 'package:ridigo/common/api_end_points.dart';
 import 'package:ridigo/core/services/all_services.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 
 class ProfileImageScreen extends StatelessWidget {
-  ProfileImageScreen({super.key, required this.image});
+  const ProfileImageScreen({super.key, required this.image});
+  // ignore: prefer_typing_uninitialized_variables
   final image;
-  final _picker = ImagePicker();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

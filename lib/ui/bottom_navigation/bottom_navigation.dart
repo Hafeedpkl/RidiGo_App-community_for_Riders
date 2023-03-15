@@ -24,7 +24,7 @@ class BottomNavScreen extends StatelessWidget {
     const HomeScreen(),
     const MapScreen(),
     const ChatGroups(),
-    ProfileScreen(),
+    const ProfileScreen(),
   ];
 
   @override

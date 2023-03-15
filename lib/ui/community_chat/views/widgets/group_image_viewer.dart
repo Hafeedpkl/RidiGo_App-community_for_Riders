@@ -1,12 +1,7 @@
-import 'dart:developer';
-import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:ridigo/core/services/all_services.dart';
 
@@ -15,6 +10,7 @@ import '../../../../common/api_end_points.dart';
 import '../../../bottom_navigation/bottom_navigation.dart';
 import '../../model/group_model.dart';
 
+// ignore: must_be_immutable
 class GroupImageViewer extends StatelessWidget {
   GroupImageViewer({super.key, required this.data});
   Group? data;
@@ -28,7 +24,7 @@ class GroupImageViewer extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
                 color: Colors.white,
               )),
@@ -37,17 +33,15 @@ class GroupImageViewer extends StatelessWidget {
                 onPressed: () {
                   updateImage(data: data, context: context);
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.edit,
                   color: Colors.white,
                 ))
           ]),
       body: Center(
-          child: Container(
-        child: PhotoView(
-          imageProvider: getDp(data),
-        ),
-      )),
+          child: PhotoView(
+            imageProvider: getDp(data),
+          )),
     );
   }
 

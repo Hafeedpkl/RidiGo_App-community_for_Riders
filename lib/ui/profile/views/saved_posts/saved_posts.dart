@@ -10,6 +10,7 @@ import 'package:ridigo/ui/home/provider/post_provider.dart';
 import 'package:ridigo/ui/profile/views/saved_posts/saved_events.dart';
 import 'package:ridigo/ui/profile/views/saved_posts/saved_rides.dart';
 
+// ignore: must_be_immutable
 class SavedPostsScreen extends StatefulWidget {
   SavedPostsScreen({super.key, required this.wishList});
   List<dynamic> wishList;
@@ -33,6 +34,14 @@ class _SavedPostsScreenState extends State<SavedPostsScreen> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              )),
           bottom: TabBar(
               labelColor: Colors.white,
               unselectedLabelColor: Colors.white54,

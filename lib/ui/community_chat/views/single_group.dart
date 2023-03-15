@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -217,7 +216,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 child: Lottie.asset(
                                     'assets/lottie/76699-error.json'));
                           } else {
-                            return Center(child: CircularProgressIndicator());
+                            return const Center(child: CircularProgressIndicator());
                           }
                         })),
                 SizedBox(
@@ -258,7 +257,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     groupId: widget.data.id);
                               }
                             },
-                            icon: Icon(Icons.send, color: Colors.white),
+                            icon: const Icon(Icons.send, color: Colors.white),
                           ),
                         ),
                       )

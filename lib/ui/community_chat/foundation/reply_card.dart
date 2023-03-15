@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class ReplyCard extends StatelessWidget {
   ReplyCard(
       {super.key,
@@ -30,7 +31,7 @@ class ReplyCard extends StatelessWidget {
             child: Stack(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     left: 10,
                     right: 30,
                     top: 5,
@@ -41,13 +42,13 @@ class ReplyCard extends StatelessWidget {
                     children: [
                       Text(
                         name,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.blueAccent,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
                         text,
-                        style: TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 15),
                       ),
                     ],
                   ),

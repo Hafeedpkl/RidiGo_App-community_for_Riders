@@ -17,6 +17,7 @@ import '../../../bottom_navigation/provider/bottom_nav_provider.dart';
 import '../../../community_chat/model/group_model.dart';
 import '../../../home/provider/post_provider.dart';
 
+// ignore: must_be_immutable
 class SavedRidesScreen extends StatelessWidget {
   SavedRidesScreen({super.key, required this.wishList});
   List<dynamic> wishList;

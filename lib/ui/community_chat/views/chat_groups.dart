@@ -95,7 +95,7 @@ class ChatGroups extends StatelessWidget {
                         );
                       },
                       separatorBuilder: (context, index) =>
-                          Divider(thickness: 0.3),
+                          const Divider(thickness: 0.3),
                     );
             }),
           ),

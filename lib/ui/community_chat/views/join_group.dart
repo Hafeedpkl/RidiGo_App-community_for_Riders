@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,14 +28,14 @@ class JoinGroup extends StatelessWidget {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Container(
+            : SizedBox(
                 width: size.width,
                 child: Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CupertinoSearchTextField(
-                        suffixIcon: Icon(Icons.close),
+                        suffixIcon: const Icon(Icons.close),
                         onChanged: (enteredKeyword) {
                           value.joinGroupRunFilter(enteredKeyword);
                         },

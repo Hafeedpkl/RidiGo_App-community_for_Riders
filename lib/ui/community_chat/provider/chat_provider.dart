@@ -1,3 +1,5 @@
+// ignore_for_file: library_prefixes
+
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,6 +35,7 @@ class ChatProvider extends ChangeNotifier {
     socket!.connect();
     notifyListeners();
     socket!.onConnect((data) {
+      // ignore: avoid_print
       print('connnected to frontend');
     });
     notifyListeners();
@@ -56,8 +59,6 @@ class ChatProvider extends ChangeNotifier {
 
   void sendMsg({required String message, required String groupId}) {
     final user = FirebaseAuth.instance.currentUser!;
-    ChatModel chat = ChatModel(
-        name: user.email!, text: message, groupId: groupId, email: user.email!);
     notifyListeners();
     // listMsg.add(chat);
     notifyListeners();

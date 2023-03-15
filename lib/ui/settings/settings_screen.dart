@@ -13,7 +13,6 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future<SaveModel?>? futureData;
-    final user = FirebaseAuth.instance.currentUser;
     String image = 'public\\Profile\\2023-02-23T04-46-56.232Zimages.png';
     futureData = getSavedList();
     return Scaffold(
@@ -34,21 +33,20 @@ class SettingsScreen extends StatelessWidget {
               onPressed: () async {
                 getSavedList();
               },
-              child: Text('Get'),
+              child: const Text('Get'),
             ),
             FutureBuilder(
               future: futureData,
               builder: (context, snapshot) {
                 final data = snapshot.data;
                 log(data.toString());
-                final List<dynamic> wishList = data!.wishList;
                 return Container(
                   color: Colors.amber,
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: 10,
                     itemBuilder: (context, index) {
-                      return Text(data.email);
+                      return Text(data!.email);
                     },
                   ),
                 );
@@ -97,11 +95,13 @@ void checkGet() async {
         }));
     if (response.statusCode == 200) {
       log('done');
+      // ignore: avoid_print
       print(response.data.toString());
     } else {
       log('error');
     }
   } on DioError catch (e) {
+    // ignore: avoid_print
     print(e);
   }
 }

@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:ridigo/ui/profile/provider/user_provider.dart';
 import 'package:ridigo/main.dart';
 import 'package:ridigo/ui/authentication/views/login.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../common/api_base_url.dart';
 import '../../../common/api_end_points.dart';
 import '../../../core/constants/constants.dart';
@@ -228,7 +227,6 @@ class SignupScreen extends StatelessWidget {
 
   Future signUp({context}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    final db = FirebaseFirestore.instance;
 
     final isvalid = formkey.currentState!.validate();
     if (!isvalid) return;
@@ -249,6 +247,7 @@ class SignupScreen extends StatelessWidget {
       await user!.updateDisplayName(namecontroller.text.trim());
       dbSignup(user);
     } on FirebaseAuthException catch (e) {
+      // ignore: avoid_print
       print(e);
       var snackBar = SnackBar(content: Text(e.message.toString()));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -259,7 +258,7 @@ class SignupScreen extends StatelessWidget {
   Future<void> dbSignup(user) async {
     var dio = Dio();
     try {
-      final url = Uri.parse('${kBaseUrl}${ApiEndPoints.signUp}');
+      final url = Uri.parse('$kBaseUrl${ApiEndPoints.signUp}');
       var data = {'email': user.email.toString(), 'uid': user.uid.toString()};
       final response = await dio.post(url.toString(), data: data);
       if (response.statusCode == 200) {

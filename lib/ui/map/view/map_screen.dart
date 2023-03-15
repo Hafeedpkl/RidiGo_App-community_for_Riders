@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -161,7 +160,6 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                 },
                                 itemCount: value.mapMarkerList!.length,
                                 itemBuilder: (_, index) {
-                                  final item = value.mapMarkerList![index];
                                   return Padding(
                                     padding: const EdgeInsets.all(15.0),
                                     child: GestureDetector(
@@ -232,7 +230,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                                                   .mapMarkerList![
                                                                       index]
                                                                   .description,
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                   fontSize: 12),
                                                             )
                                                           ],
@@ -246,7 +244,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                   );
                                 },
                               )
-                            : SizedBox()),
+                            : const SizedBox()),
                   ],
                 ),
               ),
@@ -264,7 +262,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       context: context,
       builder: (context) {
         return Scaffold(
-          body: Container(
+          body: SizedBox(
             height: size.height * 0.5,
             child: SingleChildScrollView(
               child: Padding(
@@ -398,22 +396,25 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _getCurrentLocation() async {
+    log('getCurrentLocation');
     final PermissionStatus permissionStatus =
         await Permission.location.request();
     if (permissionStatus == PermissionStatus.granted) {
-      // permission granted
-      final Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      log('lat:${position.latitude} long: ${position.longitude}',
-          name: 'latitude');
-
-      messageBox(
-        latitude: position.latitude,
-        longitude: position.longitude,
-      );
+      try {
+        final Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high,
+        );
+        final latitude = position.latitude;
+        final longitude = position.longitude;
+        log('lat: $latitude long: $longitude', name: 'latitude');
+        messageBox(latitude: latitude, longitude: longitude);
+      } catch (e) {
+        log('Error getting position: $e');
+        // handle error
+      }
     } else {
-      // permission denied,
-      log('permssion denied');
+      log('Permission denied');
+      // handle permission denied
     }
   }
 

@@ -141,7 +141,7 @@ class GroupInfoScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            Container(
+            SizedBox(
               width: double.infinity,
               // color: Colors.amber,
               child: Padding(
@@ -272,10 +272,10 @@ class GroupInfoScreen extends StatelessWidget {
                   style: const TextStyle(
                       fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-                Text('more'),
+                const Text('more'),
               ],
             ),
-            Container(
+            SizedBox(
               height: size.height * 0.12,
               width: double.infinity,
               child: ListView.builder(

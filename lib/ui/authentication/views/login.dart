@@ -1,13 +1,9 @@
-import 'dart:developer';
 
-import 'package:dio/dio.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:ridigo/common/api_base_url.dart';
 import 'package:ridigo/main.dart';
 import 'package:ridigo/ui/authentication/views/signup.dart';
 
@@ -75,7 +71,7 @@ class LogInScreen extends StatelessWidget {
                                     : null,
                                 textInputAction: TextInputAction.next,
                                 decoration: InputDecoration(
-                                    prefixIcon: Icon(
+                                    prefixIcon: const Icon(
                                       CupertinoIcons.at,
                                       color: Colors.black,
                                     ),
@@ -105,7 +101,7 @@ class LogInScreen extends StatelessWidget {
                                 obscureText: true,
                                 textInputAction: TextInputAction.done,
                                 decoration: InputDecoration(
-                                    prefixIcon: Icon(
+                                    prefixIcon: const Icon(
                                       CupertinoIcons.padlock,
                                       color: Colors.black,
                                     ),
@@ -224,6 +220,7 @@ class LogInScreen extends StatelessWidget {
           email: emailController.text.trim(),
           password: passwordController.text.trim());
     } on FirebaseAuthException catch (e) {
+      // ignore: avoid_print
       print(e);
       if (e.message ==
           'There is no user record corresponding to this identifier. The user may have been deleted.') {
@@ -238,13 +235,12 @@ class LogInScreen extends StatelessWidget {
   }
 
   void resetPassword(context) {
-    final size = MediaQuery.of(context).size;
     final formkey1 = GlobalKey<FormState>();
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Reset Password'),
+            title: const Text('Reset Password'),
             content: Form(
               key: formkey1,
               child: TextFormField(
@@ -311,6 +307,7 @@ class LogInScreen extends StatelessWidget {
 
       Navigator.popUntil(context, (route) => route.isFirst);
     } on FirebaseAuthException catch (e) {
+      // ignore: avoid_print
       print(e);
 
       Navigator.pop(context);

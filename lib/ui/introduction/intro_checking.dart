@@ -15,16 +15,18 @@ class IntroChecking extends StatefulWidget {
 class _IntroCheckingState extends State<IntroChecking> {
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool _seen = (prefs.getBool('seen') ?? false);
-    if (_seen) {
+    bool seen = (prefs.getBool('seen') ?? false);
+    if (seen) {
+      // ignore: use_build_context_synchronously
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => SplashScreen(),
+            builder: (context) => const SplashScreen(),
           ));
     } else {
       await prefs.setBool('seen', true);
 
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -43,7 +45,7 @@ class _IntroCheckingState extends State<IntroChecking> {
   Widget build(BuildContext context) {
     return Container(
       color: kBackgroundColor,
-      child: Center(
+      child: const Center(
         child: CircularProgressIndicator(),
       ),
     );
