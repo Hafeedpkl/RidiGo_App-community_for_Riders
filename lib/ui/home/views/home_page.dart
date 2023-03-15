@@ -15,7 +15,13 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final postprovider = Provider.of<PostProvider>(context, listen: false);
+      postprovider.eventList.clear();
+      postprovider.ridesList.clear();
+      postprovider.getPosts();
+      log('get post called');
+    });
     return DefaultTabController(
       length: 2,
       child: Scaffold(
