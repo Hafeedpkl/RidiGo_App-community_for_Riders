@@ -22,7 +22,6 @@ class PostProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
   final user = FirebaseAuth.instance.currentUser;
-
   void getPosts() async {
     log('getPosts');
     isLoading = true;
@@ -115,6 +114,47 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
+  List<UserPost>? eventWishList = [];
+  List<UserPost>? ridesWishList = [];
+  void getWishListedEventRides({required List<dynamic> userWishList}) async {
+    log('getWishlists');
+    isLoading = true;
+    notifyListeners();
+    await AllServices().getPosts().then((value) {
+      if (value != null) {
+        postList = value;
+        notifyListeners();
+        for (var e in postList) {
+          if (e.eventType != 'ride') {
+            if (userWishList.contains(e.id)) {
+              eventWishList!.add(e);
+              notifyListeners();
+            }
+          } else {
+            if (userWishList.contains(e.id)) {
+              ridesWishList!.add(e);
+            notifyListeners();
+            }
+          }
+        }
+        isLoading = false;
+        notifyListeners();
+      } else {
+        isLoading = false;
+        notifyListeners();
+      }
+    });
+
+    // await getPosts();
+    // for (var i; i < eventList.length; i++) {
+    //   var id = eventList[i].id;
+    //   if (userWishList.contains(id)) {
+    //     filteredEventWishList!.add(eventList[i]);
+    //   }
+    // }
+    // notifyListeners();
+  }
+
   checkWishList({required String postId}) {
     bool? boolcheck;
     final userDataController = StreamController<UserModel?>();
@@ -147,6 +187,7 @@ class PostProvider extends ChangeNotifier {
                   eventList.clear();
                   ridesList.clear();
                   getPosts();
+                  
                 },
                 icon: const Icon(Icons.bookmark_outline),
                 iconSize: 25,

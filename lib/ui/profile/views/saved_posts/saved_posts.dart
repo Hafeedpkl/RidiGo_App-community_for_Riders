@@ -7,12 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/ui/home/provider/post_provider.dart';
 
-import 'package:ridigo/ui/home/views/events.dart';
-import 'package:ridigo/ui/home/views/rides.dart';
+import 'package:ridigo/ui/profile/views/saved_posts/saved_events.dart';
+import 'package:ridigo/ui/profile/views/saved_posts/saved_rides.dart';
 
 class SavedPostsScreen extends StatefulWidget {
-   SavedPostsScreen({super.key,required this.wishList});
- List<dynamic> wishList;
+  SavedPostsScreen({super.key, required this.wishList});
+  List<dynamic> wishList;
   @override
   State<SavedPostsScreen> createState() => _SavedPostsScreenState();
 }
@@ -22,9 +22,10 @@ class _SavedPostsScreenState extends State<SavedPostsScreen> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final postprovider = Provider.of<PostProvider>(context, listen: false);
-      postprovider.eventList.clear();
-      postprovider.ridesList.clear();
-      postprovider.getPosts();
+      postprovider.eventWishList!.clear();
+      postprovider.ridesWishList!.clear();
+      postprovider.getWishListedEventRides(userWishList: widget.wishList);
+
       log('get post called');
     });
     return DefaultTabController(
@@ -72,20 +73,21 @@ class _SavedPostsScreenState extends State<SavedPostsScreen> {
                 )
               ]),
           centerTitle: true,
-          title: Image.asset(
-            'assets/images/newLogo.png',
-            scale: 10,
+          title: const Text(
+            'Saved Posts',
+            style: TextStyle(
+                color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
           ),
           backgroundColor: kBackgroundColor,
         ),
-        body:  TabBarView(
+        body: TabBarView(
           children: [
             //events
-        // Saved
+            SavedEventsScreen(wishList: widget.wishList),
 
             //Rides
 
-            // RidesScreen()
+            SavedRidesScreen(wishList: widget.wishList)
           ],
         ),
         // floatingActionButton: FloatingActionButton(
@@ -100,9 +102,9 @@ class _SavedPostsScreenState extends State<SavedPostsScreen> {
   }
 
   @override
-  void dispose() {
+  void deactivate() {
     Provider.of<PostProvider>(context, listen: false).eventList.clear();
     Provider.of<PostProvider>(context, listen: false).ridesList.clear();
-    super.dispose();
+    super.deactivate();
   }
 }

@@ -20,10 +20,10 @@ class ApiEndPoints {
   static String regUserPost = '/api/userPosts/join';
 
 //Wishlist
+  static String getWishList = '/api/userPosts/savedItems';
   static String addToWishlist = '/api/userPosts/wishList';
-  static String removeFromWishlist = '/api/userPosts/removeSaved'; 
+  static String removeFromWishlist = '/api/userPosts/removeSaved';
 
- //Map
-  static String getMapPin = '/api/pins/'; 
-  
+  //Map
+  static String getMapPin = '/api/pins/';
 }

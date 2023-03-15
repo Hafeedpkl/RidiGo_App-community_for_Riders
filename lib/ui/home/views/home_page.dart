@@ -99,10 +99,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    Provider.of<PostProvider>(context, listen: false).eventList.clear();
-    Provider.of<PostProvider>(context, listen: false).ridesList.clear();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   Provider.of<PostProvider>(context, listen: false).eventList.clear();
+  //   Provider.of<PostProvider>(context, listen: false).ridesList.clear();
+  //   log('home page disposed');
+  //   super.dispose();
+  // }
 }

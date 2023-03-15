@@ -6,17 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:ridigo/common/api_base_url.dart';
 
 import '../../common/api_end_points.dart';
-import '../community_chat/model/group_model.dart';
+import '../profile/model/saved_model.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
+    Future<SaveModel?>? futureData;
     final user = FirebaseAuth.instance.currentUser;
     String image = 'public\\Profile\\2023-02-23T04-46-56.232Zimages.png';
-
-    //
+    futureData = getSavedList();
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -33,20 +32,55 @@ class SettingsScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                openGroup(groupId: '63f3765d22bee0f28806b361');
+                getSavedList();
               },
               child: Text('Get'),
             ),
-            // FutureBuilder(
-            //   future: token,
-            //   builder: (context, snapshot) {
-            //     return Text(snapshot.data);
-            //   },
-            // )
+            FutureBuilder(
+              future: futureData,
+              builder: (context, snapshot) {
+                final data = snapshot.data;
+                log(data.toString());
+                final List<dynamic> wishList = data!.wishList;
+                return Container(
+                  color: Colors.amber,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return Text(data.email);
+                    },
+                  ),
+                );
+              },
+            )
           ],
         ),
       )),
     );
+  }
+
+  Future<SaveModel?>? getSavedList() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final token = await user!.getIdToken();
+    var dio = Dio();
+    try {
+      Response response =
+          await dio.post('http://192.168.132.15:3000/api/userPosts/savedItems',
+              data: {"email": user.email},
+              options: Options(headers: {
+                'authorization': 'Bearer $token',
+              }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log(response.data.toString(), name: 'getSavedList');
+        return SaveModel.fromJson(response.data);
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      log(e.message, name: 'getSavedList');
+    }
+    return null;
   }
 }
 
@@ -70,26 +104,4 @@ void checkGet() async {
   } on DioError catch (e) {
     print(e);
   }
-}
-
-Future<Group?> openGroup({groupId}) async {
-  var dio = Dio();
-  final user = FirebaseAuth.instance.currentUser;
-  final token = await user!.getIdToken();
-  try {
-    Response response = await dio.post(kBaseUrl + ApiEndPoints.openGroup,
-        data: {"details": "${groupId}"},
-        options: Options(headers: {
-          'authorization': 'Bearer $token',
-        }));
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      log(response.data.toString());
-      return Group.fromJson(response.data);
-    } else {
-      return null;
-    }
-  } on DioError catch (e) {
-    print(e.message);
-  }
-  return null;
 }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
@@ -18,15 +17,11 @@ import '../../../bottom_navigation/provider/bottom_nav_provider.dart';
 import '../../../community_chat/model/group_model.dart';
 import '../../../home/provider/post_provider.dart';
 
-class SavedEventsScreen extends StatelessWidget {
-  SavedEventsScreen({super.key, required this.wishList});
+class SavedRidesScreen extends StatelessWidget {
+  SavedRidesScreen({super.key, required this.wishList});
   List<dynamic> wishList;
   @override
   Widget build(BuildContext context) {
-    log(wishList.toString());
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   final provider = Provider.of<PostProvider>(context, listen: false);
-    // });
     final size = MediaQuery.of(context).size;
     return Scaffold(
       body: SizedBox(
@@ -38,16 +33,15 @@ class SavedEventsScreen extends StatelessWidget {
             );
           } else {
             return ListView.builder(
-              itemCount: value.eventWishList!.length,
+              itemCount: value.ridesWishList!.length,
               itemBuilder: (context, index) {
-                List regMembers = value.eventWishList![index].regMembers;
+                List regMembers = value.ridesWishList![index].regMembers;
                 bool isRegistered =
                     value.checkRegistered(regMembers: regMembers);
-                value.openGroup(groupId: value.eventWishList![index].group);
+                value.openGroup(groupId: value.ridesWishList![index].group);
                 final daysLeft =
-                    getDaysleft(value.eventWishList![index].expirationDate);
-                final data = value.eventWishList![index];
-
+                    getDaysleft(value.ridesWishList![index].expirationDate);
+                final data = value.ridesWishList![index];
                 if (!daysLeft.isNegative) {
                   return Padding(
                     padding: const EdgeInsets.only(
@@ -200,8 +194,8 @@ class SavedEventsScreen extends StatelessWidget {
                                             );
                                           }
                                         })),
-                                checkWishList(
-                                    postId: value.eventWishList![index].id),
+                                value.checkWishList(
+                                    postId: value.ridesWishList![index].id),
                                 isRegistered == false
                                     ? ElevatedButton(
                                         style: const ButtonStyle(
@@ -210,9 +204,10 @@ class SavedEventsScreen extends StatelessWidget {
                                                     Colors.blueAccent)),
                                         onPressed: () {
                                           AllServices().registerUserPost(
-                                              postId: value.eventList[index].id,
-                                              groupId:
-                                                  value.eventList[index].group);
+                                              postId: value
+                                                  .ridesWishList![index].id,
+                                              groupId: value
+                                                  .ridesWishList![index].group);
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -224,7 +219,7 @@ class SavedEventsScreen extends StatelessWidget {
                                                   listen: false)
                                               .bottomChanger(2);
                                           value.eventList.clear();
-                                          value.eventList.clear();
+                                          value.ridesWishList!.clear();
                                         },
                                         child: const Text(
                                           'Join',
@@ -255,7 +250,6 @@ class SavedEventsScreen extends StatelessWidget {
                     ),
                   );
                 }
-
                 return null;
               },
             );
