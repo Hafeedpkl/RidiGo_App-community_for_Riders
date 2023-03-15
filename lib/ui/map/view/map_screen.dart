@@ -116,7 +116,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                               )
                           ],
                         )
-                      : MarkerLayer(
+                      : const MarkerLayer(
                           markers: [],
                         )
                 ],

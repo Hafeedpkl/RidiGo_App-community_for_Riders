@@ -8,6 +8,7 @@ import 'package:ridigo/core/model/user.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/profile/views/profile_image_screen.dart';
 import 'package:ridigo/ui/profile/provider/user_provider.dart';
+import 'package:ridigo/ui/profile/views/saved_posts/saved_posts.dart';
 import 'package:ridigo/ui/settings/settings_screen.dart';
 
 import '../../../common/api_base_url.dart';
@@ -85,7 +86,7 @@ class ProfileScreen extends StatelessWidget {
         body: RefreshIndicator(
           onRefresh: refresh,
           child: Consumer<UserProvider>(builder: (context, value, _) {
-            Provider.of<UserProvider>(context, listen: false).getUser();
+            value.getUser();
 
             return FutureBuilder(
                 future: value.futureUserData,
@@ -105,7 +106,15 @@ class ProfileScreen extends StatelessWidget {
                                 Card(
                                   elevation: 4,
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                SavedPostsScreen(
+                                                    wishList: data!.wishList),
+                                          ));
+                                    },
                                     child: SizedBox(
                                       height: size.height * 0.06,
                                       width: double.infinity,
