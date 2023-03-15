@@ -1,11 +1,18 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:ridigo/core/constants/constants.dart';
+import 'package:ridigo/core/services/all_services.dart';
+import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/map/constants/map_constants.dart';
-import 'package:ridigo/ui/map/model/map_marker_model.dart';
 import 'package:ridigo/ui/map/provider/map_provider.dart';
 
 class MapScreen extends StatefulWidget {
@@ -18,7 +25,6 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   final pageController = PageController();
   int selectedIndex = 0;
-  var currentLocation = MapConstants.myLocation;
   late final MapController mapController;
 
   @override
@@ -30,6 +36,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -49,7 +57,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   minZoom: 5,
                   maxZoom: 18,
                   zoom: 11,
-                  center: currentLocation,
+                  center: value.currentLocation,
                 ),
                 children: [
                   TileLayer(
@@ -79,11 +87,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                               const Duration(microseconds: 500),
                                           curve: Curves.easeInOut);
                                       selectedIndex = i;
-                                      currentLocation = LatLng(
+                                      value.currentLocation = LatLng(
                                           value.mapMarkerList![i].latitude,
                                           value.mapMarkerList![i].longitude);
-                                      _animatedMapMove(currentLocation, 11.5);
-                                      setState(() {});
+                                      _animatedMapMove(
+                                          value.currentLocation, 11.5);
+                                      // setState(() {});
                                     },
                                     child: AnimatedScale(
                                       duration:
@@ -93,8 +102,13 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                         duration:
                                             const Duration(milliseconds: 500),
                                         opacity: selectedIndex == i ? 1 : 0.5,
-                                        child: Image.asset(
-                                            'assets/images/map-mark.png'),
+                                        child: value.mapMarkerList![i]
+                                                    .username ==
+                                                user!.email
+                                            ? Image.asset(
+                                                'assets/images/map-mark-own.png')
+                                            : Image.asset(
+                                                'assets/images/map-mark.png'),
                                       ),
                                     ),
                                   );
@@ -117,7 +131,9 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          _getCurrentLocation();
+                        },
                         child: const CircleAvatar(
                           backgroundColor: Colors.red,
                           radius: 30,
@@ -135,85 +151,98 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                 controller: pageController,
                                 onPageChanged: (changedValue) {
                                   selectedIndex = changedValue;
-                                  currentLocation = LatLng(
+                                  value.currentLocation = LatLng(
                                       value.mapMarkerList![changedValue]
                                           .latitude,
                                       value.mapMarkerList![changedValue]
                                           .longitude);
-                                  _animatedMapMove(currentLocation, 11.5);
-                                  setState(() {});
+                                  _animatedMapMove(value.currentLocation, 11.5);
+                                  // setState(() {});
                                 },
                                 itemCount: value.mapMarkerList!.length,
                                 itemBuilder: (_, index) {
                                   final item = value.mapMarkerList![index];
                                   return Padding(
                                     padding: const EdgeInsets.all(15.0),
-                                    child: Card(
-                                        elevation: 5,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: SizedBox(
-                                          height: MediaQuery.of(context)
-                                              .size
-                                              .height,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Expanded(
-                                                  child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  value.mapMarkerList![index]
-                                                      .username,
-                                                  style: const TextStyle(
-                                                      color: Colors.blueAccent,
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              )),
-                                              Expanded(
-                                                  flex: 3,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: SizedBox(
-                                                      width: double.infinity,
-                                                      child: Column(
-                                                        children: [
-                                                          Text(
-                                                            value
-                                                                .mapMarkerList![
-                                                                    index]
-                                                                .title,
-                                                            style: const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 15,
-                                                                color:
-                                                                    Colors.red),
-                                                          ),
-                                                          Text(
-                                                            value
-                                                                .mapMarkerList![
-                                                                    index]
-                                                                .description,
-                                                            style: TextStyle(
-                                                                fontSize: 12),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ))
-                                            ],
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        log('ontapped');
+                                        value.currentLocation = LatLng(
+                                            value
+                                                .mapMarkerList![index].latitude,
+                                            value.mapMarkerList![index]
+                                                .longitude);
+                                        _animatedMapMove(
+                                            value.currentLocation, 11.5);
+                                      },
+                                      child: Card(
+                                          elevation: 5,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                           ),
-                                        )),
+                                          child: SizedBox(
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                    child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    value.mapMarkerList![index]
+                                                        .username,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            Colors.blueAccent,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                )),
+                                                Expanded(
+                                                    flex: 3,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: SizedBox(
+                                                        width: double.infinity,
+                                                        child: Column(
+                                                          children: [
+                                                            Text(
+                                                              value
+                                                                  .mapMarkerList![
+                                                                      index]
+                                                                  .title!,
+                                                              style: const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 15,
+                                                                  color: Colors
+                                                                      .red),
+                                                            ),
+                                                            Text(
+                                                              value
+                                                                  .mapMarkerList![
+                                                                      index]
+                                                                  .description,
+                                                              style: TextStyle(
+                                                                  fontSize: 12),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ))
+                                              ],
+                                            ),
+                                          )),
+                                    ),
                                   );
                                 },
                               )
@@ -224,6 +253,168 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             ],
           );
         }));
+  }
+
+  Future<dynamic> messageBox({latitude, longitude}) {
+    final size = MediaQuery.of(context).size;
+    TextEditingController titleController = TextEditingController();
+    TextEditingController descriptionController = TextEditingController();
+    final formkey = GlobalKey<FormState>();
+    return showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Scaffold(
+          body: Container(
+            height: size.height * 0.5,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  key: formkey,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      const Text(
+                        'Send Help!',
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: titleController,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) =>
+                            value!.isNotEmpty && value.length < 3
+                                ? 'Enter  valid Title'
+                                : null,
+                        decoration: InputDecoration(
+                            labelText: 'Title (optional)',
+                            labelStyle: GoogleFonts.poppins(color: Colors.grey),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 5),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                width: 2,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    width: 5, style: BorderStyle.none))),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        controller: descriptionController,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) => value != null && value.length < 3
+                            ? 'Enter  Message'
+                            : null,
+                        maxLines: 6,
+                        decoration: InputDecoration(
+                            labelText: 'Message',
+                            labelStyle: GoogleFonts.poppins(color: Colors.grey),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 5),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                width: 2,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
+                                    width: 5, style: BorderStyle.none))),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                  elevation: const MaterialStatePropertyAll(4),
+                                  shape: MaterialStatePropertyAll(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10))),
+                                  backgroundColor:
+                                      const MaterialStatePropertyAll(
+                                          Colors.white)),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                'cancel',
+                                style: TextStyle(color: Colors.black),
+                              )),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          ElevatedButton(
+                              style: ButtonStyle(
+                                  elevation: const MaterialStatePropertyAll(4),
+                                  shape: MaterialStatePropertyAll(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10))),
+                                  backgroundColor:
+                                      const MaterialStatePropertyAll(
+                                          Colors.blueAccent)),
+                              onPressed: () {
+                                if (!formkey.currentState!.validate()) return;
+                                AllServices().addMapPin(
+                                    title: titleController.text.isEmpty
+                                        ? 'Help!'
+                                        : titleController.text,
+                                    description: descriptionController.text,
+                                    latitude: latitude,
+                                    longitude: longitude);
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BottomNavScreen(),
+                                    ));
+                              },
+                              child: const Text(
+                                ' Send ',
+                                style: TextStyle(color: Colors.white),
+                              )),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _getCurrentLocation() async {
+    final PermissionStatus permissionStatus =
+        await Permission.location.request();
+    if (permissionStatus == PermissionStatus.granted) {
+      // permission granted
+      final Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      log('lat:${position.latitude} long: ${position.longitude}',
+          name: 'latitude');
+
+      messageBox(
+        latitude: position.latitude,
+        longitude: position.longitude,
+      );
+    } else {
+      // permission denied,
+      log('permssion denied');
+    }
   }
 
   void _animatedMapMove(LatLng destLocation, double destZoom) {

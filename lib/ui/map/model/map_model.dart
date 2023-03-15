@@ -8,28 +8,28 @@ String mapModelToJson(List<MapModel> data) =>
 
 class MapModel {
   MapModel({
-    required this.id,
+     this.id,
     required this.username,
-    required this.title,
+   this.title,
     required this.description,
-    required this.latitude,
+     required this.latitude,
     required this.longitude,
-    required this.expireAt,
-    required this.createdAt,
-    required this.updatedAt,
+     this.expireAt,
+     this.createdAt,
+     this.updatedAt,
   });
 
-  String id;
+  String? id;
   String username;
-  String title;
+  String? title;
   String description;
   double latitude;
   double longitude;
-  DateTime expireAt;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? expireAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
-  factory MapModel.fromJson(Map<String, dynamic> json) => MapModel(
+  factory MapModel.fromJson(Map<String?, dynamic> json) => MapModel(
         id: json["_id"],
         username: json["username"],
         title: json["title"],
@@ -48,8 +48,8 @@ class MapModel {
         "description": description,
         "latitude": latitude,
         "longitude": longitude,
-        "expireAt": expireAt.toIso8601String(),
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "expireAt": expireAt!.toIso8601String(),
+        "createdAt": createdAt!.toIso8601String(),
+        "updatedAt": updatedAt!.toIso8601String(),
       };
 }

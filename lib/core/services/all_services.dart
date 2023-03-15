@@ -368,4 +368,27 @@ class AllServices {
     }
     return null;
   }
+
+  void addMapPin({latitude, longitude, description, title}) async {
+    final token = await user.getIdToken();
+
+    try {
+      Response response = await dio.post(kBaseUrl + ApiEndPoints.getMapPin,
+          data: {
+            "username": user.email,
+            "title": title,
+            "description": description,
+            "latitude": latitude,
+            "longitude": longitude
+          },
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log(response.data.toString(), name: 'addMapPin');
+      }
+    } on DioError catch (e) {
+      log(e.message);
+    }
+  }
 }
