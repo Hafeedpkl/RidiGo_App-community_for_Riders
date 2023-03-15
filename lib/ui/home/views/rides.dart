@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,7 +17,6 @@ class RidesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
     final size = MediaQuery.of(context).size;
     return Scaffold(
         body: SizedBox(
@@ -214,6 +212,8 @@ class RidesScreen extends StatelessWidget {
                                         Provider.of<BottomNavProvider>(context,
                                                 listen: false)
                                             .bottomChanger(2);
+                                        value.eventList.clear();
+                                        value.ridesList.clear();
                                       },
                                       child: const Text(
                                         'Join',

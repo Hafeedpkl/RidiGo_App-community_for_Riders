@@ -10,9 +10,14 @@ import 'package:ridigo/ui/home/provider/post_provider.dart';
 import 'package:ridigo/ui/home/views/events.dart';
 import 'package:ridigo/ui/home/views/rides.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -92,5 +97,12 @@ class HomeScreen extends StatelessWidget {
         // ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    Provider.of<PostProvider>(context, listen: false).eventList.clear();
+    Provider.of<PostProvider>(context, listen: false).ridesList.clear();
+    super.dispose();
   }
 }

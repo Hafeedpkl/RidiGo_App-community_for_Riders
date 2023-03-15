@@ -19,7 +19,6 @@ class EventsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
     final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
@@ -240,6 +239,8 @@ class EventsScreen extends StatelessWidget {
                                                       context,
                                                       listen: false)
                                                   .bottomChanger(2);
+                                              value.eventList.clear();
+                                              value.ridesList.clear();
                                             },
                                             child: const Text(
                                               'register',
