@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:ridigo/ui/community_chat/provider/chat_provider.dart';
 import 'package:ridigo/ui/community_chat/provider/group_provider.dart';
 import 'package:ridigo/ui/home/provider/post_provider.dart';
+import 'package:ridigo/ui/map/provider/map_provider.dart';
 import 'package:ridigo/ui/profile/provider/user_provider.dart';
 import 'package:ridigo/ui/bottom_navigation/provider/bottom_nav_provider.dart';
 import 'package:ridigo/ui/splash/splash_screen.dart';
@@ -43,6 +44,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => PostProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MapProvider(),
         ),
       ],
       child: MaterialApp(

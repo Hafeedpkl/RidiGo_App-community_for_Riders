@@ -24,7 +24,7 @@ class GroupProvider extends ChangeNotifier {
       if (value != null) {
         groupList = value;
         notifyListeners();
-
+ 
         isLoading = false;
         notifyListeners();
       } else {

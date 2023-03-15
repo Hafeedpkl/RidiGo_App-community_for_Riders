@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -6,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ridigo/core/model/post.dart';
+import 'package:ridigo/ui/map/model/map_model.dart';
 
 import '../../common/api_base_url.dart';
 import '../../common/api_end_points.dart';
@@ -344,5 +346,26 @@ class AllServices {
       log(e.message);
     }
   }
-  
+
+//------------------Map section-----------------------
+  Future<List<MapModel>?> getMapPins() async {
+    final token = await user.getIdToken();
+    try {
+      Response response = await dio.get(kBaseUrl + ApiEndPoints.getMapPin,
+          options: Options(headers: {
+            'authorization': 'Bearer $token',
+          }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        List<MapModel> mapMarkersList =
+            (response.data as List).map((e) => MapModel.fromJson(e)).toList();
+        log(response.data.toString(), name: 'getMapPins');
+        return mapMarkersList;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      log(e.message);
+    }
+    return null;
+  }
 }

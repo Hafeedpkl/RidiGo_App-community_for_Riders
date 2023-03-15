@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:developer';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -115,25 +115,21 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  bool isEventWishlistEnabled = false;
-  void eventWishlist() {
-    isEventWishlistEnabled = !isEventWishlistEnabled;
-    notifyListeners();
-  }
-
-  Future<UserModel?>? futureUserData;
-
-  Widget checkWishList({required String postId}) {
+  checkWishList({required String postId}) {
     bool? boolcheck;
-    futureUserData = AllServices().getUser();
-    log(futureUserData.toString());
-    return FutureBuilder(
-      future: futureUserData,
+    final userDataController = StreamController<UserModel?>();
+
+    AllServices().getUser().then((userData) {
+      userDataController.add(userData);
+    });
+
+    return StreamBuilder<UserModel?>(
+      stream: userDataController.stream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final data = snapshot.data;
+          final data = snapshot.data!;
           int count = 0;
-          for (var element in data!.wishList) {
+          for (var element in data.wishList) {
             if (element == postId) {
               count++;
             }
@@ -148,6 +144,9 @@ class PostProvider extends ChangeNotifier {
             ? IconButton(
                 onPressed: () {
                   AllServices().addToWishList(postId: postId);
+                  eventList.clear();
+                  ridesList.clear();
+                  getPosts();
                 },
                 icon: const Icon(Icons.bookmark_outline),
                 iconSize: 25,
@@ -155,6 +154,9 @@ class PostProvider extends ChangeNotifier {
             : IconButton(
                 onPressed: () {
                   AllServices().removeFromWishList(postId: postId);
+                  eventList.clear();
+                  ridesList.clear();
+                  getPosts();
                 },
                 icon: const Icon(
                   Icons.bookmark,

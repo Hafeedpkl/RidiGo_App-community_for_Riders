@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,8 +18,6 @@ class EventsScreen extends StatelessWidget {
   const EventsScreen({super.key});
 
   @override
-  bool get wantKeepAlive => true;
-
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final postprovider = Provider.of<PostProvider>(context, listen: false);
@@ -213,7 +210,7 @@ class EventsScreen extends StatelessWidget {
                                         postId: value.eventList[index].id)),
                                 Expanded(
                                     flex: 2,
-                                    child: isRegistered == true  
+                                    child: isRegistered == true
                                         ? ElevatedButton(
                                             style: const ButtonStyle(
                                                 elevation:
