@@ -126,7 +126,7 @@ class AllServices {
         return null;
       }
     } on DioError catch (e) {
-      log(e.message,name: 'openGroup');
+      log(e.message, name: 'openGroup');
     }
     return null;
   }
@@ -203,7 +203,7 @@ class AllServices {
         return null;
       }
     } on DioError catch (e) {
-      log(e.message,name: 'getUser');
+      log(e.message, name: 'getUser');
     }
     return null;
   }
@@ -237,6 +237,29 @@ class AllServices {
         log(e.message);
       }
     }
+  }
+
+  Future<List<UserPost>?> getJoinedEventsRides() async {
+    final token = await user.getIdToken();
+    try {
+      Response response =
+          await dio.get(kBaseUrl + ApiEndPoints.getJoinedEventsRides,
+              options: Options(headers: {
+                'authorization': 'Bearer $token',
+              }));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // log(response.data.toString(), name: 'getJoinedEventRides');
+        final List<UserPost> getJoinedPostsList =
+            (response.data as List).map((e) => UserPost.fromJson(e)).toList();
+        // log(getJoinedPostsList.toString());
+        return getJoinedPostsList;
+      } else {
+        return null;
+      }
+    } on DioError catch (e) {
+      log(e.message);
+    }
+    return null;
   }
 
 //!------------------------User Posts---------------------------------------

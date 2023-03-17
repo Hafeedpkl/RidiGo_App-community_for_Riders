@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ridigo/common/api_base_url.dart';
+import 'package:ridigo/core/services/all_services.dart';
 
 import '../../common/api_end_points.dart';
 import '../profile/model/saved_model.dart';
@@ -31,27 +32,28 @@ class SettingsScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                getSavedList();
+                // getSavedList();
+                AllServices().getJoinedEventsRides();
               },
               child: const Text('Get'),
             ),
-            FutureBuilder(
-              future: futureData,
-              builder: (context, snapshot) {
-                final data = snapshot.data;
-                log(data.toString());
-                return Container(
-                  color: Colors.amber,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Text(data!.email);
-                    },
-                  ),
-                );
-              },
-            )
+            // FutureBuilder(
+            //   future: futureData,
+            //   builder: (context, snapshot) {
+            //     final data = snapshot.data;
+            //     log(data.toString());
+            //     return Container(
+            //       color: Colors.amber,
+            //       child: ListView.builder(
+            //         shrinkWrap: true,
+            //         itemCount: 10,
+            //         itemBuilder: (context, index) {
+            //           return Text(data!.email);
+            //         },
+            //       ),
+            //     );
+            //   },
+            // )
           ],
         ),
       )),

@@ -8,6 +8,8 @@ import 'package:ridigo/core/model/user.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:ridigo/ui/profile/views/profile_image_screen.dart';
 import 'package:ridigo/ui/profile/provider/user_provider.dart';
+import 'package:ridigo/ui/profile/views/registered_posts/events_registered.dart';
+import 'package:ridigo/ui/profile/views/registered_posts/rides_registered.dart';
 import 'package:ridigo/ui/profile/views/saved_posts/saved_posts.dart';
 import 'package:ridigo/ui/settings/settings_screen.dart';
 
@@ -149,7 +151,14 @@ class ProfileScreen extends StatelessWidget {
                                         color: Colors.lightBlueAccent,
                                         elevation: 4,
                                         child: InkWell(
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EventRegistered(),
+                                                ));
+                                          },
                                           child: SizedBox(
                                             height: size.height * 0.06,
                                             child: Center(
@@ -183,7 +192,14 @@ class ProfileScreen extends StatelessWidget {
                                         color: Colors.deepPurpleAccent,
                                         elevation: 4,
                                         child: InkWell(
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      RidesRegistered(),
+                                                ));
+                                          },
                                           child: SizedBox(
                                             height: size.height * 0.06,
                                             child: Center(

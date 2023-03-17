@@ -23,6 +23,7 @@ class PostProvider extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
   final user = FirebaseAuth.instance.currentUser;
+
   void getPosts() async {
     log('getPosts');
     isLoading = true;
@@ -138,7 +139,7 @@ class PostProvider extends ChangeNotifier {
           } else {
             if (userWishList.contains(e.id)) {
               ridesWishList!.add(e);
-            notifyListeners();
+              notifyListeners();
             }
           }
         }
@@ -192,7 +193,6 @@ class PostProvider extends ChangeNotifier {
                   eventList.clear();
                   ridesList.clear();
                   getPosts();
-                  
                 },
                 icon: const Icon(Icons.bookmark_outline),
                 iconSize: 25,
@@ -213,6 +213,44 @@ class PostProvider extends ChangeNotifier {
     );
   }
 
+  List<UserPost> allPosts = [];
+  List<UserPost> registeredEvents = [];
+  List<UserPost> registeredRides = [];
+  void getJoinedPosts() {
+    isLoading = true;
+    notifyListeners();
+    AllServices().getJoinedEventsRides().then((value) {
+      if (value != null) {
+        allPosts = value;
+        notifyListeners();
+        for (var element in allPosts) {
+          if (element.eventType == 'event') {
+            for (var member in element.regMembers) {
+              if (member['email'] == user!.email) {
+                registeredEvents.add(element);
+                notifyListeners();
+                log(registeredEvents.toString());
+                isLoading = false;
+                notifyListeners();
+              }
+            }
+          } else if (element.eventType == 'ride') {
+            for (var member in element.regMembers) {
+              if (member['email'] == user!.email) {
+                registeredRides.add(element);
+                notifyListeners();
+                isLoading = false;
+                notifyListeners();
+              }
+            }
+          }
+        }
+      }
+    });
+    log('getJoinedEvents');
+    isLoading = false;
+    notifyListeners();
+  }
   // bool isWishListed = false;
   // IconButton wishListButton() {
   //   return isWishListed == false
