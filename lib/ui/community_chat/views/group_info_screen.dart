@@ -125,22 +125,22 @@ class GroupInfoScreen extends StatelessWidget {
             SizedBox(
               height: size.width * 0.02,
             ),
-            postCard(
-                list: groupData!.events,
-                size: size,
-                name: "Events",
-                color: Colors.white),
-            const SizedBox(
-              height: 10,
-            ),
-            postCard(
-                name: 'Rides',
-                list: groupData!.rides,
-                color: Colors.white,
-                size: size),
-            const SizedBox(
-              height: 10,
-            ),
+            // postCard(
+            //     list: groupData!.events,
+            //     size: size,
+            //     name: "Events",
+            //     color: Colors.white),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // postCard(
+            //     name: 'Rides',
+            //     list: groupData!.rides,
+            //     color: Colors.white,
+            //     size: size),
+            // const SizedBox(
+            //   height: 10,
+            // ),
             SizedBox(
               width: double.infinity,
               // color: Colors.amber,

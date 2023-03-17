@@ -1,4 +1,3 @@
-
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,7 +27,7 @@ class LogInScreen extends StatelessWidget {
           width: size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center, 
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 height: size.width * 0.3,
@@ -219,6 +218,7 @@ class LogInScreen extends StatelessWidget {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text.trim(),
           password: passwordController.text.trim());
+      FocusScope.of(context).unfocus();
     } on FirebaseAuthException catch (e) {
       // ignore: avoid_print
       print(e);

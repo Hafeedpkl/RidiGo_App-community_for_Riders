@@ -37,23 +37,7 @@ class SettingsScreen extends StatelessWidget {
               },
               child: const Text('Get'),
             ),
-            // FutureBuilder(
-            //   future: futureData,
-            //   builder: (context, snapshot) {
-            //     final data = snapshot.data;
-            //     log(data.toString());
-            //     return Container(
-            //       color: Colors.amber,
-            //       child: ListView.builder(
-            //         shrinkWrap: true,
-            //         itemCount: 10,
-            //         itemBuilder: (context, index) {
-            //           return Text(data!.email);
-            //         },
-            //       ),
-            //     );
-            //   },
-            // )
+           
           ],
         ),
       )),

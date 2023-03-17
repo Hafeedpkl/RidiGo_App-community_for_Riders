@@ -34,12 +34,12 @@ class RidesRegistered extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: kBackgroundColor,
         title: const Text(
-          'Event Registered',
+          'Rides Registered',
           style: TextStyle(
               color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
         ),
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),

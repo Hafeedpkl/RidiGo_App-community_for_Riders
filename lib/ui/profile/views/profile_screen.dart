@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/core/model/user.dart';
 import 'package:ridigo/ui/bottom_navigation/bottom_navigation.dart';
+import 'package:ridigo/ui/home/provider/post_provider.dart';
 import 'package:ridigo/ui/profile/views/profile_image_screen.dart';
 import 'package:ridigo/ui/profile/provider/user_provider.dart';
 import 'package:ridigo/ui/profile/views/registered_posts/events_registered.dart';
@@ -23,6 +24,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<UserProvider>(context, listen: false).getUser();
+      Provider.of<PostProvider>(context, listen: false).getJoinedPosts();
     });
     Future<void> refresh() async {
       await Future.delayed(const Duration(seconds: 1));
@@ -45,10 +47,10 @@ class ProfileScreen extends StatelessWidget {
                   value: 1,
                   child: Text('Sign Out'),
                 ),
-                const PopupMenuItem(
-                  value: 2,
-                  child: Text('Settings'),
-                ),
+                // const PopupMenuItem(
+                //   value: 2,
+                //   child: Text('Settings'),
+                // ),
               ],
               onSelected: (value) {
                 if (value == 1) {
@@ -345,8 +347,15 @@ class ProfileScreen extends StatelessWidget {
                           child: Row(
                         children: [
                           eventsRidesAttended(
-                              count: 2, text: 'Events attended'),
-                          eventsRidesAttended(count: 5, text: 'Rides attended')
+                              count: Provider.of<PostProvider>(context)
+                                  .registeredEvents
+                                  .length,
+                              text: 'Events attended'),
+                          eventsRidesAttended(
+                              count: Provider.of<PostProvider>(context)
+                                  .registeredRides
+                                  .length,
+                              text: 'Rides attended')
                         ],
                       )),
                     ],
