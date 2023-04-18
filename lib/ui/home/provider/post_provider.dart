@@ -216,10 +216,10 @@ class PostProvider extends ChangeNotifier {
   List<UserPost> allPosts = [];
   List<UserPost> registeredEvents = [];
   List<UserPost> registeredRides = [];
-  void getJoinedPosts() {
+  void getJoinedPosts() async {
     isLoading = true;
     notifyListeners();
-    AllServices().getJoinedEventsRides().then((value) {
+    await AllServices().getJoinedEventsRides().then((value) {
       if (value != null) {
         allPosts = value;
         notifyListeners();
@@ -229,7 +229,7 @@ class PostProvider extends ChangeNotifier {
               if (member['email'] == user!.email) {
                 registeredEvents.add(element);
                 notifyListeners();
-                log(registeredEvents.toString());
+                log(registeredEvents.toString(), name: 'registeredEvents');
                 isLoading = false;
                 notifyListeners();
               }

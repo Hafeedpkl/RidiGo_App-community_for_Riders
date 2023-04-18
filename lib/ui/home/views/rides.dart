@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +7,7 @@ import 'package:ridigo/common/api_end_points.dart';
 import 'package:ridigo/core/constants/constants.dart';
 import 'package:ridigo/core/services/all_services.dart';
 import 'package:ridigo/ui/home/provider/post_provider.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../bottom_navigation/bottom_navigation.dart';
 import '../../bottom_navigation/provider/bottom_nav_provider.dart';
 import '../../community_chat/model/group_model.dart';
@@ -23,9 +23,57 @@ class RidesScreen extends StatelessWidget {
       height: double.infinity,
       child: Consumer<PostProvider>(builder: (context, value, _) {
         if (value.isLoading == true) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return Shimmer.fromColors(
+              period: Duration(seconds: 2),
+              baseColor: Colors.grey.withOpacity(0.5),
+              highlightColor: Colors.white,
+              child: Container(
+                child: ListView.builder(
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                            child: Container(
+                              color: Colors.amber,
+                              width: double.infinity,
+                              height: size.height * 0.3,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const Expanded(
+                                flex: 1,
+                                child: CircleAvatar(
+                                  radius: 25,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    height: 20,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ));
         } else {
           return ListView.builder(
             itemCount: value.ridesList.length,
@@ -183,10 +231,39 @@ class RidesScreen extends StatelessWidget {
                                               ));
                                           return const SizedBox();
                                         } else {
-                                          return const SizedBox(
-                                            child: CircularProgressIndicator(
-                                                color: kBackgroundColor,
-                                                strokeWidth: 2),
+                                          return Shimmer.fromColors(
+                                            baseColor:
+                                                Colors.grey.withOpacity(0.5),
+                                            highlightColor: Colors.white,
+                                            child: Row(
+                                              children: [
+                                                const Expanded(
+                                                  flex: 1,
+                                                  child: CircleAvatar(
+                                                    radius: 20,
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 5,
+                                                  child: Card(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20)),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10)),
+                                                      height: 20,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           );
                                         }
                                       })),

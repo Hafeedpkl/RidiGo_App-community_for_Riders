@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/api_base_url.dart';
 import '../../../../common/api_end_points.dart';
@@ -53,9 +54,58 @@ class EventRegistered extends StatelessWidget {
         height: double.infinity,
         child: Consumer<PostProvider>(builder: (context, value, _) {
           if (value.isLoading == true) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return Shimmer.fromColors(
+                period: Duration(seconds: 2),
+                baseColor: Colors.grey.withOpacity(0.5),
+                highlightColor: Colors.white,
+                child: Container(
+                  child: ListView.builder(
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              child: Container(
+                                color: Colors.amber,
+                                width: double.infinity,
+                                height: size.height * 0.3,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                const Expanded(
+                                  flex: 1,
+                                  child: CircleAvatar(
+                                    radius: 25,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 5,
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      height: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ));
           } else {
             return value.registeredEvents != null
                 ? ListView.builder(
@@ -71,240 +121,258 @@ class EventRegistered extends StatelessWidget {
                           value.registeredEvents[index].expirationDate);
                       final data = value.registeredEvents[index];
 
-                      if (!daysLeft.isNegative) {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                            top: 10,
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.white),
-                            // height: size.width * 0.8,
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  child: Stack(
-                                    children: [
-                                      Image.network(
-                                        kBaseUrl +
-                                            ApiEndPoints.getImage +
-                                            data.image,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      Positioned(
-                                        left: 0,
-                                        bottom: 0,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              color: Colors.black26,
-                                            ),
-                                            height: 30,
-                                            width: 80,
-                                            child: daysLeft.isNegative
-                                                ? Center(
-                                                    child: Text('Expired',
+                      // if (!daysLeft.isNegative) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10,
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.white),
+                          // height: size.width * 0.8,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                child: Stack(
+                                  children: [
+                                    Image.network(
+                                      kBaseUrl +
+                                          ApiEndPoints.getImage +
+                                          data.image,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    Positioned(
+                                      left: 0,
+                                      bottom: 0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            color: Colors.black26,
+                                          ),
+                                          height: 30,
+                                          width: 80,
+                                          child: daysLeft.isNegative
+                                              ? Center(
+                                                  child: Text('Expired',
+                                                      style: GoogleFonts.sarala(
+                                                          fontSize: 13,
+                                                          color: Colors.red,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                )
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(daysLeft.toString(),
                                                         style:
                                                             GoogleFonts.sarala(
                                                                 fontSize: 13,
-                                                                color:
-                                                                    Colors.red,
+                                                                color: Colors
+                                                                    .white,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold)),
-                                                  )
-                                                : Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(daysLeft.toString(),
-                                                          style: GoogleFonts
-                                                              .sarala(
-                                                                  fontSize: 13,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold)),
-                                                      const Text(
-                                                        ' days left',
-                                                        style: TextStyle(
-                                                            fontSize: 10,
-                                                            color:
-                                                                Colors.white),
-                                                      )
-                                                    ],
+                                                    const Text(
+                                                      ' days left',
+                                                      style: TextStyle(
+                                                          fontSize: 10,
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: size.width * 0.08,
+                                      width: double.infinity,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 2.0),
+                                        child: Text(
+                                          data.title,
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                    ReadMoreText(
+                                      data.description,
+                                      trimLines: 2,
+                                      colorClickableText: Colors.pink,
+                                      trimMode: TrimMode.Line,
+                                      trimCollapsedText: ' Show more',
+                                      trimExpandedText: ' Show less',
+                                      moreStyle: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                      lessStyle: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold),
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: size.width * 0.01,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        flex: 4,
+                                        child: FutureBuilder(
+                                            future: value.futureGroupData,
+                                            builder: (context, snapshot) {
+                                              final futureData = snapshot.data;
+                                              if (snapshot.hasData) {
+                                                return Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    CircleAvatar(
+                                                      radius: 20,
+                                                      backgroundImage:
+                                                          getDp(futureData),
+                                                    ),
+                                                    SizedBox(
+                                                      width: size.width * 0.01,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 200,
+                                                      child: Text(
+                                                        futureData!.groupName,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                      ),
+                                                    )
+                                                  ],
+                                                );
+                                              } else if (snapshot.hasError) {
+                                                Navigator.pop(context);
+                                                return const SizedBox();
+                                              } else {
+                                              return Shimmer.fromColors(
+                                              baseColor:
+                                                  Colors.grey.withOpacity(0.5),
+                                              highlightColor: Colors.white,
+                                              child: Row(
+                                                children: [
+                                                  const Expanded(
+                                                    flex: 1,
+                                                    child: CircleAvatar(
+                                                      radius: 20,
+                                                    ),
                                                   ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        height: size.width * 0.08,
-                                        width: double.infinity,
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 2.0),
-                                          child: Text(
-                                            data.title,
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ),
-                                      ReadMoreText(
-                                        data.description,
-                                        trimLines: 2,
-                                        colorClickableText: Colors.pink,
-                                        trimMode: TrimMode.Line,
-                                        trimCollapsedText: ' Show more',
-                                        trimExpandedText: ' Show less',
-                                        moreStyle: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                        lessStyle: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.width * 0.01,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                          flex: 4,
-                                          child: FutureBuilder(
-                                              future: value.futureGroupData,
-                                              builder: (context, snapshot) {
-                                                final futureData =
-                                                    snapshot.data;
-                                                if (snapshot.hasData) {
-                                                  return Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      CircleAvatar(
-                                                        radius: 20,
-                                                        backgroundImage:
-                                                            getDp(futureData),
+                                                  Expanded(
+                                                    flex: 5,
+                                                    child: Card(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20)),
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
+                                                        height: 20,
                                                       ),
-                                                      SizedBox(
-                                                        width:
-                                                            size.width * 0.01,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 200,
-                                                        child: Text(
-                                                          futureData!.groupName,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: GoogleFonts
-                                                              .poppins(
-                                                                  fontSize: 13,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  );
-                                                } else if (snapshot.hasError) {
-                                                  Navigator.pop(context);
-                                                  return const SizedBox();
-                                                } else {
-                                                  return const SizedBox(
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                            color:
-                                                                kBackgroundColor,
-                                                            strokeWidth: 2),
-                                                  );
-                                                }
-                                              })),
-                                      checkWishList(
-                                          postId:
-                                              value.registeredEvents[index].id),
-                                      isRegistered == false
-                                          ? ElevatedButton(
-                                              style: const ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStatePropertyAll(
-                                                          Colors.blueAccent)),
-                                              onPressed: () {
-                                                AllServices().registerUserPost(
-                                                    postId: value
-                                                        .eventList[index].id,
-                                                    groupId: value
-                                                        .eventList[index]
-                                                        .group);
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          BottomNavScreen(),
-                                                    ));
-                                                Provider.of<BottomNavProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .bottomChanger(2);
-                                                value.eventList.clear();
-                                                value.eventList.clear();
-                                              },
-                                              child: const Text(
-                                                'Join',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white),
-                                              ))
-                                          : ElevatedButton(
-                                              style: const ButtonStyle(
-                                                  elevation:
-                                                      MaterialStatePropertyAll(
-                                                          5),
-                                                  backgroundColor:
-                                                      MaterialStatePropertyAll(
-                                                          Colors.white)),
-                                              onPressed: () {},
-                                              child: const Text(
-                                                'Joined',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
-                                                    fontSize: 12),
-                                              ))
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                              }
+                                            })),
+                                    checkWishList(
+                                        postId:
+                                            value.registeredEvents[index].id),
+                                    isRegistered == false
+                                        ? ElevatedButton(
+                                            style: const ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStatePropertyAll(
+                                                        Colors.blueAccent)),
+                                            onPressed: () {
+                                              AllServices().registerUserPost(
+                                                  postId:
+                                                      value.eventList[index].id,
+                                                  groupId: value
+                                                      .eventList[index].group);
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BottomNavScreen(),
+                                                  ));
+                                              Provider.of<BottomNavProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .bottomChanger(2);
+                                              value.eventList.clear();
+                                              value.eventList.clear();
+                                            },
+                                            child: const Text(
+                                              'Join',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white),
+                                            ))
+                                        : ElevatedButton(
+                                            style: const ButtonStyle(
+                                                elevation:
+                                                    MaterialStatePropertyAll(5),
+                                                backgroundColor:
+                                                    MaterialStatePropertyAll(
+                                                        Colors.white)),
+                                            onPressed: () {},
+                                            child: const Text(
+                                              'Joined',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                  fontSize: 12),
+                                            ))
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
-                        );
-                      }
+                        ),
+                      );
+                    }
 
-                      return null;
-                    },
-                  )
+                    //   return null;
+                    // },
+                    )
                 : SizedBox();
           }
         }),
